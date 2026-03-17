@@ -186,7 +186,7 @@ table.hm th{font-family:var(--cond);font-size:9px;font-weight:600;letter-spacing
 /* ── MAP ── */
 .map-layout{display:grid;grid-template-columns:1fr 300px;gap:18px}
 @media(max-width:900px){.map-layout{grid-template-columns:1fr}}
-#map-canvas{width:100%;aspect-ratio:.55;border-radius:var(--r);cursor:crosshair;background:#eae8e2;border:1px solid var(--rule);display:block}
+#map-canvas{max-width:500px;max-height:60vh;aspect-ratio:.55;border-radius:var(--r);cursor:crosshair;background:#eae8e2;border:1px solid var(--rule);display:block;margin:0 auto}
 .map-sidebar{display:flex;flex-direction:column;gap:12px}
 .map-info-card{background:var(--white);border:1px solid var(--rule);border-radius:var(--r);padding:14px 16px}
 .map-info-card h3{font-family:var(--cond);font-size:16px;font-weight:700;margin-bottom:6px;color:inherit}
