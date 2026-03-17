@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UK Regional Carbon Intensity</title>
+<title>UK Carbon Intensity Map</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
@@ -334,7 +334,7 @@ table.hm th{font-family:var(--cond);font-size:9px;font-weight:600;letter-spacing
 <body>
 <header>
   <div class="hd-left">
-    <div class="hd-title">UK Regional Carbon Intensity</div>
+    <div class="hd-title">UK Carbon Intensity Map</div>
     <div class="hd-sub">National Grid ESO · 14 regions · half-hourly · Sep 2018 – Mar 2026</div>
   </div>
   <div class="hd-chips">
@@ -606,7 +606,7 @@ table.hm th{font-family:var(--cond);font-size:9px;font-weight:600;letter-spacing
       <p>Intensity data from the <a href="https://carbonintensity.org.uk" target="_blank">National Grid ESO Carbon Intensity API</a>. 130,089 half-hourly readings across 14 GB regions, Sep 2018 – Mar 2026.</p>
       <p>Generation mix data is modelled by NESO using power flow analysis — it is an estimate of fuel consumption per region, not a direct metered measurement. Treat as indicative for operational decisions.</p>
       <p>Forecast data uses NESO's ML-based 96h ahead model scaled to current conditions. Built by <a href="#">Posetiv Cloud</a>.</p>
-      <p style="margin-top:10px;font-family:var(--cond);font-size:11px;color:var(--ink3);letter-spacing:.03em">github.com/posetiv/uk-grid-carbon</p>
+      <p style="margin-top:10px;font-family:var(--cond);font-size:11px;color:var(--ink3);letter-spacing:.03em">github.com/Marksbutcher/uk-carbon-intensity-map</p>
     </div>
   </div>
 </div>
@@ -2058,7 +2058,7 @@ var MAP_BOUNDS = null;
 
 function initMap(){
   if(MAP_GEO){ drawMap(); return; }
-  fetch('data/regions.geojson')
+  fetch('regions.geojson')
     .then(function(r){ return r.json(); })
     .then(function(geo){
       MAP_GEO = geo;
