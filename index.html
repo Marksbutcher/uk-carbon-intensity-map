@@ -184,14 +184,9 @@ table.hm th{font-family:var(--cond);font-size:9px;font-weight:600;letter-spacing
 .flist li{font-size:12px;color:var(--ink3);padding:7px 10px;background:var(--paper);border-radius:var(--r);line-height:1.5;font-weight:300}
 .flist li strong{display:block;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);margin-bottom:1px}
 /* ── MAP ── */
-.map-layout{display:grid;grid-template-columns:1fr 300px;gap:18px}
+.map-layout{display:grid;grid-template-columns:1fr 380px;gap:18px;align-items:start}
 @media(max-width:900px){.map-layout{grid-template-columns:1fr}}
-#map-canvas{max-width:500px;max-height:60vh;aspect-ratio:.55;border-radius:var(--r);cursor:crosshair;background:#eae8e2;border:1px solid var(--rule);display:block;margin:0 auto}
-.map-sidebar{display:flex;flex-direction:column;gap:12px}
-.map-info-card{background:var(--white);border:1px solid var(--rule);border-radius:var(--r);padding:14px 16px}
-.map-info-card h3{font-family:var(--cond);font-size:16px;font-weight:700;margin-bottom:6px;color:inherit}
-.map-info-val{font-family:var(--cond);font-size:36px;font-weight:700;line-height:1;letter-spacing:-.02em}
-.map-info-unit{font-size:12px;color:var(--ink3);margin-top:2px}
+#map-canvas{max-height:70vh;aspect-ratio:.55;border-radius:var(--r);cursor:crosshair;background:#ffffff;border:1px solid var(--rule);display:block;margin:0 auto;width:100%}
 .map-legend-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .map-legend-item{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--ink3)}
 .map-legend-swatch{width:14px;height:10px;border-radius:2px;flex-shrink:0}
@@ -200,6 +195,38 @@ table.hm th{font-family:var(--cond);font-size:9px;font-weight:600;letter-spacing
 .map-gen-legend{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:4px}
 .map-gen-legend span{display:flex;align-items:center;gap:3px;font-size:11px;color:var(--ink3)}
 .map-gen-dot{width:7px;height:7px;border-radius:2px;flex-shrink:0}
+
+/* ── MAP TOOLTIP ── */
+#map-tooltip{position:fixed;background:var(--white);border:1px solid var(--rule2);border-radius:6px;padding:14px 16px;font-size:11px;pointer-events:none;display:none;z-index:999;box-shadow:0 6px 24px rgba(0,0,0,.14);min-width:220px;max-width:280px}
+.mt-header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px}
+.mt-name{font-family:var(--cond);font-size:15px;font-weight:700}
+.mt-val{font-family:var(--cond);font-size:30px;font-weight:700;line-height:1}
+.mt-unit{font-size:11px;color:var(--ink3);margin:2px 0 6px}
+.mt-stats{border-top:1px solid var(--rule);padding-top:6px;margin-bottom:6px}
+.mt-stats .tr{display:flex;justify-content:space-between;gap:14px;color:var(--ink3);padding:1px 0;font-size:11px}
+.mt-stats .tv{color:var(--ink);font-weight:500}
+.mt-mix-bar{display:flex;height:6px;border-radius:3px;overflow:hidden;margin:6px 0 4px}
+.mt-mix-bar div{height:100%}
+.mt-mix-legend{display:flex;flex-wrap:wrap;gap:2px 8px;font-size:10px;color:var(--ink3)}
+.mt-mix-legend span{display:flex;align-items:center;gap:3px}
+.mt-action{font-size:10px;color:var(--acc);margin-top:6px;text-align:center;font-weight:500}
+
+/* ── MAP LEADERBOARD ── */
+.map-leaderboard{background:var(--white);border:1px solid var(--rule);border-radius:var(--r);overflow:hidden}
+.map-lb-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--rule);font-family:var(--cond);font-size:13px;font-weight:700;letter-spacing:.02em;color:var(--ink2)}
+.map-lb-sub{font-size:10px;font-weight:400;color:var(--ink3);letter-spacing:0}
+.map-lb-list{max-height:70vh;overflow-y:auto}
+.map-lb-row{display:flex;align-items:center;gap:10px;padding:7px 14px;border-bottom:1px solid var(--rule);cursor:pointer;transition:background .1s}
+.map-lb-row:last-child{border-bottom:none}
+.map-lb-row:hover,.map-lb-row.active{background:var(--paper)}
+.map-lb-rank{font-family:var(--cond);font-size:11px;font-weight:600;color:var(--ink3);width:16px;text-align:center;flex-shrink:0}
+.map-lb-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.map-lb-name{font-size:12px;color:var(--ink2);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.map-lb-val{font-family:var(--cond);font-size:16px;font-weight:700;flex-shrink:0}
+.map-lb-trend{font-size:10px;font-weight:500;width:44px;text-align:right;flex-shrink:0}
+.map-lb-mixbar{display:flex;height:4px;border-radius:2px;overflow:hidden;width:60px;flex-shrink:0}
+.map-lb-mixbar div{height:100%}
+@media(max-width:700px){.map-lb-mixbar{display:none}}
 
 
 /* ── TOOLTIP ── */
@@ -554,22 +581,17 @@ table.hm th{font-family:var(--cond);font-size:9px;font-weight:600;letter-spacing
   <div class="map-layout">
     <div>
       <canvas id="map-canvas"></canvas>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;justify-content:center">
+        <div class="map-legend-item"><div class="map-legend-swatch" style="background:#16a34a"></div>&lt;75 Very low</div>
+        <div class="map-legend-item"><div class="map-legend-swatch" style="background:#65a30d"></div>75–150 Low</div>
+        <div class="map-legend-item"><div class="map-legend-swatch" style="background:#d97706"></div>150–225 Moderate</div>
+        <div class="map-legend-item"><div class="map-legend-swatch" style="background:#ea580c"></div>225–300 High</div>
+        <div class="map-legend-item"><div class="map-legend-swatch" style="background:#dc2626"></div>&gt;300 Very high</div>
+      </div>
     </div>
-    <div class="map-sidebar">
-      <div class="map-info-card" id="map-info">
-        <div style="color:var(--ink3);font-size:13px;line-height:1.6">Hover over a region to see current intensity and generation mix.<br><br>Click a region to open its full detail view.</div>
-      </div>
-      <div class="map-info-card">
-        <div style="font-family:var(--cond);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px">Intensity scale</div>
-        <div class="map-legend-row">
-          <div class="map-legend-item"><div class="map-legend-swatch" style="background:#16a34a"></div>&lt;75 Very low</div>
-          <div class="map-legend-item"><div class="map-legend-swatch" style="background:#65a30d"></div>75–150 Low</div>
-          <div class="map-legend-item"><div class="map-legend-swatch" style="background:#d97706"></div>150–225 Moderate</div>
-          <div class="map-legend-item"><div class="map-legend-swatch" style="background:#ea580c"></div>225–300 High</div>
-          <div class="map-legend-item"><div class="map-legend-swatch" style="background:#dc2626"></div>&gt;300 Very high</div>
-        </div>
-        <div style="font-size:11px;color:var(--ink3);margin-top:10px">Double-click any region to open its full detail view.</div>
-      </div>
+    <div class="map-leaderboard">
+      <div class="map-lb-header">Current Intensity <span class="map-lb-sub">sorted cleanest first · click for detail</span></div>
+      <div class="map-lb-list" id="map-lb-list"></div>
     </div>
   </div>
 </div>
@@ -720,6 +742,8 @@ table.hm th{font-family:var(--cond);font-size:9px;font-weight:600;letter-spacing
   <div class="tr"><span id="tip-l1">Value</span><span class="tv" id="tip-v1"></span></div>
   <div class="tr"><span id="tip-l2">Period</span><span class="tv" id="tip-v2"></span></div>
 </div>
+
+<div id="map-tooltip"></div>
 
 <script>
 // ═══════════════════════════════════════════════════
@@ -1695,7 +1719,7 @@ function fetchLiveData(){
         if(panelId === 'now'){ buildNow(); }
         else if(panelId === 'mix'){ buildMix(); }
         else if(panelId === 'region'){ buildRegion(); }
-        else if(panelId === 'map'){ if(MAP_DRAWN) drawMapRegions(null); }
+        else if(panelId === 'map'){ if(MAP_DRAWN) drawMapRegions(null); buildMapLeaderboard(); }
       }
       // Always refresh now table if visible
       if(document.getElementById('now-tbody')) renderNowTable();
@@ -2057,6 +2081,7 @@ var MAP_PROJECT = null;
 var MAP_BOUNDS = null;
 
 function initMap(){
+  buildMapLeaderboard();
   if(MAP_GEO){ drawMap(); return; }
   fetch('regions.geojson')
     .then(function(r){ return r.json(); })
@@ -2116,13 +2141,17 @@ function drawMap(){
       lastHover = region;
       drawMapRegions(region);
       canvas.style.cursor = region ? 'pointer' : 'crosshair';
-      if(region) showMapInfo(region);
+      // Highlight leaderboard row
+      document.querySelectorAll('.map-lb-row').forEach(function(row){
+        row.classList.toggle('active', row.dataset.region === region);
+      });
     }
+    showMapTooltip(region, e);
   };
   canvas.onclick = function(e){
     var r2 = canvas.getBoundingClientRect();
     var region = mapHitTest(e.clientX-r2.left, e.clientY-r2.top);
-    if(region){ showMapInfo(region); }
+    if(region){ openRegion(region); }
   };
   canvas.ondblclick = function(e){
     var r2 = canvas.getBoundingClientRect();
@@ -2132,6 +2161,8 @@ function drawMap(){
   canvas.onmouseleave = function(){
     lastHover = null;
     drawMapRegions(null);
+    showMapTooltip(null);
+    document.querySelectorAll('.map-lb-row').forEach(function(row){ row.classList.remove('active'); });
   };
 
   // Redraw when panel width changes (e.g. window resize)
@@ -2166,8 +2197,8 @@ function drawMapRegions(hoverRegion){
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.clearRect(0, 0, W, H);
 
-  // Background (sea / paper)
-  ctx.fillStyle = '#eae8e2';
+  // Background
+  ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, W, H);
 
   // Draw filled regions
@@ -2187,7 +2218,7 @@ function drawMapRegions(hoverRegion){
       ctx.fillStyle = (val !== undefined) ? ci(val, isHovered ? 0.95 : 0.72) : (isHovered ? 'rgba(180,178,172,0.9)' : 'rgba(200,198,192,0.6)');
       ctx.fill();
       // Border — use literal colour, not CSS var (doesn't work on canvas)
-      ctx.strokeStyle = isHovered ? '#1a1a1a' : 'rgba(245,243,238,0.95)';
+      ctx.strokeStyle = isHovered ? '#1a1a1a' : 'rgba(255,255,255,0.95)';
       ctx.lineWidth = isHovered ? 2 : 0.8;
       ctx.stroke();
     });
@@ -2226,7 +2257,7 @@ function drawMapRegions(hoverRegion){
       .replace(' and Merseyside','');
 
     // Shadow for legibility
-    ctx.shadowColor = 'rgba(245,243,238,0.9)';
+    ctx.shadowColor = 'rgba(255,255,255,0.85)';
     ctx.shadowBlur = 3;
 
     ctx.fillStyle = isHovered ? '#111' : 'rgba(26,26,26,0.85)';
@@ -2273,31 +2304,34 @@ function pointInPolyMap(x, y, poly){
   return inside;
 }
 
-function showMapInfo(regionName){
-  var info = document.getElementById('map-info');
-  if(!info) return;
+function showMapTooltip(regionName, e){
+  var tip = document.getElementById('map-tooltip');
+  if(!tip) return;
+  if(!regionName){ tip.style.display='none'; return; }
+
   var val = NOW[regionName];
   var mix = CUR_MIX[regionName];
   var regionCol = RCOL[regionName] || '#3b82f6';
 
-  var html = '<h3 style="color:'+regionCol+'">'+regionName+'</h3>';
-
+  var html = '<div class="mt-header"><span class="mt-name" style="color:'+regionCol+'">'+regionName+'</span>';
   if(val !== undefined){
-    var col = ci(val);
-    html += '<div class="map-info-val" style="color:'+col+'">'+val+'</div>';
-    html += '<div class="map-info-unit">gCO\u2082/kWh now</div>';
     var badge, bcls;
     if(val<75){ badge='Very low'; bcls='bdg-g'; }
     else if(val<150){ badge='Low'; bcls='bdg-g'; }
     else if(val<225){ badge='Moderate'; bcls='bdg-a'; }
     else if(val<300){ badge='High'; bcls='bdg-r'; }
     else { badge='Very high'; bcls='bdg-r'; }
-    html += '<div style="margin:6px 0"><span class="bdg '+bcls+'">'+badge+'</span></div>';
+    html += '<span class="bdg '+bcls+'">'+badge+'</span>';
+  }
+  html += '</div>';
+
+  if(val !== undefined){
+    html += '<div class="mt-val" style="color:'+ci(val)+'">'+val+'</div>';
+    html += '<div class="mt-unit">gCO\u2082/kWh now</div>';
   }
 
-  // Stats strip
   if(RAVG[regionName]){
-    html += '<div style="margin-top:8px;border-top:1px solid var(--rule);padding-top:8px;font-size:12px;color:var(--ink3)">';
+    html += '<div class="mt-stats">';
     var rows = [
       ['All-time avg', Math.round(RAVG[regionName])],
       ['7-day avg', D7[regionName] ? Math.round(D7[regionName]) : null],
@@ -2305,31 +2339,79 @@ function showMapInfo(regionName){
     ];
     if(BASE[regionName]){
       var drop = Math.round((1 - RAVG[regionName]/BASE[regionName])*100);
-      rows.push(['Since 2018', (drop>0?'↓':'↑')+Math.abs(drop)+'%']);
+      rows.push(['Since 2018', (drop>0?'\u2193':'↑')+Math.abs(drop)+'%']);
     }
     rows.forEach(function(row){
       if(row[1]===null) return;
-      html += '<div style="display:flex;justify-content:space-between;padding:2px 0"><span>'+row[0]+'</span><span style="font-weight:600;color:var(--ink)">'+row[1]+'</span></div>';
+      html += '<div class="tr"><span>'+row[0]+'</span><span class="tv">'+row[1]+'</span></div>';
     });
     html += '</div>';
   }
 
-  // Fuel mix bar
   if(mix){
     var fuels = ['wind','nuclear','solar','biomass','hydro','imports','gas','coal','other'];
-    html += '<div style="margin-top:8px;border-top:1px solid var(--rule);padding-top:8px">';
-    html += '<div style="font-family:var(--cond);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:4px">Generation mix</div>';
-    html += '<div class="map-gen-bar">';
+    html += '<div class="mt-mix-bar">';
     fuels.forEach(function(f){ if(mix[f]&&mix[f]>0) html += '<div style="width:'+mix[f]+'%;background:'+FUEL_COLORS[f]+'"></div>'; });
-    html += '</div><div class="map-gen-legend">';
+    html += '</div><div class="mt-mix-legend">';
     fuels.forEach(function(f){ if(mix[f]&&mix[f]>0) html += '<span><span class="map-gen-dot" style="background:'+FUEL_COLORS[f]+'"></span>'+FUEL_LABELS[f]+' '+mix[f]+'%</span>'; });
-    html += '</div></div>';
+    html += '</div>';
   }
 
-  // Open region link
-  html += '<div style="margin-top:10px"><button onclick="openRegion(\''+regionName+'\')" style="font-size:12px;color:var(--acc);background:none;border:none;cursor:pointer;padding:0;font-weight:500">View full detail \u2192</button></div>';
+  html += '<div class="mt-action">Click to view full detail</div>';
+  tip.innerHTML = html;
+  tip.style.display = 'block';
 
-  info.innerHTML = html;
+  // Position near cursor, viewport-aware
+  var tw = tip.offsetWidth, th = tip.offsetHeight;
+  var vw = window.innerWidth, vh = window.innerHeight;
+  var left = e.clientX + 15, top = e.clientY + 15;
+  if(left + tw > vw - 10) left = e.clientX - tw - 15;
+  if(top + th > vh - 10) top = e.clientY - th - 15;
+  tip.style.left = left + 'px';
+  tip.style.top = top + 'px';
+}
+
+function buildMapLeaderboard(){
+  var list = document.getElementById('map-lb-list');
+  if(!list) return;
+  var sorted = RG.slice().sort(function(a,b){ return (NOW[a]||999) - (NOW[b]||999); });
+  var fuels = ['wind','nuclear','solar','biomass','hydro','imports','gas','coal','other'];
+  var html = '';
+  sorted.forEach(function(r, i){
+    var val = NOW[r];
+    var col = val !== undefined ? ci(val) : 'var(--ink3)';
+    var trend = '';
+    if(D7[r] && val !== undefined){
+      var diff = val - Math.round(D7[r]);
+      if(diff < -5) trend = '<span style="color:var(--low)">\u2193'+Math.abs(diff)+'</span>';
+      else if(diff > 5) trend = '<span style="color:var(--high)">\u2191'+diff+'</span>';
+      else trend = '<span style="color:var(--ink3)">\u2194</span>';
+    }
+    var mixBar = '';
+    var mix = CUR_MIX[r];
+    if(mix){
+      mixBar = '<div class="map-lb-mixbar">';
+      fuels.forEach(function(f){ if(mix[f]&&mix[f]>0) mixBar += '<div style="width:'+mix[f]+'%;background:'+FUEL_COLORS[f]+'"></div>'; });
+      mixBar += '</div>';
+    }
+    html += '<div class="map-lb-row" data-region="'+r+'" onclick="openRegion(\''+r+'\')" onmouseenter="highlightMapRegion(\''+r+'\')" onmouseleave="highlightMapRegion(null)">';
+    html += '<span class="map-lb-rank">'+(i+1)+'</span>';
+    html += '<span class="map-lb-dot" style="background:'+(RCOL[r]||'#94a3b8')+'"></span>';
+    html += '<span class="map-lb-name">'+r+'</span>';
+    html += '<span class="map-lb-val" style="color:'+col+'">'+(val !== undefined ? val : '–')+'</span>';
+    html += '<span class="map-lb-trend">'+trend+'</span>';
+    html += mixBar;
+    html += '</div>';
+  });
+  list.innerHTML = html;
+}
+
+function highlightMapRegion(region){
+  drawMapRegions(region);
+  // Update active state on leaderboard rows
+  document.querySelectorAll('.map-lb-row').forEach(function(row){
+    row.classList.toggle('active', row.dataset.region === region);
+  });
 }
 
 window.addEventListener('load', function(){
