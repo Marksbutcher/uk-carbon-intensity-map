@@ -506,7 +506,7 @@ table.hm th{font-family:var(--cond);font-size:9px;font-weight:600;letter-spacing
     </div>
     <div class="comp-reco" id="comp-reco"></div>
     <!-- Context block: annualised + equivalents -->
-    <div id="calc-context" style="display:none;margin-top:12px;padding:12px 14px;background:var(--paper);border-radius:var(--r);border:1px solid var(--rule)"></div>
+    <div id="calc-context" style="display:none;margin-top:12px;padding:14px 16px;background:var(--paper);border-radius:var(--r);border:1px solid var(--rule)"></div>
     <div class="api-note" style="margin-top:8px">Live intensity from NESO API. Best window from 48h forecast. GB = national average.</div>
   </div>
 
@@ -2778,11 +2778,11 @@ function updateCalc(){
   }
 
   ctxEl.style.display = '';
-  var ctxHTML = '<div style="font-size:12px;color:var(--ink2);line-height:1.8">';
+  var ctxHTML = '<div style="font-size:13px;color:var(--ink2);line-height:1.8">';
 
   // Scale line
   if(period !== 'once'){
-    ctxHTML += '<div style="margin-bottom:6px">';
+    ctxHTML += '<div style="font-size:13px;margin-bottom:6px">';
     ctxHTML += periodSummaryLines.join(' \u2014 ');
     ctxHTML += '.</div>';
   } else {
@@ -2795,7 +2795,7 @@ function updateCalc(){
   }
 
   // Source note
-  ctxHTML += '<div style="font-size:10px;color:var(--ink3);margin-top:6px">Flight equivalents use DEFRA economy-class emission factors (LHR\u2013BCN ~110\u202fkg, LHR\u2013EDI ~46\u202fkg CO\u2082e per passenger). Car: 170\u202fg/km.</div>';
+  ctxHTML += '<div style="font-size:11px;color:var(--ink3);margin-top:6px">Flight equivalents use DEFRA economy-class emission factors (LHR\u2013BCN ~110\u202fkg, LHR\u2013EDI ~46\u202fkg CO\u2082e per passenger). Car: 170\u202fg/km.</div>';
   ctxHTML += '</div>';
   ctxEl.innerHTML = ctxHTML;
 }
