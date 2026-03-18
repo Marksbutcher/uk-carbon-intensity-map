@@ -473,6 +473,16 @@ table.hm th{font-family:var(--cond);font-size:9px;font-weight:600;letter-spacing
         <input type="number" id="calc-kwh" value="100" min="1" max="100000" oninput="updateCalc()">
       </div>
       <div class="calc-field">
+        <label>Per</label>
+        <select id="calc-period" onchange="updateCalc()">
+          <option value="once">one-off</option>
+          <option value="hour">hour</option>
+          <option value="day" selected>day</option>
+          <option value="month">month</option>
+          <option value="year">year</option>
+        </select>
+      </div>
+      <div class="calc-field">
         <label>Region A</label>
         <select id="calc-region" onchange="updateCalc()"></select>
       </div>
@@ -495,6 +505,8 @@ table.hm th{font-family:var(--cond);font-size:9px;font-weight:600;letter-spacing
       </table>
     </div>
     <div class="comp-reco" id="comp-reco"></div>
+    <!-- Context block: annualised + equivalents -->
+    <div id="calc-context" style="display:none;margin-top:12px;padding:12px 14px;background:var(--paper);border-radius:var(--r);border:1px solid var(--rule)"></div>
     <div class="api-note" style="margin-top:8px">Live intensity from NESO API. Best window from 48h forecast. GB = national average.</div>
   </div>
 
@@ -2612,11 +2624,21 @@ function initCalc(){
 
 function updateCalc(){
   var kwh = parseFloat(document.getElementById('calc-kwh')&&document.getElementById('calc-kwh').value) || 100;
+  var period = (document.getElementById('calc-period')&&document.getElementById('calc-period').value) || 'day';
   var regionA = (document.getElementById('calc-region')&&document.getElementById('calc-region').value) || RG[4];
   var regionB = (document.getElementById('calc-region-b')&&document.getElementById('calc-region-b').value) || RG[0];
   var liveFc = (typeof LIVE_FORECAST !== 'undefined') ? LIVE_FORECAST : {};
 
-  var fmt = function(v){ return v >= 1 ? v.toFixed(1)+' kg' : (v*1000).toFixed(0)+' g'; };
+  // Period multiplier for annualisation
+  var periodLabel = {once:'one-off',hour:'per hour',day:'per day',month:'per month',year:'per year'}[period]||'per day';
+  var annualMult = {once:1, hour:8760, day:365, month:12, year:1}[period]||365;
+
+  var fmt = function(v){ return v >= 1 ? v.toFixed(1)+'\u202fkg' : (v*1000).toFixed(0)+'\u202fg'; };
+  var fmtAnn = function(v){
+    if(v >= 1000) return (v/1000).toFixed(2)+'\u202ftCO\u2082';
+    if(v >= 1) return v.toFixed(1)+'\u202fkg CO\u2082';
+    return (v*1000).toFixed(0)+'\u202fg CO\u2082';
+  };
 
   function getStats(region){
     var nowI = NOW[region] || 200;
@@ -2632,16 +2654,12 @@ function updateCalc(){
       bestTime = String(bd.getUTCHours()).padStart(2,'0')+':'+String(bd.getUTCMinutes()).padStart(2,'0');
     }
     return {
-      region: region,
-      nowI: nowI,
-      bestI: bestI,
-      bestTime: bestTime,
+      region: region, nowI: nowI, bestI: bestI, bestTime: bestTime,
       kgNow: kwh * nowI / 1000,
       kgBest: kwh * bestI / 1000
     };
   }
 
-  // GB average — use mean of regional forecasts for best window
   var gbNowI = Math.round(RG.reduce(function(s,r){return s+NOW[r];},0)/RG.length);
   var gbFcArrays = RG.map(function(r){
     return (liveFc[r] && liveFc[r].length > 0) ? liveFc[r].map(function(p){return p.intensity||0;}) : FORECAST[r];
@@ -2654,42 +2672,132 @@ function updateCalc(){
     gbBestI = Math.min.apply(null, gbFcAvg);
   }
   var gbStats = { region:'GB average', nowI:gbNowI, bestI:gbBestI, bestTime:'', kgNow:kwh*gbNowI/1000, kgBest:kwh*gbBestI/1000 };
-
   var rows = [getStats(regionA), getStats(regionB), gbStats];
-
-  // Find cleanest option (lowest kgBest)
   var bestRow = rows.reduce(function(b,r){return r.kgBest < b.kgBest ? r : b;}, rows[0]);
+  var worstRow = rows.reduce(function(b,r){return r.kgBest > b.kgBest ? r : b;}, rows[0]);
 
   var tbody = document.getElementById('comp-tbody');
   if(!tbody) return;
-
   tbody.innerHTML = rows.map(function(row){
     var isBest = row.region === bestRow.region;
-    var nowCol = row.nowI < 100 ? 'var(--low)' : row.nowI < 200 ? '#65a30d' : row.nowI < 300 ? 'var(--mid)' : 'var(--high)';
-    var bestCol = row.bestI < 100 ? 'var(--low)' : row.bestI < 200 ? '#65a30d' : row.bestI < 300 ? 'var(--mid)' : 'var(--high)';
+    var nowCol = row.nowI<100?'var(--low)':row.nowI<200?'#65a30d':row.nowI<300?'var(--mid)':'var(--high)';
+    var bestCol = row.bestI<100?'var(--low)':row.bestI<200?'#65a30d':row.bestI<300?'var(--mid)':'var(--high)';
     var saving = Math.max(0, row.kgNow - row.kgBest);
     return '<tr'+(isBest?' class="best-row"':'')+'>'+
-      '<td><strong>'+row.region+'</strong>'+(isBest?' <span style="font-size:11px;color:var(--low);font-weight:600">★ cleanest</span>':'')+'</td>'+
+      '<td><strong>'+row.region+'</strong>'+(isBest?' <span style="font-size:11px;color:var(--low);font-weight:600">\u2605 cleanest</span>':'')+'</td>'+
       '<td class="cv" style="color:'+nowCol+'">'+row.nowI+'</td>'+
       '<td class="cv" style="color:'+bestCol+'">'+row.bestI+(row.bestTime?' <span style="font-size:11px;font-weight:400;color:var(--ink3)">'+row.bestTime+'</span>':'')+'</td>'+
       '<td class="cv" style="color:'+nowCol+'">'+fmt(row.kgNow)+'</td>'+
       '<td class="cv" style="color:'+bestCol+'">'+fmt(row.kgBest)+'</td>'+
-      '<td class="cv '+(saving>0.1?'comp-saving':'')+'">'+fmt(saving)+'</td>'+
+      '<td class="cv '+(saving>0.1?'comp-saving':'')+'" >'+fmt(saving)+'</td>'+
     '</tr>';
   }).join('');
 
-  // Recommendation
-  var worstRow = rows.reduce(function(b,r){return r.kgBest > b.kgBest ? r : b;}, rows[0]);
+  // ── Recommendation line ──
   var saved = Math.max(0, worstRow.kgBest - bestRow.kgBest);
+  var gPerKwh = Math.round(saved / kwh * 1000);
   var recoEl = document.getElementById('comp-reco');
   if(!recoEl) return;
   if(saved < 0.05){
     recoEl.innerHTML = 'All three scenarios have similar carbon cost at the best window. Timing matters more than location right now.';
   } else {
-    recoEl.innerHTML = 'Running in <strong>'+bestRow.region+'</strong> at its best window saves <strong style="color:var(--low)">'+fmt(saved)+'</strong> vs '+worstRow.region+' per '+kwh+' kWh. ' +
-      (bestRow.bestTime ? 'Optimal time: <strong>'+bestRow.bestTime+'</strong>.' : '') +
-      ' The location decision is worth <strong>'+(saved/kwh*1000).toFixed(0)+' gCO\u2082 per kWh</strong>.';
+    recoEl.innerHTML =
+      'Running in <strong>'+bestRow.region+'</strong> at its best window saves '+
+      '<strong style="color:var(--low)">'+fmt(saved)+'</strong> vs '+worstRow.region+
+      ' per <strong>'+kwh+'\u202fkWh</strong> '+periodLabel+'. '+
+      'The location and timing decision is worth <strong>'+gPerKwh+'\u202fgCO\u2082 per kWh</strong>.'+
+      (bestRow.bestTime ? ' Optimal window: <strong>'+bestRow.bestTime+'</strong>.' : '');
   }
+
+  // ── Context block: annualisation + real-world equivalents ──
+  var ctxEl = document.getElementById('calc-context');
+  if(!ctxEl) return;
+
+  var annSaving = saved * annualMult;   // kg CO2 saved per year (or period)
+  var annBest = bestRow.kgBest * annualMult;
+  var annWorst = worstRow.kgBest * annualMult;
+
+  // Real-world equivalents (using DEFRA/ICCT figures)
+  // London–Barcelona one-way economy ~110 kg CO2 (1,530km × 72 gCO2/pkm)
+  var barcelonaFlight = 110;
+  // London–Edinburgh one-way economy ~46 kg CO2 (530km × 87 gCO2/pkm domestic)
+  var edinburghFlight = 46;
+  // Average UK car 1km = 0.17 kg CO2
+  var carKmCO2 = 0.17;
+  // Average UK home annual electricity = ~3,500 kWh → ~800 kg CO2 at grid avg
+  var homeAnnualCO2 = 800;
+
+  // Choose the most legible equivalent based on magnitude of annual saving
+  var equivLines = [];
+  if(period !== 'once' && annSaving > 0.5){
+    var barcelonaFlights = (annSaving / barcelonaFlight).toFixed(1);
+    var edinburghFlights = (annSaving / edinburghFlight).toFixed(1);
+    var carKm = Math.round(annSaving / carKmCO2);
+    var homePct = Math.round((annSaving / homeAnnualCO2) * 100);
+
+    // Pick the most human-scale equivalent
+    if(annSaving >= barcelonaFlight * 0.5){
+      equivLines.push(
+        parseFloat(barcelonaFlights) >= 2
+          ? '\u2248 <strong>'+barcelonaFlights+' London\u2013Barcelona flights</strong> per year'
+          : '\u2248 <strong>'+(annSaving/edinburghFlight).toFixed(1)+' London\u2013Edinburgh flights</strong> per year'
+      );
+    } else if(carKm >= 50){
+      equivLines.push('\u2248 <strong>'+carKm.toLocaleString()+'\u202fkm</strong> driven in an average UK car per year');
+    }
+
+    if(homePct >= 1 && homePct <= 500){
+      equivLines.push(homePct+'% of an average UK home\'s annual electricity carbon footprint');
+    }
+  }
+
+  // Period summary line
+  var periodSummaryLines = [];
+
+  if(period !== 'once'){
+    periodSummaryLines.push(
+      '<strong>'+fmtAnn(annBest)+'</strong> per year in '+bestRow.region+' at its best window'
+    );
+    if(annSaving > 0.05){
+      periodSummaryLines.push(
+        'switching from '+worstRow.region+' saves <strong style="color:var(--low)">'+fmtAnn(annSaving)+'</strong> per year'
+      );
+    }
+  }
+
+  if(period === 'once'){
+    // Just the rate context
+    periodSummaryLines.push(
+      gPerKwh+'\u202fgCO\u2082/kWh difference \u2014 equivalent to '+Math.round(gPerKwh/1000*kwh*365/barcelonaFlight * 10)/10+' Barcelona flights if this workload ran daily for a year'
+    );
+  }
+
+  if(periodSummaryLines.length === 0 && equivLines.length === 0){
+    ctxEl.style.display = 'none';
+    return;
+  }
+
+  ctxEl.style.display = '';
+  var ctxHTML = '<div style="font-size:12px;color:var(--ink2);line-height:1.8">';
+
+  // Scale line
+  if(period !== 'once'){
+    ctxHTML += '<div style="margin-bottom:6px">';
+    ctxHTML += periodSummaryLines.join(' \u2014 ');
+    ctxHTML += '.</div>';
+  } else {
+    ctxHTML += '<div style="margin-bottom:6px">'+periodSummaryLines[0]+'.</div>';
+  }
+
+  // Equivalents
+  if(equivLines.length){
+    ctxHTML += '<div style="color:var(--ink3)">Annual saving equivalent to: '+equivLines.join('; ')+'.</div>';
+  }
+
+  // Source note
+  ctxHTML += '<div style="font-size:10px;color:var(--ink3);margin-top:6px">Flight equivalents use DEFRA economy-class emission factors (LHR\u2013BCN ~110\u202fkg, LHR\u2013EDI ~46\u202fkg CO\u2082e per passenger). Car: 170\u202fg/km.</div>';
+  ctxHTML += '</div>';
+  ctxEl.innerHTML = ctxHTML;
 }
 
 // ══════════════════════════════════════════════════════════
