@@ -185,6 +185,15 @@ table.hm th{font-family:var(--cond);font-size:9px;font-weight:600;letter-spacing
 .flist li strong{display:block;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);margin-bottom:1px}
 
 
+
+/* ── SCHEDULE TAB ── */
+.fc-best-row td{font-weight:600}
+.fc-hl-best{color:var(--low);font-weight:700}
+.fc-hl-worst{color:var(--high)}
+#fc-all-table td{font-size:12px}
+#fc-all-table .fc-region-link{cursor:pointer;color:var(--ink);text-decoration:none}
+#fc-all-table .fc-region-link:hover{color:var(--acc);text-decoration:underline}
+
 /* ── TREND ANALYSIS ── */
 .tca-table{width:100%;border-collapse:collapse;font-size:12px}
 .tca-table th{font-family:var(--cond);font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3);padding:6px 10px;border-bottom:2px solid var(--rule);text-align:left;white-space:nowrap}
@@ -521,26 +530,71 @@ table.hm th{font-family:var(--cond);font-size:9px;font-weight:600;letter-spacing
 
 <!-- ══════════════════════════ FORECAST ══════════════════════════ -->
 <div id="p-forecast" class="panel">
-  <div class="sh"><h2>Scheduling windows</h2><p>Best and worst windows for the next 48 hours · select a region · live NESO forecast data</p></div>
+  <div class="sh"><h2>Scheduling windows</h2><p>Where and when to run deferrable workloads · all regions · next 48 hours</p></div>
 
-  <div class="fcast-region-sel">
-    <label>Region</label>
-    <select id="fc-region" onchange="buildForecast()"></select>
-    <span style="font-size:12px;color:var(--ink3);margin-left:4px">Forecast uses historical patterns scaled to current conditions. Treat as indicative, not guaranteed.</span>
+  <!-- Row 1: workload preset + region selector -->
+  <div style="display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:4px">
+    <div class="ctrl-grp">
+      <label>Workload type</label>
+      <select id="fc-preset" onchange="onFcPreset()">
+        <option value="custom">Custom kWh</option>
+        <option value="ai_training">AI training run (500 kWh)</option>
+        <option value="batch_nightly">Nightly batch job (50 kWh)</option>
+        <option value="ev_fleet">EV fleet charge (200 kWh)</option>
+        <option value="server_idle">Server idle migration (10 kWh)</option>
+        <option value="hpc">HPC job (2000 kWh)</option>
+      </select>
+    </div>
+    <div class="ctrl-grp">
+      <label>kWh</label>
+      <input type="number" id="fc-kwh" value="100" min="1" max="100000" style="width:90px" oninput="buildForecast()">
+    </div>
+    <div class="ctrl-grp">
+      <label>Region detail</label>
+      <select id="fc-region" onchange="buildForecast()"></select>
+    </div>
+    <div style="font-size:11px;color:var(--ink3);padding-bottom:4px">Indicative · based on NESO historical patterns</div>
   </div>
 
-  <div class="g2">
-    <div class="chart-wrap">
-      <div class="card-title" style="margin-bottom:10px">Intensity forecast — next 48 hours</div>
-      <canvas id="fc-chart" height="200"></canvas>
+  <!-- Row 2: cross-region best window table -->
+  <div class="card" style="margin-bottom:0">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+      <div class="card-title" style="margin:0">All-region scheduling table <span class="card-sub">· sorted by best forecast window · next 48h</span></div>
+      <div id="fc-kwh-label" style="font-family:var(--cond);font-size:12px;color:var(--ink3)"></div>
     </div>
-    <div class="chart-wrap">
-      <div class="card-title" style="margin-bottom:10px">Estimated generation mix — next 48 hours</div>
-      <canvas id="fc-mix-chart" height="200"></canvas>
+    <div style="overflow-x:auto">
+      <table class="tca-table" id="fc-all-table">
+        <thead><tr>
+          <th style="min-width:170px">Region</th>
+          <th>Now<br><span style="font-weight:400;text-transform:none;letter-spacing:0">gCO₂/kWh</span></th>
+          <th>Best window<br><span style="font-weight:400;text-transform:none;letter-spacing:0">gCO₂/kWh</span></th>
+          <th>Peak<br><span style="font-weight:400;text-transform:none;letter-spacing:0">gCO₂/kWh</span></th>
+          <th>Spread<br><span style="font-weight:400;text-transform:none;letter-spacing:0">gCO₂/kWh</span></th>
+          <th>CO₂ at best<br><span style="font-weight:400;text-transform:none;letter-spacing:0">for workload</span></th>
+          <th>Saving vs worst<br><span style="font-weight:400;text-transform:none;letter-spacing:0">kg CO₂</span></th>
+        </tr></thead>
+        <tbody id="fc-all-tbody"></tbody>
+      </table>
     </div>
+    <div id="fc-table-reco" style="margin-top:10px;font-size:13px;color:var(--ink2);line-height:1.6"></div>
   </div>
 
-  <div id="fc-windows"></div>
+  <!-- Row 3: single-region detail -->
+  <div class="card" style="margin-bottom:0">
+    <div class="card-title" style="margin-bottom:10px">Region detail — <span id="fc-region-label">Yorkshire</span></div>
+    <div class="g2">
+      <div class="chart-wrap">
+        <div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Intensity forecast — next 48h</div>
+        <canvas id="fc-chart" height="190"></canvas>
+      </div>
+      <div class="chart-wrap">
+        <div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Estimated generation mix</div>
+        <canvas id="fc-mix-chart" height="190"></canvas>
+      </div>
+    </div>
+    <div id="fc-windows" style="margin-top:10px"></div>
+  </div>
+
 </div>
 
 <!-- ══════════════════════════ HEATMAP ══════════════════════════ -->
@@ -1306,157 +1360,239 @@ function buildRgnSummary(r, avg, base, drop, mix, renew2, nowVal){
 function initForecast(){
   const sel=document.getElementById('fc-region');
   if(!sel.options.length){RG.forEach(r=>{const o=document.createElement('option');o.value=o.text=r;sel.appendChild(o);});sel.value='Yorkshire';}
+  // Also update kwh label on init
+  var labelEl=document.getElementById('fc-kwh-label');
+  if(labelEl) labelEl.textContent='Custom workload · 100 kWh';
   buildForecast();
 }
 
+
+// ── Schedule tab preset handler ──
+var FC_PRESETS = {
+  custom:       {kwh: null,  label: 'Custom workload'},
+  ai_training:  {kwh: 500,   label: 'AI training run'},
+  batch_nightly:{kwh: 50,    label: 'Nightly batch job'},
+  ev_fleet:     {kwh: 200,   label: 'EV fleet charge'},
+  server_idle:  {kwh: 10,    label: 'Server idle migration'},
+  hpc:          {kwh: 2000,  label: 'HPC job'}
+};
+
+function onFcPreset(){
+  var preset = document.getElementById('fc-preset')?.value;
+  var kwhEl = document.getElementById('fc-kwh');
+  if(!preset || !kwhEl) return;
+  var p = FC_PRESETS[preset];
+  if(p && p.kwh !== null){ kwhEl.value = p.kwh; }
+  buildForecast();
+}
 function buildForecast(){
-  const r=document.getElementById('fc-region').value;
-  // Use live forecast if available, else fall back to static
-  const livePts = LIVE_FORECAST[r];
-  const now = new Date();
-  const startH = now.getUTCHours();
-  const labels=Array.from({length:48},(_,i)=>{
-    const h=(startH+i)%24;
-    const day=i<(24-startH)?'Today':i<(48-startH)?'Tomorrow':'Day 3';
-    return (i===0||(startH+i)%24===0)?`${day} ${String(h).padStart(2,'0')}:00`
-           :(startH+i)%6===0?`${String(h).padStart(2,'0')}:00`:'';
+  var r = document.getElementById('fc-region')?.value || RG[4];
+  var kwh = parseFloat(document.getElementById('fc-kwh')?.value) || 100;
+  var preset = document.getElementById('fc-preset')?.value || 'custom';
+  var presetLabel = FC_PRESETS[preset]?.label || 'Workload';
+
+  // Update label
+  var labelEl = document.getElementById('fc-kwh-label');
+  if(labelEl) labelEl.textContent = presetLabel+' · '+kwh+' kWh';
+  var regionLabel = document.getElementById('fc-region-label');
+  if(regionLabel) regionLabel.textContent = r;
+
+  // ── ALL-REGION TABLE ──
+  var tableData = RG.map(function(region){
+    var live = LIVE_FORECAST[region];
+    var vals = (live && live.length > 0) ? live.map(function(p){return p.intensity||0;}) : FORECAST[region];
+    var bestI = vals ? Math.min.apply(null,vals) : 0;
+    var worstI = vals ? Math.max.apply(null,vals) : 0;
+    var nowI = NOW[region] || 0;
+    var spread = worstI - bestI;
+    var kgBest = kwh * bestI / 1000;
+    var kgWorst = kwh * worstI / 1000;
+    var saving = kgWorst - kgBest;
+    // Timing: get best slot time if live data available
+    var bestIdx = vals ? vals.indexOf(bestI) : -1;
+    var bestSlot = live && live.length > 0 && bestIdx >= 0 ? live[bestIdx] : null;
+    var bestTime = '';
+    if(bestSlot && bestSlot.from){
+      var bd = new Date(bestSlot.from);
+      var now2 = new Date();
+      var hoursAhead = Math.round((bd - now2) / 3600000);
+      var dayLabel = hoursAhead < 2 ? 'now' : hoursAhead < 12 ? 'today' : hoursAhead < 36 ? 'tomorrow' : 'Day 3';
+      bestTime = String(bd.getUTCHours()).padStart(2,'0')+':00 '+dayLabel;
+    }
+    return {region, nowI, bestI, worstI, spread, kgBest, saving, bestTime, isLive: live && live.length > 0};
+  }).sort(function(a,b){ return a.bestI - b.bestI; });
+
+  var globalBestI = tableData[0].bestI;
+  var globalWorstI = tableData[tableData.length-1].worstI;
+
+  function fmtKg(kg){ return kg >= 1 ? kg.toFixed(1)+'\u202fkg' : (kg*1000).toFixed(0)+'\u202fg'; }
+
+  var tbody = document.getElementById('fc-all-tbody');
+  if(tbody){
+    tbody.innerHTML = tableData.map(function(d, i){
+      var isBest = i === 0;
+      var nowCol = d.nowI<100?'#16a34a':d.nowI<150?'#65a30d':d.nowI<225?'#d97706':d.nowI<300?'#ea580c':'#dc2626';
+      var bestCol = d.bestI<100?'#16a34a':d.bestI<150?'#65a30d':d.bestI<225?'#d97706':d.bestI<300?'#ea580c':'#dc2626';
+      var isSelected = d.region === r;
+      return '<tr'+(isBest?' class="fc-best-row"':'')+(isSelected?' style="background:var(--paper)"':'')+'>'+
+        '<td><a class="fc-region-link" onclick="selectFcRegion(\''+d.region+'\')" >'+
+          (isBest?'<span style="color:var(--low);margin-right:4px">\u2605</span>':'')+d.region+
+          (isSelected?' <span style="font-size:10px;color:var(--ink3)">\u25c4 selected</span>':'')+
+        '</a></td>'+
+        '<td style="color:'+nowCol+';font-family:var(--cond);font-weight:600">'+d.nowI+'</td>'+
+        '<td style="color:'+bestCol+';font-family:var(--cond);font-weight:700">'+d.bestI+
+          (d.bestTime?' <span style="font-size:10px;font-weight:400;color:var(--ink3)">'+d.bestTime+'</span>':'')+'</td>'+
+        '<td style="color:#dc2626;font-family:var(--cond)">'+d.worstI+'</td>'+
+        '<td style="color:var(--ink3);font-family:var(--cond)">'+d.spread+'</td>'+
+        '<td style="font-family:var(--cond);font-weight:600;color:'+bestCol+'">'+fmtKg(d.kgBest)+'</td>'+
+        '<td style="font-family:var(--cond);color:var(--low)">'+fmtKg(d.saving)+'</td>'+
+      '</tr>';
+    }).join('');
+  }
+
+  // Table recommendation
+  var best = tableData[0], worst = tableData[tableData.length-1];
+  var totalSaving = worst.kgBest - best.kgBest;
+  var recoEl = document.getElementById('fc-table-reco');
+  if(recoEl){
+    var gPerKwh = Math.round((worst.bestI - best.bestI));
+    recoEl.innerHTML =
+      '\u2605 <strong>'+best.region+'</strong> has the cleanest forecast window at <strong style="color:var(--low)">'+best.bestI+' gCO\u2082/kWh</strong>'+
+      (best.bestTime?' ('+best.bestTime+')':'')+'. '+
+      'Running '+kwh+'\u202fkWh there instead of '+worst.region+' at its best window saves '+
+      '<strong style="color:var(--low)">'+fmtKg(totalSaving)+'</strong> CO\u2082 \u2014 '+
+      'a <strong>'+gPerKwh+'\u202fgCO\u2082/kWh</strong> difference. '+
+      (totalSaving >= 1 ?
+        'Equivalent to '+( totalSaving / 110 >= 0.1 ? (totalSaving/110).toFixed(2)+' London\u2013Barcelona flights' :
+          Math.round(totalSaving/0.17)+'\u202fkm driven') + '.' : '');
+  }
+
+  // ── SINGLE-REGION DETAIL CHART ──
+  var livePts = LIVE_FORECAST[r];
+  var now = new Date();
+  var startH = now.getUTCHours();
+  var labels = Array.from({length:48},function(_,i){
+    var h=(startH+i)%24;
+    var day=i<(24-startH)?'Today':i<(48-startH)?'Tomorrow':'Day 3';
+    return (i===0||(startH+i)%24===0)?day+' '+String(h).padStart(2,'0')+':00'
+           :(startH+i)%6===0?String(h).padStart(2,'0')+':00':'';
   });
 
-  const vals = (livePts && livePts.length > 0) ? livePts.map(function(p){return p.intensity||0;}) : FORECAST[r];
-  // Fetch live forecast in background if not loaded
-  // When it arrives, update charts in place rather than destroy+recreate
-  if(!livePts || livePts.length === 0){ fetchRegionForecast(r, function(pts){
-    if(!pts) return;
-    if(!document.getElementById('p-forecast').classList.contains('active')) return;
-    // Update existing chart data in place — no flash
-    if(CH.fc){
-      var liveFcVals = pts.map(function(p){return p.intensity||0;});
-      var bIdx = liveFcVals.indexOf(Math.min.apply(null,liveFcVals));
-      var wIdx = liveFcVals.indexOf(Math.max.apply(null,liveFcVals));
-      CH.fc.data.datasets[0].data = liveFcVals;
-      CH.fc.data.datasets[0].pointRadius = liveFcVals.map(function(_,i){return i===bIdx||i===wIdx?5:0;});
-      CH.fc.data.datasets[0].pointBackgroundColor = liveFcVals.map(function(_,i){return i===bIdx?'#16a34a':i===wIdx?'#dc2626':'transparent';});
-      CH.fc.update('none');
-      // Also rebuild the recommendation boxes with live data
-      var selR = document.getElementById('fc-region').value;
-      var bestH2=(startH+bIdx)%24, worstH2=(startH+wIdx)%24;
-      var bestDay=bIdx<(24-startH)?'today':'tomorrow';
-      var worstDay=wIdx<(24-startH)?'today':'tomorrow';
-      var saving=liveFcVals[wIdx]-liveFcVals[bIdx];
-      var fcWin=document.getElementById('fc-windows');
-      if(fcWin) fcWin.innerHTML='<div class="best-window"><div class="bw-icon">✅</div><div><div class="bw-title">Best window — '+String(bestH2).padStart(2,'0')+':00 '+bestDay+'</div><div class="bw-body"><strong>'+liveFcVals[bIdx]+' gCO₂/kWh forecast</strong> — lowest carbon period for '+selR+'. Shifting a 100kWh workload here instead of the peak saves approximately '+Math.round(saving/10)*10+' grams of CO₂.</div></div></div><div class="bw-warning" style="margin-top:8px"><div class="bw-icon">⚠️</div><div><div class="bw-title" style="color:var(--mid)">Peak period — '+String(worstH2).padStart(2,'0')+':00 '+worstDay+'</div><div class="bw-body"><strong>'+liveFcVals[wIdx]+' gCO₂/kWh forecast</strong> — avoid intensive workloads during this period. The '+saving+' gCO₂/kWh difference is a '+Math.round((saving/liveFcVals[wIdx])*100)+'% reduction opportunity.</div></div></div><div style="font-size:12px;color:var(--ink3);margin-top:8px;font-style:italic">Live 48h forecast from NESO Carbon Intensity API.</div>';
-    } else {
-      buildForecast(); // chart not yet created, do full build
-    }
-  }); }
-  const bestIdx=vals.indexOf(Math.min(...vals));
-  const worstIdx=vals.indexOf(Math.max(...vals));
+  var vals = (livePts && livePts.length > 0) ? livePts.map(function(p){return p.intensity||0;}) : FORECAST[r];
+  if(!livePts || livePts.length === 0){
+    fetchRegionForecast(r, function(pts){
+      if(!pts) return;
+      if(!document.getElementById('p-forecast').classList.contains('active')) return;
+      if(CH.fc){
+        var lv = pts.map(function(p){return p.intensity||0;});
+        var bi = lv.indexOf(Math.min.apply(null,lv)), wi = lv.indexOf(Math.max.apply(null,lv));
+        CH.fc.data.datasets[0].data = lv;
+        CH.fc.data.datasets[0].pointRadius = lv.map(function(_,i){return i===bi||i===wi?5:0;});
+        CH.fc.data.datasets[0].pointBackgroundColor = lv.map(function(_,i){return i===bi?'#16a34a':i===wi?'#dc2626':'transparent';});
+        CH.fc.update('none');
+        buildFcWindows(r, lv, startH, kwh);
+        buildForecast(); // rebuild table with live data
+      }
+    });
+  }
 
-  // Intensity line chart
+  var bestIdx2 = vals.indexOf(Math.min.apply(null,vals));
+  var worstIdx2 = vals.indexOf(Math.max.apply(null,vals));
+
   kc('fc');
-  const ctx1=document.getElementById('fc-chart').getContext('2d');
-  CH.fc=new Chart(ctx1,{
+  var ctx1 = document.getElementById('fc-chart').getContext('2d');
+  CH.fc = new Chart(ctx1,{
     type:'line',
-    data:{labels,datasets:[{
-      label:`${r} — gCO₂/kWh`,
-      data:vals,
+    data:{labels, datasets:[{
+      label:r+' \u2014 gCO\u2082/kWh', data:vals,
       borderColor:RCOL[r]||'#3b82f6',
-      backgroundColor:vals.map(v=>ci(v,.08)),
+      backgroundColor:vals.map(function(v){return ci(v,.08);}),
       borderWidth:2,
-      pointRadius:vals.map((_,i)=>i===bestIdx||i===worstIdx?5:0),
-      pointBackgroundColor:vals.map((_,i)=>i===bestIdx?'#16a34a':i===worstIdx?'#dc2626':'transparent'),
+      pointRadius:vals.map(function(_,i){return i===bestIdx2||i===worstIdx2?5:0;}),
+      pointBackgroundColor:vals.map(function(_,i){return i===bestIdx2?'#16a34a':i===worstIdx2?'#dc2626':'transparent';}),
       tension:.4,fill:false
     }]},
     options:{
       responsive:true,maintainAspectRatio:false,
-      plugins:{
-        legend:{display:false},
-        tooltip:{
-          displayColors:false,
-          callbacks:{label:c=>`${Math.round(c.parsed.y)} gCO₂/kWh`}
-        }
-      },
+      plugins:{legend:{display:false},tooltip:{displayColors:false,callbacks:{label:function(c){return Math.round(c.parsed.y)+' gCO\u2082/kWh';}}}},
       scales:{
         x:{ticks:{color:'#6b6b6b',font:{size:9,family:'Barlow'},maxRotation:0},grid:{color:'#f0ede6'}},
-        y:{ticks:{color:'#6b6b6b',font:{size:10,family:'Barlow'}},grid:{color:'#f0ede6'},
-           title:{display:true,text:'gCO₂/kWh',color:'#6b6b6b',font:{size:10,family:'Barlow'}}}
+        y:{ticks:{color:'#6b6b6b',font:{size:10,family:'Barlow'}},grid:{color:'#f0ede6'},title:{display:true,text:'gCO\u2082/kWh',color:'#6b6b6b',font:{size:10}}}
       }
     }
   });
 
-  // Estimated mix stacked area chart (use GB March mix pattern)
-  // Use live regional mix for forecast overlay if available
+  // Mix chart
   var liveMixNow = LIVE.mix[r] || {};
   var marchBase = MONTHLY_MIX['2026-03']||[22,46,19,5,4,2,0,2,0];
-  const marchMix = [
-    liveMixNow.gas !== undefined ? liveMixNow.gas : marchBase[0],
-    liveMixNow.wind !== undefined ? liveMixNow.wind : marchBase[1],
-    liveMixNow.nuclear !== undefined ? liveMixNow.nuclear : marchBase[2],
-    liveMixNow.solar !== undefined ? liveMixNow.solar : marchBase[3],
-    liveMixNow.biomass !== undefined ? liveMixNow.biomass : marchBase[4],
-    liveMixNow.hydro !== undefined ? liveMixNow.hydro : marchBase[5],
-    0, // coal
-    liveMixNow.imports !== undefined ? liveMixNow.imports : marchBase[7],
-    liveMixNow.other !== undefined ? liveMixNow.other : marchBase[8]
+  var marchMix=[
+    liveMixNow.gas!==undefined?liveMixNow.gas:marchBase[0],
+    liveMixNow.wind!==undefined?liveMixNow.wind:marchBase[1],
+    liveMixNow.nuclear!==undefined?liveMixNow.nuclear:marchBase[2],
+    liveMixNow.solar!==undefined?liveMixNow.solar:marchBase[3],
+    liveMixNow.biomass!==undefined?liveMixNow.biomass:marchBase[4],
+    liveMixNow.hydro!==undefined?liveMixNow.hydro:marchBase[5],
+    0,
+    liveMixNow.imports!==undefined?liveMixNow.imports:marchBase[7],
+    liveMixNow.other!==undefined?liveMixNow.other:marchBase[8]
   ];
-  // Vary mix over 48h — solar peaks midday, gas inversely
-  const solarProfile=[0,0,0,0,0,0,0.1,0.3,0.6,0.85,1.0,1.1,1.15,1.1,1.0,0.85,0.6,0.3,0.1,0,0,0,0,0];
-  const gasProfile=[0.85,0.82,0.80,0.80,0.82,0.90,1.02,1.10,1.12,1.10,1.06,1.02,1.0,0.98,1.0,1.05,1.14,1.18,1.18,1.15,1.10,1.02,0.95,0.88];
-  const mixDs=FUELS.filter(f=>marchMix[FUELS.indexOf(f)]>1).map(f=>{
-    const fi=FUELS.indexOf(f);
-    const base=marchMix[fi];
-    const data=Array.from({length:48},(_,i)=>{
-      const h=(startH+i)%24;
-      let v=base;
-      if(f==='solar') v=base*(solarProfile[h]||0);
-      else if(f==='gas') v=base*(gasProfile[h]||1);
+  var solarPro=[0,0,0,0,0,0,.1,.3,.6,.85,1,1.1,1.15,1.1,1,.85,.6,.3,.1,0,0,0,0,0];
+  var gasPro=[.85,.82,.80,.80,.82,.90,1.02,1.10,1.12,1.10,1.06,1.02,1,.98,1,1.05,1.14,1.18,1.18,1.15,1.10,1.02,.95,.88];
+  var mixDs=FUELS.filter(function(f){return marchMix[FUELS.indexOf(f)]>1;}).map(function(f){
+    var fi=FUELS.indexOf(f); var base=marchMix[fi];
+    var data=Array.from({length:48},function(_,i){
+      var h=(startH+i)%24, v=base;
+      if(f==='solar') v=base*(solarPro[h]||0);
+      else if(f==='gas') v=base*(gasPro[h]||1);
       return Math.max(0,Math.round(v));
     });
     return{label:FUEL_LABELS[f],data,backgroundColor:FUEL_COLORS[f]+'cc',borderColor:FUEL_COLORS[f],borderWidth:0,fill:true};
   });
-
   kc('fcm');
-  const ctx2=document.getElementById('fc-mix-chart').getContext('2d');
+  var ctx2=document.getElementById('fc-mix-chart').getContext('2d');
   CH.fcm=new Chart(ctx2,{
-    type:'line',
-    data:{labels,datasets:mixDs},
+    type:'line',data:{labels,datasets:mixDs},
     options:{
       responsive:true,maintainAspectRatio:false,
       interaction:{mode:'index',intersect:false},
-      plugins:{
-        legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:9,family:'Barlow'},boxWidth:10,padding:8}},
-        tooltip:{usePointStyle:true}
-      },
+      plugins:{legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:9,family:'Barlow'},boxWidth:10,padding:8}},tooltip:{usePointStyle:true}},
       scales:{
         x:{stacked:true,ticks:{color:'#6b6b6b',font:{size:9,family:'Barlow'},maxRotation:0},grid:{display:false}},
-        y:{stacked:true,ticks:{color:'#6b6b6b',font:{size:10,family:'Barlow'},callback:v=>v+'%'},grid:{color:'#f0ede6'},max:100}
+        y:{stacked:true,ticks:{color:'#6b6b6b',font:{size:10,family:'Barlow'},callback:function(v){return v+'%';}},grid:{color:'#f0ede6'},max:100}
       }
     }
   });
 
-  // Best/worst windows
-  const bestH=(startH+bestIdx)%24;
-  const worstH=(startH+worstIdx)%24;
-  const bestDay=bestIdx<(24-startH)?'today':bestIdx<(48-startH)?'tomorrow':'Wednesday';
-  const worstDay=worstIdx<(24-startH)?'today':worstIdx<(48-startH)?'tomorrow':'Wednesday';
-  const saving=vals[worstIdx]-vals[bestIdx];
-  document.getElementById('fc-windows').innerHTML=`
-    <div class="best-window">
-      <div class="bw-icon">✅</div>
-      <div>
-        <div class="bw-title">Best window — ${String(bestH).padStart(2,'0')}:00 ${bestDay}</div>
-        <div class="bw-body"><strong>${vals[bestIdx]} gCO₂/kWh forecast</strong> — lowest carbon period in the next 48 hours for ${r}. Ideal for scheduling AI training jobs, batch compute, EV charging, or any deferrable load. Shifting a 100kWh workload to this window instead of the peak period saves approximately ${Math.round(saving/10)*10} grams of CO₂.</div>
-      </div>
-    </div>
-    <div class="bw-warning" style="margin-top:8px">
-      <div class="bw-icon">⚠️</div>
-      <div>
-        <div class="bw-title" style="color:var(--mid)">Peak period — ${String(worstH).padStart(2,'0')}:00 ${worstDay}</div>
-        <div class="bw-body"><strong>${vals[worstIdx]} gCO₂/kWh forecast</strong> — highest carbon intensity in the forecast window. Avoid running intensive workloads during this period where possible. The ${saving} gCO₂/kWh difference between best and worst represents a ${Math.round((saving/vals[worstIdx])*100)}% reduction opportunity.</div>
-      </div>
-    </div>
-    <div style="font-size:12px;color:var(--ink3);margin-top:8px;font-style:italic">Forecast uses NESO historical patterns scaled to current conditions. Actual values will vary. Connect to the live Carbon Intensity API for real-time data in production.</div>
-  `;
+  buildFcWindows(r, vals, startH, kwh);
+}
+
+function selectFcRegion(region){
+  var sel = document.getElementById('fc-region');
+  if(sel) sel.value = region;
+  buildForecast();
+}
+
+function buildFcWindows(r, vals, startH, kwh){
+  var bestIdx = vals.indexOf(Math.min.apply(null,vals));
+  var worstIdx = vals.indexOf(Math.max.apply(null,vals));
+  var bestH = (startH+bestIdx)%24, worstH = (startH+worstIdx)%24;
+  var bestDay = bestIdx<(24-startH)?'today':bestIdx<(48-startH)?'tomorrow':'in 2 days';
+  var worstDay = worstIdx<(24-startH)?'today':worstIdx<(48-startH)?'tomorrow':'in 2 days';
+  var saving = vals[worstIdx]-vals[bestIdx];
+  var kgSaving = (kwh * saving / 1000);
+  var kgFmt = kgSaving >= 1 ? kgSaving.toFixed(1)+'\u202fkg' : (kgSaving*1000).toFixed(0)+'\u202fg';
+  document.getElementById('fc-windows').innerHTML =
+    '<div class="best-window"><div class="bw-icon">\u2705</div><div>'+
+      '<div class="bw-title">Best window \u2014 '+String(bestH).padStart(2,'0')+':00 '+bestDay+'</div>'+
+      '<div class="bw-body"><strong>'+vals[bestIdx]+' gCO\u2082/kWh forecast</strong> \u2014 lowest carbon period for '+r+'. '+
+      'Running '+kwh+'\u202fkWh here instead of the peak saves <strong style="color:var(--low)">'+kgFmt+' CO\u2082</strong>.</div>'+
+    '</div></div>'+
+    '<div class="bw-warning" style="margin-top:8px"><div class="bw-icon">\u26a0\ufe0f</div><div>'+
+      '<div class="bw-title" style="color:var(--mid)">Peak period \u2014 '+String(worstH).padStart(2,'0')+':00 '+worstDay+'</div>'+
+      '<div class="bw-body"><strong>'+vals[worstIdx]+' gCO\u2082/kWh forecast</strong> \u2014 avoid intensive workloads here. '+
+      'The '+saving+' gCO\u2082/kWh spread is a '+Math.round((saving/vals[worstIdx])*100)+'% reduction opportunity by shifting to the best window.</div>'+
+    '</div></div>'+
+    '<div style="font-size:11px;color:var(--ink3);margin-top:8px;font-style:italic">Indicative forecast from NESO historical patterns. Click any region in the table above to update this detail view.</div>';
 }
 
 // ══════════════════════════════════════════════════════════
