@@ -376,7 +376,7 @@ table.hm th{font-family:var(--cond);font-size:9px;font-weight:600;letter-spacing
   <button class="tab active" onclick="go('now')">Now</button>
   <button class="tab" onclick="go('map')">Map</button>
   <button class="tab" id="tab-region" onclick="go('region')">Region</button>
-  <button class="tab" onclick="go('forecast')">Forecast</button>
+  <button class="tab" onclick="go('forecast')">Schedule</button>
   <button class="tab" onclick="go('heatmap')">Heatmap</button>
   <button class="tab" onclick="go('trend')">Trend</button>
   <button class="tab" onclick="go('mix')">Power Mix</button>
@@ -482,7 +482,7 @@ table.hm th{font-family:var(--cond);font-size:9px;font-weight:600;letter-spacing
 
 <!-- ══════════════════════════ FORECAST ══════════════════════════ -->
 <div id="p-forecast" class="panel">
-  <div class="sh"><h2>48-hour forecast</h2><p>Based on NESO Carbon Intensity API forecast model · 96h ahead capability · generation mix and intensity</p></div>
+  <div class="sh"><h2>Scheduling windows</h2><p>Best and worst windows for the next 48 hours · select a region · live NESO forecast data</p></div>
 
   <div class="fcast-region-sel">
     <label>Region</label>
@@ -712,20 +712,20 @@ table.hm th{font-family:var(--cond);font-size:9px;font-weight:600;letter-spacing
   <div class="rgn-stats" id="rgn-stats"></div>
   <div class="g2">
     <div class="chart-wrap">
-      <div class="card-title" style="margin-bottom:10px">48-hour intensity forecast</div>
-      <canvas id="rgn-fc-chart" height="200"></canvas>
-      <div id="rgn-fc-tip" style="margin-top:10px"></div>
+      <div class="card-title" style="margin-bottom:10px">Monthly intensity vs GB average</div>
+      <canvas id="rgn-trend-chart" height="220"></canvas>
     </div>
     <div class="chart-wrap">
-      <div class="card-title" style="margin-bottom:10px">Average intensity by hour of day</div>
-      <canvas id="rgn-sched-chart" height="200"></canvas>
+      <div class="card-title" style="margin-bottom:10px">Average intensity by hour of day <span class="card-sub">· all-time average</span></div>
+      <canvas id="rgn-sched-chart" height="220"></canvas>
       <div id="rgn-sched-tip" style="margin-top:10px"></div>
     </div>
   </div>
   <div class="g2">
     <div class="chart-wrap">
-      <div class="card-title" style="margin-bottom:10px">Monthly intensity vs GB average</div>
-      <canvas id="rgn-trend-chart" height="220"></canvas>
+      <div class="card-title" style="margin-bottom:10px">48-hour forecast</div>
+      <canvas id="rgn-fc-chart" height="200"></canvas>
+      <div id="rgn-fc-tip" style="margin-top:10px"></div>
     </div>
     <div class="chart-wrap">
       <div class="card-title" style="margin-bottom:10px">Estimated generation mix over time</div>
@@ -994,6 +994,41 @@ function buildRegion(){
     '<div class="stat-cell c-g"><div class="stat-lbl">Reduction since 2018</div><div class="stat-val" style="color:var(--low)">↓'+drop+'%</div><div class="stat-sub">'+Math.round(base)+' → '+Math.round(avg)+'</div></div>' +
     '<div class="stat-cell c-b"><div class="stat-lbl">Clean energy now</div><div class="stat-val" style="color:var(--acc)">'+renew2+'%</div><div class="stat-sub">wind+solar+nuclear+hydro</div></div>';
 
+  // Trend vs GB
+  kc('rgn-trend');
+  var months = Object.keys(MONTHLY).sort();
+  var gbAvgs = months.map(function(m){ var v=RG.map(function(rg){return MONTHLY[m]?.[rg];}).filter(function(v){return v!=null;}); return v.length?Math.round(v.reduce(function(a,b){return a+b;})/v.length):null; });
+  var ctx3 = document.getElementById('rgn-trend-chart').getContext('2d');
+  CH['rgn-trend'] = new Chart(ctx3, {
+    type:'line',
+    data:{labels:months, datasets:[
+      {label:r, data:months.map(function(m){return MONTHLY[m]?.[r]??null;}), borderColor:RCOL[r], backgroundColor:RCOL[r]+'15', borderWidth:2, pointRadius:0, tension:.35, fill:false},
+      {label:'GB average', data:gbAvgs, borderColor:'#94a3b8', backgroundColor:'transparent', borderWidth:1.5, borderDash:[4,3], pointRadius:0, tension:.35, fill:false}
+    ]},
+    options:{responsive:true, maintainAspectRatio:false, interaction:{mode:'index',intersect:false},
+      plugins:{legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:10},boxWidth:12,padding:10}}, tooltip:{usePointStyle:true,callbacks:{label:function(c){return c.dataset.label+': '+Math.round(c.parsed.y)+' gCO₂/kWh';}}}},
+      scales:{x:{ticks:{color:'#6b6b6b',font:{size:9},maxRotation:40,maxTicksLimit:20},grid:{color:'#f0ede6'}}, y:{ticks:{color:'#6b6b6b',font:{size:9}},grid:{color:'#f0ede6'},title:{display:true,text:'gCO₂/kWh',color:'#6b6b6b',font:{size:9}}}}
+    }
+  });
+
+  // Hourly bar chart
+  kc('rgn-sched');
+  var hrs = Array.from({length:24}, function(_,i){return i;});
+  var hAvg = hrs.map(function(h){return HOURLY[h]?.[r]??0;});
+  var ctx2 = document.getElementById('rgn-sched-chart').getContext('2d');
+  CH['rgn-sched'] = new Chart(ctx2, {
+    type:'bar',
+    data:{labels:hrs.map(function(h){return String(h).padStart(2,'0')+':00';}), datasets:[{
+      data:hAvg, backgroundColor:hAvg.map(function(v){return ci(v,.75);}), borderColor:hAvg.map(function(v){return ci(v,1);}), borderWidth:1, borderRadius:2
+    }]},
+    options:{responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false}, tooltip:{displayColors:false,callbacks:{label:function(c){return 'avg '+Math.round(c.parsed.y)+' gCO₂/kWh';}}}},
+      scales:{x:{ticks:{color:'#6b6b6b',font:{size:8},maxRotation:40},grid:{display:false}}, y:{ticks:{color:'#6b6b6b',font:{size:9}},grid:{color:'#f0ede6'},title:{display:true,text:'avg gCO₂/kWh',color:'#6b6b6b',font:{size:9}}}}
+    }
+  });
+  var bestHr=hAvg.indexOf(Math.min.apply(null,hAvg)), worstHr=hAvg.indexOf(Math.max.apply(null,hAvg));
+  document.getElementById('rgn-sched-tip').innerHTML = '<div style="font-size:13px;color:var(--ink3);line-height:1.6">Best hour: <strong style="color:var(--low)">'+String(bestHr).padStart(2,'0')+':00</strong> ('+Math.round(hAvg[bestHr])+' avg). Peak: <strong style="color:var(--high)">'+String(worstHr).padStart(2,'0')+':00</strong> ('+Math.round(hAvg[worstHr])+' avg). Shifting 1 MWh saves ~'+Math.round(hAvg[worstHr]-hAvg[bestHr])+' kg CO₂.</div>';
+
   // 48h forecast chart — use live data if available, otherwise fetch
   kc('rgn-fc');
   var fVals = (LIVE_FORECAST[r] && LIVE_FORECAST[r].length > 0) ? LIVE_FORECAST[r].map(function(p){return p.intensity||0;}) : FORECAST[r];
@@ -1031,41 +1066,6 @@ function buildRegion(){
     '<div class="best-window" style="flex:1;margin:0"><div class="bw-icon">✅</div><div><div class="bw-title">Best: '+String(bestH2).padStart(2,'0')+':00 '+bestDay+'</div><div class="bw-body">'+fVals[bestIdx]+' gCO₂/kWh &middot; '+(fVals[worstIdx]-fVals[bestIdx])+' gCO₂/kWh saving vs peak</div></div></div>' +
     '<div class="bw-warning" style="flex:1;margin:0"><div class="bw-icon">⚠️</div><div><div class="bw-title" style="color:var(--mid)">Peak: '+String(worstH2).padStart(2,'0')+':00 '+worstDay+'</div><div class="bw-body">'+fVals[worstIdx]+' gCO₂/kWh &middot; avoid intensive workloads</div></div></div>' +
     '</div>';
-
-  // Hourly bar chart
-  kc('rgn-sched');
-  var hrs = Array.from({length:24}, function(_,i){return i;});
-  var hAvg = hrs.map(function(h){return HOURLY[h]?.[r]??0;});
-  var ctx2 = document.getElementById('rgn-sched-chart').getContext('2d');
-  CH['rgn-sched'] = new Chart(ctx2, {
-    type:'bar',
-    data:{labels:hrs.map(function(h){return String(h).padStart(2,'0')+':00';}), datasets:[{
-      data:hAvg, backgroundColor:hAvg.map(function(v){return ci(v,.75);}), borderColor:hAvg.map(function(v){return ci(v,1);}), borderWidth:1, borderRadius:2
-    }]},
-    options:{responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:false}, tooltip:{displayColors:false,callbacks:{label:function(c){return 'avg '+Math.round(c.parsed.y)+' gCO₂/kWh';}}}},
-      scales:{x:{ticks:{color:'#6b6b6b',font:{size:8},maxRotation:40},grid:{display:false}}, y:{ticks:{color:'#6b6b6b',font:{size:9}},grid:{color:'#f0ede6'},title:{display:true,text:'avg gCO₂/kWh',color:'#6b6b6b',font:{size:9}}}}
-    }
-  });
-  var bestHr=hAvg.indexOf(Math.min.apply(null,hAvg)), worstHr=hAvg.indexOf(Math.max.apply(null,hAvg));
-  document.getElementById('rgn-sched-tip').innerHTML = '<div style="font-size:13px;color:var(--ink3);line-height:1.6">Best hour: <strong style="color:var(--low)">'+String(bestHr).padStart(2,'0')+':00</strong> ('+Math.round(hAvg[bestHr])+' avg). Peak: <strong style="color:var(--high)">'+String(worstHr).padStart(2,'0')+':00</strong> ('+Math.round(hAvg[worstHr])+' avg). Shifting 1 MWh saves ~'+Math.round(hAvg[worstHr]-hAvg[bestHr])+' kg CO₂.</div>';
-
-  // Trend vs GB
-  kc('rgn-trend');
-  var months = Object.keys(MONTHLY).sort();
-  var gbAvgs = months.map(function(m){ var v=RG.map(function(rg){return MONTHLY[m]?.[rg];}).filter(function(v){return v!=null;}); return v.length?Math.round(v.reduce(function(a,b){return a+b;})/v.length):null; });
-  var ctx3 = document.getElementById('rgn-trend-chart').getContext('2d');
-  CH['rgn-trend'] = new Chart(ctx3, {
-    type:'line',
-    data:{labels:months, datasets:[
-      {label:r, data:months.map(function(m){return MONTHLY[m]?.[r]??null;}), borderColor:RCOL[r], backgroundColor:RCOL[r]+'15', borderWidth:2, pointRadius:0, tension:.35, fill:false},
-      {label:'GB average', data:gbAvgs, borderColor:'#94a3b8', backgroundColor:'transparent', borderWidth:1.5, borderDash:[4,3], pointRadius:0, tension:.35, fill:false}
-    ]},
-    options:{responsive:true, maintainAspectRatio:false, interaction:{mode:'index',intersect:false},
-      plugins:{legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:10},boxWidth:12,padding:10}}, tooltip:{usePointStyle:true,callbacks:{label:function(c){return c.dataset.label+': '+Math.round(c.parsed.y)+' gCO₂/kWh';}}}},
-      scales:{x:{ticks:{color:'#6b6b6b',font:{size:9},maxRotation:40,maxTicksLimit:20},grid:{color:'#f0ede6'}}, y:{ticks:{color:'#6b6b6b',font:{size:9}},grid:{color:'#f0ede6'},title:{display:true,text:'gCO₂/kWh',color:'#6b6b6b',font:{size:9}}}}
-    }
-  });
 
   // Mix over time
   kc('rgn-mix');
