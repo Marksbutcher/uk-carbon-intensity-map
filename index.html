@@ -191,6 +191,15 @@ table.hm th{font-family:var(--cond);font-size:9px;font-weight:600;letter-spacing
 .hm-rank-bar-wrap{flex:1;height:8px;background:var(--paper);border-radius:4px;overflow:hidden}
 .hm-rank-bar{height:100%;border-radius:4px;transition:width .4s ease}
 .hm-rank-val{font-family:var(--cond);font-size:12px;font-weight:600;width:38px;text-align:right;flex-shrink:0}
+
+/* region summary */
+.rgn-sum-row{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--rule)}
+.rgn-sum-row:last-child{border-bottom:none}
+.rgn-sum-ico{font-size:15px;width:20px;flex-shrink:0;text-align:center;padding-top:2px}
+.rgn-sum-body{flex:1;min-width:0}
+.rgn-sum-lbl{font-family:var(--cond);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:2px}
+.rgn-sum-txt{font-size:12px;color:var(--ink2);line-height:1.55;font-weight:300}
+.rgn-sum-txt strong{font-weight:600;color:var(--ink)}
 /* ── MAP ── */
 .map-layout{display:grid;grid-template-columns:1fr 280px;gap:18px;align-items:stretch}
 @media(max-width:900px){.map-layout{grid-template-columns:1fr}}
@@ -732,13 +741,26 @@ table.hm th{font-family:var(--cond);font-size:9px;font-weight:600;letter-spacing
       <canvas id="rgn-mix-chart" height="220"></canvas>
     </div>
   </div>
-  <div class="card">
-    <div class="card-title" style="margin-bottom:10px">Carbon intensity by hour and month <span class="card-sub">all-year average</span></div>
-    <div class="hm-wrap" style="border:none;padding:0" id="rgn-hm"></div>
-    <div class="hm-legend" style="margin-top:8px">
-      <span style="color:var(--low);font-weight:500">Low</span>
-      <div class="hm-grad" style="background:linear-gradient(90deg,#16a34a,#d97706 50%,#dc2626)"></div>
-      <span style="color:var(--high);font-weight:500">High</span>
+  <div class="g2" style="align-items:start">
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap">
+        <div class="card-title" style="margin:0">Hour &times; month <span class="card-sub" id="rgn-hm-scale-label">&middot; vs GB scale</span></div>
+        <div class="chart-toggle">
+          <button class="ct-btn active" id="rgn-hm-abs" onclick="setRgnHmScale('abs')">vs GB scale</button>
+          <button class="ct-btn" id="rgn-hm-rel" onclick="setRgnHmScale('rel')">vs own range</button>
+        </div>
+      </div>
+      <div class="hm-wrap" style="border:none;padding:0" id="rgn-hm"></div>
+      <div class="hm-legend" style="margin-top:8px">
+        <span style="color:var(--low);font-weight:500">Low</span>
+        <div class="hm-grad" style="background:linear-gradient(90deg,#16a34a,#d97706 50%,#dc2626)"></div>
+        <span style="color:var(--high);font-weight:500">High</span>
+        <span style="margin-left:8px;color:var(--ink3);font-size:11px" id="rgn-hm-legend-note">vs national scale</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="margin-bottom:14px">Region at a glance</div>
+      <div id="rgn-summary"></div>
     </div>
   </div>
   <div class="card" id="rgn-context"></div>
@@ -958,7 +980,9 @@ function hlR(r){ openRegion(r); }
 let activeRegion = RG[0]; // default so Region tab works immediately
 
 function openRegion(r){
-  activeRegion = r;
+  activeRegion=r; window._rgnHmScale='abs';
+  document.getElementById('rgn-hm-abs')?.classList.add('active');
+  document.getElementById('rgn-hm-rel')?.classList.remove('active');
   go('region');
 }
 
@@ -1087,53 +1111,157 @@ function buildRegion(){
   });
 
   // Hour x month heatmap
+  window._rgnR = r;
+  window._rgnAvg = avg; window._rgnBase = base; window._rgnDrop = drop;
+  window._rgnMix = mix; window._rgnRenew = renew2; window._rgnNow = now;
+  if(!window._rgnHmScale) window._rgnHmScale = 'abs';
+  buildRgnHm(r, window._rgnHmScale);
+  buildRgnSummary(r, avg, base, drop, mix, renew2, now);
+}
+
+function setRgnHmScale(scale){
+  window._rgnHmScale = scale;
+  document.getElementById('rgn-hm-abs').classList.toggle('active', scale==='abs');
+  document.getElementById('rgn-hm-rel').classList.toggle('active', scale==='rel');
+  var lbl = document.getElementById('rgn-hm-scale-label');
+  if(lbl) lbl.textContent = scale==='rel' ? '\xb7 vs own range' : '\xb7 vs GB scale';
+  buildRgnHm(window._rgnR || activeRegion, scale);
+}
+
+function buildRgnHm(r, scale){
   var MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  var hrsAll=Array.from({length:24},function(_,i){return i;});
-  var grid=hrsAll.map(function(h){return MN.map(function(_,mi){
-    var profMean=hrsAll.reduce(function(s,hh){return s+(HOURLY[hh]?.[r]||0);},0)/24;
+  var hrs=Array.from({length:24},(_,i)=>i);
+  var profMean=hrs.reduce((s,h)=>s+(HOURLY[h]?.[r]||0),0)/24;
+  var grid=hrs.map(h=>MN.map((_,mi)=>{
     var ratio=profMean>0?(HOURLY[h]?.[r]||0)/profMean:1;
-    var keys=Object.keys(MONTHLY).filter(function(k){return parseInt(k.split('-')[1])-1===mi;});
-    var vs=keys.map(function(k){return MONTHLY[k]?.[r];}).filter(function(v){return v!=null;});
-    return vs.length?Math.round(vs.reduce(function(a,b){return a+b;})/vs.length*ratio):null;
-  });});
-  var hdr2=MN.map(function(m){return '<th style="width:28px">'+m+'</th>';}).join('');
-  var body2=hrsAll.map(function(h){
-    var cells=MN.map(function(_,mi){var v=grid[h][mi];return '<td class="hm-cell" style="background:'+(v!=null?ci(v,.88):'#f0ede6')+'" title="'+r+' · '+MN[mi]+' · '+String(h).padStart(2,'0')+':00 · '+(v!=null?v:'–')+' gCO₂/kWh"></td>';}).join('');
+    var keys=Object.keys(MONTHLY).filter(k=>parseInt(k.split('-')[1])-1===mi);
+    var vs=keys.map(k=>MONTHLY[k]?.[r]).filter(v=>v!=null);
+    return vs.length?Math.round(vs.reduce((a,b)=>a+b)/vs.length*ratio):null;
+  }));
+  // colour scale
+  var flat=grid.flat().filter(v=>v!=null);
+  var gMin=flat.length?Math.min(...flat):0, gMax=flat.length?Math.max(...flat):400;
+  function col(v){
+    if(v==null) return '#f0ede6';
+    if(scale==='rel'){ var p=(gMax>gMin)?(v-gMin)/(gMax-gMin):0.5; return ci(p*400,.88); }
+    return ci(v,.88);
+  }
+  var hdr=MN.map(m=>'<th style="width:28px">'+m+'</th>').join('');
+  var body=hrs.map(h=>{
+    var cells=MN.map((_,mi)=>{
+      var v=grid[h][mi];
+      return '<td class="hm-cell" style="background:'+col(v)+'" title="'+r+' \xb7 '+MN[mi]+' \xb7 '+String(h).padStart(2,'0')+':00 \xb7 '+(v??'\u2013')+' gCO\u2082/kWh"></td>';
+    }).join('');
     return '<tr><td class="hm-rl" style="min-width:55px">'+String(h).padStart(2,'0')+':00</td>'+cells+'</tr>';
   }).join('');
-  document.getElementById('rgn-hm').innerHTML = '<table class="hm"><thead><tr><th class="hm-corner" style="min-width:55px"></th>'+hdr2+'</tr></thead><tbody>'+body2+'</tbody></table>';
-
-  // Context
-  var topFuel=FUELS.reduce(function(b,f){return mix[f]>mix[b]?f:b;},'gas');
-  var fossilPct2=(mix.gas||0)+(mix.coal||0);
-  document.getElementById('rgn-context').innerHTML =
-    '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">' +
-    '<div><div style="font-family:var(--cond);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px">Generation profile</div><div style="font-size:13px;color:var(--ink2);line-height:1.7;font-weight:300">Primary source: <strong style="color:'+FUEL_COLORS[topFuel]+'">'+FUEL_LABELS[topFuel]+' ('+mix[topFuel]+'%)</strong>. Renewables and nuclear supply '+renew2+'%. Fossil fuels: '+fossilPct2+'%.</div></div>' +
-    '<div><div style="font-family:var(--cond);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px">Decarbonisation</div><div style="font-size:13px;color:var(--ink2);line-height:1.7;font-weight:300">Average intensity has fallen from <strong>'+Math.round(base)+'</strong> in 2018–19 to <strong>'+Math.round(avg)+'</strong> gCO₂/kWh — a <strong style="color:var(--low)">'+drop+'% reduction</strong>.</div></div>' +
-    '<div><div style="font-family:var(--cond);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px">Scheduling</div><div style="font-size:13px;color:var(--ink2);line-height:1.7;font-weight:300">Use the heatmap above to find the best hours. Target green cells for deferrable workloads. The 17:00–20:00 band is typically the highest-carbon window.</div></div>' +
-    '</div>';
-
-  // Heatmap tooltips
-  var tip = document.getElementById('tip');
-  document.querySelectorAll('#rgn-hm .hm-cell').forEach(function(cell){
-    cell.addEventListener('mouseenter', function(e){
-      var t = cell.title.split(' · ');
-      document.getElementById('tip-name').textContent = t[0]||'';
-      document.getElementById('tip-l1').textContent = 'Intensity';
-      document.getElementById('tip-v1').textContent = t[3]||'';
-      document.getElementById('tip-l2').textContent = 'Period';
-      document.getElementById('tip-v2').textContent = (t[1]||'')+' '+(t[2]||'');
-      tip.style.display = 'block';
+  document.getElementById('rgn-hm').innerHTML='<table class="hm"><thead><tr><th class="hm-corner" style="min-width:55px"></th>'+hdr+'</tr></thead><tbody>'+body+'</tbody></table>';
+  // legend note
+  var note=document.getElementById('rgn-hm-legend-note');
+  if(note) note.textContent=scale==='rel'?'vs this region\'s own range ('+gMin+'\u2013'+gMax+' gCO\u2082/kWh)':'vs national intensity scale';
+  // tooltips
+  var tip=document.getElementById('tip');
+  document.querySelectorAll('#rgn-hm .hm-cell').forEach(cell=>{
+    cell.addEventListener('mouseenter',()=>{
+      var t=cell.title.split(' \xb7 ');
+      document.getElementById('tip-name').textContent=t[0]||'';
+      document.getElementById('tip-l1').textContent='Intensity'; document.getElementById('tip-v1').textContent=t[3]||'';
+      document.getElementById('tip-l2').textContent='Period'; document.getElementById('tip-v2').textContent=(t[1]||'')+' '+(t[2]||'');
+      tip.style.display='block';
     });
-    cell.addEventListener('mousemove', function(e){
+    cell.addEventListener('mousemove',e=>{
       tip.style.left=(e.clientX+14)+'px'; tip.style.top=(e.clientY+14)+'px';
       var tr=tip.getBoundingClientRect();
       if(tr.right>window.innerWidth-8) tip.style.left=(e.clientX-tr.width-10)+'px';
       if(tr.bottom>window.innerHeight-8) tip.style.top=(e.clientY-tr.height-10)+'px';
     });
-    cell.addEventListener('mouseleave', function(){ tip.style.display='none'; });
+    cell.addEventListener('mouseleave',()=>{ tip.style.display='none'; });
   });
+  // context block
+  var mix=window._rgnMix||CUR_MIX[r]||{};
+  var renew2=window._rgnRenew||0;
+  var avg=window._rgnAvg||RAVG[r];
+  var base=window._rgnBase||BASE[r];
+  var drop=window._rgnDrop||0;
+  var topFuel=FUELS.reduce((b,f)=>(mix[f]||0)>(mix[b]||0)?f:b,'gas');
+  var fossilPct=(mix.gas||0)+(mix.coal||0);
+  document.getElementById('rgn-context').innerHTML=
+    '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">'+
+    '<div><div style="font-family:var(--cond);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px">Generation profile</div>'+
+    '<div style="font-size:13px;color:var(--ink2);line-height:1.7;font-weight:300">Primary source: <strong style="color:'+FUEL_COLORS[topFuel]+'">'+FUEL_LABELS[topFuel]+' ('+mix[topFuel]+'%)</strong>. Low-carbon: '+renew2+'%. Fossil: '+fossilPct+'%.</div></div>'+
+    '<div><div style="font-family:var(--cond);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px">Decarbonisation</div>'+
+    '<div style="font-size:13px;color:var(--ink2);line-height:1.7;font-weight:300">Average intensity: <strong>'+Math.round(base)+'</strong> in 2018\u201319 \u2192 <strong>'+Math.round(avg)+'</strong> gCO\u2082/kWh today. <strong style="color:var(--low)">'+drop+'% reduction</strong>.</div></div>'+
+    '<div><div style="font-family:var(--cond);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px">Scheduling</div>'+
+    '<div style="font-size:13px;color:var(--ink2);line-height:1.7;font-weight:300">Switch to <em>vs own range</em> above to see the cleanest hours relative to this region regardless of absolute intensity.</div></div></div>';
 }
+
+function buildRgnSummary(r, avg, base, drop, mix, renew2, nowVal){
+  var el=document.getElementById('rgn-summary');
+  if(!el) return;
+  // derived stats
+  var vsAvg=Math.round(((nowVal-avg)/avg)*100);
+  var vsCol=vsAvg<0?'var(--low)':'var(--high)';
+  var vsDir=vsAvg<0?'below':'above';
+  var hrs=Array.from({length:24},(_,i)=>i);
+  var hv=hrs.map(h=>HOURLY[h]?.[r]||0);
+  var bH=hv.indexOf(Math.min(...hv)), wH=hv.indexOf(Math.max(...hv));
+  var bHv=Math.round(hv[bH]), wHv=Math.round(hv[wH]);
+  var saving=((wHv-bHv)*100/1000).toFixed(1);
+  var sorted=RG.slice().sort((a,b)=>NOW[a]-NOW[b]);
+  var rank=sorted.indexOf(r)+1;
+  var sfx=rank===1?'st':rank===2?'nd':rank===3?'rd':'th';
+  // year-on-year
+  var fy=null,ly=null,fa=null,la=null;
+  for(var y=2018;y<=2026;y++){
+    var yk=Object.keys(MONTHLY).filter(k=>k.startsWith(y+'-'));
+    var yv=yk.map(k=>MONTHLY[k]?.[r]).filter(v=>v!=null);
+    if(yv.length>=6){ var ya=Math.round(yv.reduce((a,b)=>a+b)/yv.length); if(!fy){fy=y;fa=ya;} ly=y;la=ya; }
+  }
+  var ydrop=fa&&la?Math.round(((fa-la)/fa)*100):null;
+  // seasonal
+  var MN2=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var mav=Array.from({length:12},(_,mi)=>{
+    var ks=Object.keys(MONTHLY).filter(k=>parseInt(k.split('-')[1])-1===mi);
+    var vs=ks.map(k=>MONTHLY[k]?.[r]).filter(v=>v!=null);
+    return vs.length?Math.round(vs.reduce((a,b)=>a+b)/vs.length):null;
+  });
+  var vma=mav.filter(v=>v!=null);
+  var mnMin=Math.min(...vma),mnMax=Math.max(...vma);
+  var bMo=mav.indexOf(mnMin),wMo=mav.indexOf(mnMax);
+  var sspread=mnMax-mnMin;
+  // top fuel
+  var topF=FUELS.reduce((b,f)=>(mix[f]||0)>(mix[b]||0)?f:b,'gas');
+  function row(ico,lbl,txt){
+    return '<div class="rgn-sum-row"><div class="rgn-sum-ico">'+ico+'</div>'+
+      '<div class="rgn-sum-body"><div class="rgn-sum-lbl">'+lbl+'</div>'+
+      '<div class="rgn-sum-txt">'+txt+'</div></div></div>';
+  }
+  var out='';
+  out+=row('\u26a1','Current position',
+    '<strong style="font-family:var(--cond);font-weight:700;font-size:15px;color:'+ci(nowVal)+'">'+nowVal+'</strong> gCO\u2082/kWh \u2014 '+
+    '<strong style="color:'+vsCol+'">'+Math.abs(vsAvg)+'% '+vsDir+'</strong> all-time avg. '+
+    'Ranked <strong>'+rank+sfx+' cleanest</strong> of 14 regions now.');
+  if(ydrop!==null)
+    out+=row('\u2198\ufe0f','Trajectory',
+      fa+' gCO\u2082/kWh ('+fy+') \u2192 <strong style="color:var(--low)">'+la+'</strong> ('+ly+') \u2014 '+
+      '<strong style="color:var(--low)">'+ydrop+'%</strong> reduction in '+(ly-fy)+' years.');
+  out+=row('\u23f0','Best hour to run workloads',
+    '<strong>'+String(bH).padStart(2,'0')+':00</strong> avg '+bHv+' gCO\u2082/kWh. '+
+    'Peak: <strong>'+String(wH).padStart(2,'0')+':00</strong> at '+wHv+'. '+
+    'Shifting 100\u202fkWh peak\u2192optimal saves <strong style="color:var(--low)">'+saving+'\u202fkg CO\u2082</strong>.');
+  out+=row('\u26ef\ufe0f','Generation now',
+    'Led by <strong style="color:'+FUEL_COLORS[topF]+'">'+FUEL_LABELS[topF]+' ('+mix[topF]+'%)</strong>. '+
+    'Low-carbon: <strong>'+renew2+'%</strong>. '+
+    ((mix.gas||0)>30?'High gas share \u2014 intensity tracks wind closely.':
+     renew2>70?'Predominantly low-carbon \u2014 structurally clean.':'Mixed profile.'));
+  if(sspread>20)
+    out+=row('\ud83d\udcc5','Seasonal spread',
+      'Best month avg: <strong>'+MN2[bMo]+'</strong> ('+mnMin+' gCO\u2082/kWh). '+
+      'Worst: <strong>'+MN2[wMo]+'</strong> ('+mnMax+'). '+
+      sspread+' gCO\u2082/kWh spread \u2014 '+
+      (sspread>60?'significant seasonal effect; timing matters year-round.':'moderate; time-of-day generally more important than season.'));
+  el.innerHTML=out;
+}
+
 
 // ══════════════════════════════════════════════════════════
 // FORECAST PANEL
