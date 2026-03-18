@@ -192,22 +192,37 @@ table.hm th{font-family:var(--cond);font-size:9px;font-weight:600;letter-spacing
 .hm-rank-bar{height:100%;border-radius:4px;transition:width .4s ease}
 .hm-rank-val{font-family:var(--cond);font-size:12px;font-weight:600;width:38px;text-align:right;flex-shrink:0}
 /* ── MAP ── */
-.map-layout{display:grid;grid-template-columns:1fr 300px;gap:18px}
+.map-layout{display:grid;grid-template-columns:1fr 280px;gap:18px;align-items:start}
 @media(max-width:900px){.map-layout{grid-template-columns:1fr}}
-#map-canvas{width:100%;aspect-ratio:.55;border-radius:var(--r);cursor:crosshair;background:#eae8e2;border:1px solid var(--rule);display:block}
-.map-sidebar{display:flex;flex-direction:column;gap:12px}
-.map-info-card{background:var(--white);border:1px solid var(--rule);border-radius:var(--r);padding:14px 16px}
-.map-info-card h3{font-family:var(--cond);font-size:16px;font-weight:700;margin-bottom:6px;color:inherit}
-.map-info-val{font-family:var(--cond);font-size:36px;font-weight:700;line-height:1;letter-spacing:-.02em}
-.map-info-unit{font-size:12px;color:var(--ink3);margin-top:2px}
-.map-legend-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.map-legend-item{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--ink3)}
-.map-legend-swatch{width:14px;height:10px;border-radius:2px;flex-shrink:0}
-.map-gen-bar{display:flex;height:8px;border-radius:4px;overflow:hidden;margin:6px 0}
+.map-canvas-wrap{position:relative;border-radius:var(--r);overflow:hidden;border:1px solid var(--rule)}
+#map-canvas{width:100%;height:480px;max-height:55vh;display:block;cursor:crosshair;background:var(--white)}
+/* Floating hover tooltip over canvas */
+#map-tooltip{position:absolute;background:#1e1e1e;color:#fff;border-radius:6px;padding:10px 14px;pointer-events:none;display:none;z-index:20;min-width:160px;box-shadow:0 4px 16px rgba(0,0,0,.25)}
+#map-tooltip .mtt-region{font-family:var(--cond);font-size:13px;font-weight:700;margin-bottom:4px}
+#map-tooltip .mtt-val{font-family:var(--cond);font-size:28px;font-weight:700;line-height:1}
+#map-tooltip .mtt-unit{font-size:10px;color:#aaa;margin-bottom:6px}
+#map-tooltip .mtt-badge{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:2px 6px;border-radius:3px;margin-bottom:6px}
+#map-tooltip .mtt-bar{display:flex;height:6px;border-radius:3px;overflow:hidden;margin-top:4px}
+.map-sidebar{display:flex;flex-direction:column;gap:10px}
+.map-info-card{background:var(--white);border:1px solid var(--rule);border-radius:var(--r);padding:12px 14px}
+.map-info-card h3{font-family:var(--cond);font-size:14px;font-weight:700;margin-bottom:8px;color:var(--ink2)}
+/* Region rank rows in sidebar */
+.map-rank-row{display:flex;align-items:center;gap:7px;padding:4px 0;border-bottom:1px solid var(--rule);cursor:pointer;transition:background .1s}
+.map-rank-row:last-child{border-bottom:none}
+.map-rank-row:hover{background:var(--paper);margin:0 -4px;padding-left:4px;padding-right:4px;border-radius:3px}
+.map-rank-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.map-rank-name{flex:1;font-size:11px;color:var(--ink2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.map-rank-val{font-family:var(--cond);font-size:12px;font-weight:700;width:34px;text-align:right;flex-shrink:0}
+.map-rank-bar-wrap{width:50px;height:5px;background:var(--paper);border-radius:3px;overflow:hidden;flex-shrink:0}
+.map-rank-bar{height:100%;border-radius:3px}
+.map-legend-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.map-legend-item{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ink3)}
+.map-legend-swatch{width:12px;height:8px;border-radius:2px;flex-shrink:0}
+.map-gen-bar{display:flex;height:7px;border-radius:4px;overflow:hidden;margin:5px 0}
 .map-gen-bar div{height:100%}
-.map-gen-legend{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:4px}
-.map-gen-legend span{display:flex;align-items:center;gap:3px;font-size:11px;color:var(--ink3)}
-.map-gen-dot{width:7px;height:7px;border-radius:2px;flex-shrink:0}
+.map-gen-legend{display:flex;flex-wrap:wrap;gap:3px 8px;margin-top:3px}
+.map-gen-legend span{display:flex;align-items:center;gap:3px;font-size:10px;color:var(--ink3)}
+.map-gen-dot{width:6px;height:6px;border-radius:2px;flex-shrink:0}
 
 
 /* ── TOOLTIP ── */
@@ -602,25 +617,36 @@ table.hm th{font-family:var(--cond);font-size:9px;font-weight:600;letter-spacing
 
 <!-- ══════════════════════════ MAP ══════════════════════════ -->
 <div id="p-map" class="panel">
-  <div class="sh"><h2>Regional map</h2><p>DNO licence area boundaries · live intensity · hover or click a region</p></div>
+  <div class="sh"><h2>Regional map</h2><p>Live carbon intensity by region · hover for detail · click to open region view</p></div>
   <div class="map-layout">
-    <div>
+    <!-- Canvas with floating tooltip -->
+    <div class="map-canvas-wrap">
       <canvas id="map-canvas"></canvas>
+      <div id="map-tooltip">
+        <div class="mtt-region" id="mtt-region"></div>
+        <div class="mtt-val" id="mtt-val"></div>
+        <div class="mtt-unit">gCO₂/kWh now</div>
+        <div class="mtt-badge" id="mtt-badge"></div>
+        <div class="mtt-bar" id="mtt-bar"></div>
+        <div style="font-size:10px;color:#aaa;margin-top:5px" id="mtt-extra"></div>
+      </div>
     </div>
+    <!-- Sidebar: all-region ranked list + legend -->
     <div class="map-sidebar">
-      <div class="map-info-card" id="map-info">
-        <div style="color:var(--ink3);font-size:13px;line-height:1.6">Hover over a region to see current intensity and generation mix.<br><br>Click a region to open its full detail view.</div>
+      <div class="map-info-card">
+        <h3>All regions <span style="font-size:11px;font-weight:400;color:var(--ink3)">· now · gCO₂/kWh</span></h3>
+        <div id="map-rank-list"></div>
       </div>
       <div class="map-info-card">
-        <div style="font-family:var(--cond);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px">Intensity scale</div>
+        <div style="font-family:var(--cond);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px">Intensity scale</div>
         <div class="map-legend-row">
-          <div class="map-legend-item"><div class="map-legend-swatch" style="background:#16a34a"></div>&lt;75 Very low</div>
-          <div class="map-legend-item"><div class="map-legend-swatch" style="background:#65a30d"></div>75–150 Low</div>
-          <div class="map-legend-item"><div class="map-legend-swatch" style="background:#d97706"></div>150–225 Moderate</div>
-          <div class="map-legend-item"><div class="map-legend-swatch" style="background:#ea580c"></div>225–300 High</div>
-          <div class="map-legend-item"><div class="map-legend-swatch" style="background:#dc2626"></div>&gt;300 Very high</div>
+          <div class="map-legend-item"><div class="map-legend-swatch" style="background:#16a34a"></div>&lt;75</div>
+          <div class="map-legend-item"><div class="map-legend-swatch" style="background:#65a30d"></div>75–150</div>
+          <div class="map-legend-item"><div class="map-legend-swatch" style="background:#d97706"></div>150–225</div>
+          <div class="map-legend-item"><div class="map-legend-swatch" style="background:#ea580c"></div>225–300</div>
+          <div class="map-legend-item"><div class="map-legend-swatch" style="background:#dc2626"></div>&gt;300</div>
         </div>
-        <div style="font-size:11px;color:var(--ink3);margin-top:10px">Double-click any region to open its full detail view.</div>
+        <div style="font-size:11px;color:var(--ink3);margin-top:8px;line-height:1.5">Click a region to open full detail. Double-click to jump to Region tab.</div>
       </div>
     </div>
   </div>
@@ -2272,7 +2298,7 @@ function fetchLiveData(){
         if(panelId === 'now'){ buildNow(); }
         else if(panelId === 'mix'){ buildMix(); }
         else if(panelId === 'region'){ buildRegion(); }
-        else if(panelId === 'map'){ if(MAP_DRAWN) drawMapRegions(null); }
+        else if(panelId === 'map'){ if(MAP_DRAWN){ drawMapRegions(null); buildMapRankList(); } }
       }
       // Always refresh now table if visible
       if(document.getElementById('now-tbody')) renderNowTable();
@@ -2605,6 +2631,227 @@ function buildYoY(){
       '</div>';
     }).join('');
 }
+
+// ══════════════════════════════════════════════════════════
+// MAP — Canvas-rendered GeoJSON with live intensity data
+// ══════════════════════════════════════════════════════════
+var MAP_GEO = null;
+var MAP_DRAWN = false;
+var MAP_PROJECT = null;
+
+function initMap(){
+  if(MAP_GEO){ drawMap(); return; }
+  fetch('./regions.geojson')
+    .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+    .then(function(geo){ MAP_GEO = geo; drawMap(); })
+    .catch(function(){
+      var wrap = document.getElementById('map-canvas');
+      if(wrap){ var ctx=wrap.getContext('2d'); ctx.fillStyle='#f7f6f2'; ctx.fillRect(0,0,wrap.width||400,wrap.height||480); ctx.fillStyle='#6b6b6b'; ctx.font='13px Barlow,sans-serif'; ctx.textAlign='center'; ctx.fillText('Map data not found — upload regions.geojson to repo root',(wrap.width||400)/2,(wrap.height||480)/2); }
+    });
+}
+
+function drawMap(){
+  var canvas = document.getElementById('map-canvas');
+  if(!canvas || !MAP_GEO) return;
+  var rect = canvas.getBoundingClientRect();
+  if(rect.width === 0){ requestAnimationFrame(drawMap); return; }
+  var dpr = window.devicePixelRatio || 1;
+  canvas.width = Math.round(rect.width * dpr);
+  canvas.height = Math.round(rect.height * dpr);
+
+  var minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity;
+  MAP_GEO.features.forEach(function(f){
+    forEachRing(f,function(ring){
+      ring.forEach(function(pt){
+        if(pt[0]<minX)minX=pt[0]; if(pt[0]>maxX)maxX=pt[0];
+        if(pt[1]<minY)minY=pt[1]; if(pt[1]>maxY)maxY=pt[1];
+      });
+    });
+  });
+  var W=rect.width, H=rect.height, pad=16;
+  var scale=Math.min((W-pad*2)/(maxX-minX),(H-pad*2)/(maxY-minY));
+  var offX=(W-((maxX-minX)*scale))/2, offY=(H-((maxY-minY)*scale))/2;
+  MAP_PROJECT=function(x,y){ return [offX+(x-minX)*scale, offY+(maxY-y)*scale]; };
+
+  drawMapRegions(null);
+  buildMapRankList();
+
+  var tooltip = document.getElementById('map-tooltip');
+  var wrap = canvas.parentElement;
+  var lastHover = null;
+
+  canvas.onmousemove = function(e){
+    var r2 = canvas.getBoundingClientRect();
+    var mx = e.clientX-r2.left, my = e.clientY-r2.top;
+    var region = mapHitTest(mx, my);
+    if(region !== lastHover){
+      lastHover = region;
+      drawMapRegions(region);
+      canvas.style.cursor = region ? 'pointer' : 'crosshair';
+    }
+    if(region){
+      var wRect = wrap.getBoundingClientRect();
+      var tx = e.clientX - wRect.left + 14;
+      var ty = e.clientY - wRect.top + 14;
+      updateMapTooltip(region);
+      tooltip.style.display = 'block';
+      tooltip.style.left = tx+'px'; tooltip.style.top = ty+'px';
+      requestAnimationFrame(function(){
+        var tRect = tooltip.getBoundingClientRect();
+        var wRect2 = wrap.getBoundingClientRect();
+        if(tRect.right > wRect2.right-8) tooltip.style.left=(tx-tRect.width-28)+'px';
+        if(tRect.bottom > wRect2.bottom-8) tooltip.style.top=(ty-tRect.height-28)+'px';
+      });
+    } else {
+      tooltip.style.display = 'none';
+    }
+  };
+  canvas.onclick = function(e){
+    var r2 = canvas.getBoundingClientRect();
+    var region = mapHitTest(e.clientX-r2.left, e.clientY-r2.top);
+    if(region){ activeRegion=region; go('region'); }
+  };
+  canvas.ondblclick = function(e){
+    var r2 = canvas.getBoundingClientRect();
+    var region = mapHitTest(e.clientX-r2.left, e.clientY-r2.top);
+    if(region) openRegion(region);
+  };
+  canvas.onmouseleave = function(){
+    lastHover=null; tooltip.style.display='none'; drawMapRegions(null);
+  };
+
+  if(window.ResizeObserver){ var ro=new ResizeObserver(function(){ drawMap(); }); ro.observe(canvas); }
+  MAP_DRAWN = true;
+}
+
+function updateMapTooltip(region){
+  var val = NOW[region];
+  var mix = CUR_MIX[region];
+  document.getElementById('mtt-region').textContent = region;
+  if(val !== undefined){
+    document.getElementById('mtt-val').style.color = ci(val);
+    document.getElementById('mtt-val').textContent = val;
+    var label = val<75?'Very low':val<150?'Low':val<225?'Moderate':val<300?'High':'Very high';
+    var bgCol = val<75?'#15803d':val<150?'#4d7c0f':val<225?'#b45309':val<300?'#c2410c':'#b91c1c';
+    var badge = document.getElementById('mtt-badge');
+    badge.textContent = label; badge.style.background = bgCol; badge.style.color = '#fff';
+  }
+  if(mix){
+    var fuels=['wind','nuclear','solar','biomass','hydro','imports','gas','coal','other'];
+    document.getElementById('mtt-bar').innerHTML = fuels.map(function(f){
+      return mix[f]&&mix[f]>0?'<div style="width:'+mix[f]+'%;background:'+FUEL_COLORS[f]+'"></div>':'';
+    }).join('');
+    var clean=Math.round((mix.wind||0)+(mix.solar||0)+(mix.nuclear||0)+(mix.hydro||0)+(mix.biomass||0));
+    document.getElementById('mtt-extra').textContent = clean+'% low-carbon · click for region detail';
+  }
+}
+
+function buildMapRankList(){
+  var el = document.getElementById('map-rank-list');
+  if(!el) return;
+  var sorted = RG.slice().sort(function(a,b){ return NOW[a]-NOW[b]; });
+  var maxVal = Math.max.apply(null, sorted.map(function(r){ return NOW[r]||0; }));
+  el.innerHTML = sorted.map(function(r){
+    var val = NOW[r]||0;
+    var col = ci(val);
+    var pct = maxVal>0 ? Math.round((val/maxVal)*100) : 0;
+    return '<div class="map-rank-row" onclick="activeRegion=\''+r+'\';go(\'region\')" title="Click to open '+r+'">' +
+      '<div class="map-rank-dot" style="background:'+col+'"></div>' +
+      '<div class="map-rank-name">'+r+'</div>' +
+      '<div class="map-rank-bar-wrap"><div class="map-rank-bar" style="width:'+pct+'%;background:'+col+'"></div></div>' +
+      '<div class="map-rank-val" style="color:'+col+'">'+val+'</div>' +
+    '</div>';
+  }).join('');
+}
+
+function drawMapRegions(hoverRegion){
+  var canvas = document.getElementById('map-canvas');
+  if(!canvas || !MAP_GEO || !MAP_PROJECT) return;
+  var dpr = window.devicePixelRatio||1;
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width/dpr, H = canvas.height/dpr;
+  ctx.save();
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = '#eae8e2';
+  ctx.fillRect(0,0,W,H);
+  MAP_GEO.features.forEach(function(f){
+    var region=f.properties.region, val=NOW[region], isHov=region===hoverRegion;
+    forEachRing(f,function(ring){
+      ctx.beginPath();
+      ring.forEach(function(pt,i){ var p=MAP_PROJECT(pt[0],pt[1]); i===0?ctx.moveTo(p[0],p[1]):ctx.lineTo(p[0],p[1]); });
+      ctx.closePath();
+      ctx.fillStyle = val!==undefined ? ci(val,isHov?1:0.75) : (isHov?'#c8c6c0':'#d4d2cc');
+      ctx.fill();
+      ctx.strokeStyle = isHov ? '#fff' : 'rgba(255,255,255,0.75)';
+      ctx.lineWidth = isHov ? 2.5 : 1;
+      ctx.stroke();
+    });
+  });
+  MAP_GEO.features.forEach(function(f){
+    var region=f.properties.region, val=NOW[region], isHov=region===hoverRegion;
+    var largestArea=0, cx=0, cy=0;
+    var polys=f.geometry.type==='MultiPolygon'?f.geometry.coordinates:[f.geometry.coordinates];
+    polys.forEach(function(poly){
+      var ring=poly[0],area=0,sx=0,sy=0;
+      for(var i=0;i<ring.length;i++){
+        var j=(i+1)%ring.length, cross=ring[i][0]*ring[j][1]-ring[j][0]*ring[i][1];
+        area+=cross; sx+=(ring[i][0]+ring[j][0])*cross; sy+=(ring[i][1]+ring[j][1])*cross;
+      }
+      area=Math.abs(area)/2;
+      if(area>largestArea&&area>0){ largestArea=area; cx=sx/(6*area); cy=sy/(6*area); }
+    });
+    if(largestArea<0.01) return;
+    var p=MAP_PROJECT(cx,cy);
+    var short=region.replace('North ','N ').replace('South ','S ').replace('East ','E ').replace('West ','W ')
+      .replace(' England','').replace(' Scotland','').replace(' and Merseyside','');
+    ctx.shadowColor='rgba(0,0,0,0.35)'; ctx.shadowBlur=3;
+    ctx.fillStyle=isHov?'#fff':'rgba(255,255,255,0.92)';
+    ctx.font=(isHov?'700':'600')+' 9px \'Barlow Condensed\',Barlow,sans-serif';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(short,p[0],p[1]-6);
+    if(val!==undefined){
+      ctx.font=(isHov?'800':'700')+' 12px \'Barlow Condensed\',Barlow,sans-serif';
+      ctx.fillStyle=isHov?'#fff':'rgba(255,255,255,0.95)';
+      ctx.fillText(val,p[0],p[1]+7);
+    }
+    ctx.shadowBlur=0; ctx.shadowColor='transparent';
+  });
+  ctx.restore();
+}
+
+function mapHitTest(mx,my){
+  if(!MAP_GEO||!MAP_PROJECT) return null;
+  for(var i=MAP_GEO.features.length-1;i>=0;i--){
+    var f=MAP_GEO.features[i];
+    var polys=f.geometry.type==='MultiPolygon'?f.geometry.coordinates:[f.geometry.coordinates];
+    for(var pi=0;pi<polys.length;pi++){
+      for(var ri=0;ri<polys[pi].length;ri++){
+        var projected=polys[pi][ri].map(function(pt){return MAP_PROJECT(pt[0],pt[1]);});
+        if(pointInPolyMap(mx,my,projected)) return f.properties.region;
+      }
+    }
+  }
+  return null;
+}
+
+function pointInPolyMap(x,y,poly){
+  var inside=false;
+  for(var i=0,j=poly.length-1;i<poly.length;j=i++){
+    var xi=poly[i][0],yi=poly[i][1],xj=poly[j][0],yj=poly[j][1];
+    if((yi>y)!==(yj>y)&&x<(xj-xi)*(y-yi)/(yj-yi)+xi) inside=!inside;
+  }
+  return inside;
+}
+
+function forEachRing(feature,fn){
+  var coords=feature.geometry.coordinates,type=feature.geometry.type;
+  if(type==='Polygon') coords.forEach(function(ring){fn(ring);});
+  else if(type==='MultiPolygon') coords.forEach(function(poly){poly.forEach(function(ring){fn(ring);});});
+}
+
+function showMapInfo(regionName){}
+
 // ══════════════════════════════════════════════════════════
 // ROUTING
 // ══════════════════════════════════════════════════════════
@@ -2625,309 +2872,6 @@ function go(name){
 window.FUELS=FUELS; window.FUEL_COLORS=FUEL_COLORS; window.FUEL_LABELS=FUEL_LABELS; window.CUR_MIX=CUR_MIX; window.MONTHLY_MIX=MONTHLY_MIX; window.MONTHLY=MONTHLY;
 go('now');
 // Fetch live data once DOM and all resources are loaded, then auto-refresh every 30 minutes
-// ══════════════════════════════════════════════════════════
-// MAP — Canvas-rendered GeoJSON with live intensity data
-// ══════════════════════════════════════════════════════════
-var MAP_GEO = null;
-var MAP_DRAWN = false;
-var MAP_PROJECT = null;
-var MAP_BOUNDS = null;
-
-// GeoJSON loaded via fetch from data/regions.geojson
-function initMap(){
-  if(MAP_GEO){ drawMap(); return; }
-  // Try relative path first, then fallback message
-  fetch('./regions.geojson')
-    .then(function(r){
-      if(!r.ok) throw new Error('HTTP '+r.status);
-      return r.json();
-    })
-    .then(function(geo){
-      MAP_GEO = geo;
-      drawMap();
-    })
-    .catch(function(){
-      // GeoJSON not found — show inline message
-      var info = document.getElementById('map-info');
-      if(info) info.innerHTML = '<div style="color:var(--mid);font-size:13px;line-height:1.8">Map data not loaded.<br><br>Upload <strong>data/regions.geojson</strong> to the GitHub repo alongside index.html to enable the map.<br><br>All other dashboard features work without it.</div>';
-      var canvas = document.getElementById('map-canvas');
-      if(canvas){
-        var ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#eae8e2';
-        ctx.fillRect(0,0,canvas.width||400,canvas.height||600);
-        ctx.fillStyle = '#6b6b6b';
-        ctx.font = "13px Barlow,sans-serif";
-        ctx.textAlign = 'center';
-        ctx.fillText('Map data not found — upload data/regions.geojson', (canvas.width||400)/2, (canvas.height||600)/2);
-      }
-    });
-}
-
-function drawMap(){
-  var canvas = document.getElementById('map-canvas');
-  if(!canvas || !MAP_GEO) return;
-
-  // Guard: getBoundingClientRect returns 0 before layout — defer if needed
-  var rect = canvas.getBoundingClientRect();
-  if(rect.width === 0){
-    requestAnimationFrame(drawMap);
-    return;
-  }
-
-  var dpr = window.devicePixelRatio || 1;
-  canvas.width = Math.round(rect.width * dpr);
-  canvas.height = Math.round(rect.height * dpr);
-
-  // Compute BNG bounds across all features
-  var minX=Infinity, maxX=-Infinity, minY=Infinity, maxY=-Infinity;
-  MAP_GEO.features.forEach(function(f){
-    forEachRing(f, function(ring){
-      ring.forEach(function(pt){
-        if(pt[0]<minX) minX=pt[0]; if(pt[0]>maxX) maxX=pt[0];
-        if(pt[1]<minY) minY=pt[1]; if(pt[1]>maxY) maxY=pt[1];
-      });
-    });
-  });
-  MAP_BOUNDS = {minX:minX,maxX:maxX,minY:minY,maxY:maxY};
-
-  var W = rect.width, H = rect.height, pad = 20;
-  var geoW = maxX-minX, geoH = maxY-minY;
-  var scale = Math.min((W-pad*2)/geoW, (H-pad*2)/geoH);
-  var offX = (W - geoW*scale)/2;
-  var offY = (H - geoH*scale)/2;
-
-  MAP_PROJECT = function(x, y){
-    return [offX + (x-minX)*scale, offY + (maxY-y)*scale];
-  };
-
-  drawMapRegions(null);
-
-  // Interaction
-  var lastHover = null;
-  canvas.onmousemove = function(e){
-    var r2 = canvas.getBoundingClientRect();
-    var mx = e.clientX - r2.left, my = e.clientY - r2.top;
-    var region = mapHitTest(mx, my);
-    if(region !== lastHover){
-      lastHover = region;
-      drawMapRegions(region);
-      canvas.style.cursor = region ? 'pointer' : 'crosshair';
-      if(region) showMapInfo(region);
-    }
-  };
-  canvas.onclick = function(e){
-    var r2 = canvas.getBoundingClientRect();
-    var region = mapHitTest(e.clientX-r2.left, e.clientY-r2.top);
-    if(region){ showMapInfo(region); }
-  };
-  canvas.ondblclick = function(e){
-    var r2 = canvas.getBoundingClientRect();
-    var region = mapHitTest(e.clientX-r2.left, e.clientY-r2.top);
-    if(region){ openRegion(region); }
-  };
-  canvas.onmouseleave = function(){
-    lastHover = null;
-    drawMapRegions(null);
-  };
-
-  // Redraw when panel width changes (e.g. window resize)
-  if(window.ResizeObserver){
-    var ro = new ResizeObserver(function(){ drawMap(); });
-    ro.observe(canvas);
-  }
-
-  MAP_DRAWN = true;
-}
-
-// Helper: iterate over all rings in a feature regardless of Polygon/MultiPolygon
-function forEachRing(feature, fn){
-  var coords = feature.geometry.coordinates;
-  var type = feature.geometry.type;
-  if(type === 'Polygon'){
-    coords.forEach(function(ring){ fn(ring); });
-  } else if(type === 'MultiPolygon'){
-    coords.forEach(function(poly){ poly.forEach(function(ring){ fn(ring); }); });
-  }
-}
-
-function drawMapRegions(hoverRegion){
-  var canvas = document.getElementById('map-canvas');
-  if(!canvas || !MAP_GEO || !MAP_PROJECT) return;
-  var dpr = window.devicePixelRatio || 1;
-  var ctx = canvas.getContext('2d');
-  var W = canvas.width/dpr, H = canvas.height/dpr;
-  var project = MAP_PROJECT;
-
-  ctx.save();
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  ctx.clearRect(0, 0, W, H);
-
-  // Background (sea / paper)
-  ctx.fillStyle = '#eae8e2';
-  ctx.fillRect(0, 0, W, H);
-
-  // Draw filled regions
-  MAP_GEO.features.forEach(function(f){
-    var region = f.properties.region;
-    var val = NOW[region];
-    var isHovered = (region === hoverRegion);
-
-    forEachRing(f, function(ring){
-      ctx.beginPath();
-      ring.forEach(function(pt, i){
-        var p = project(pt[0], pt[1]);
-        if(i===0) ctx.moveTo(p[0], p[1]);
-        else ctx.lineTo(p[0], p[1]);
-      });
-      ctx.closePath();
-      ctx.fillStyle = (val !== undefined) ? ci(val, isHovered ? 0.95 : 0.72) : (isHovered ? 'rgba(180,178,172,0.9)' : 'rgba(200,198,192,0.6)');
-      ctx.fill();
-      // Border — use literal colour, not CSS var (doesn't work on canvas)
-      ctx.strokeStyle = isHovered ? '#1a1a1a' : 'rgba(245,243,238,0.95)';
-      ctx.lineWidth = isHovered ? 2 : 0.8;
-      ctx.stroke();
-    });
-  });
-
-  // Labels — draw after all fills so they sit on top
-  MAP_GEO.features.forEach(function(f){
-    var region = f.properties.region;
-    var val = NOW[region];
-    var isHovered = (region === hoverRegion);
-
-    // Find centroid of largest polygon by area
-    var largestArea = 0, cx = 0, cy = 0;
-    var polys = f.geometry.type === 'MultiPolygon' ? f.geometry.coordinates : [f.geometry.coordinates];
-    polys.forEach(function(poly){
-      var ring = poly[0];
-      var area=0, sx=0, sy=0;
-      for(var i=0; i<ring.length; i++){
-        var j=(i+1)%ring.length;
-        var cross=ring[i][0]*ring[j][1]-ring[j][0]*ring[i][1];
-        area+=cross; sx+=(ring[i][0]+ring[j][0])*cross; sy+=(ring[i][1]+ring[j][1])*cross;
-      }
-      area=Math.abs(area)/2;
-      if(area>largestArea && area>0){ largestArea=area; cx=sx/(6*area); cy=sy/(6*area); }
-    });
-
-    // Skip tiny islands
-    if(largestArea < 0.01) return;
-    var p = project(cx, cy);
-
-    // Short label
-    var short = region
-      .replace('North ','N ').replace('South ','S ')
-      .replace('East ','E ').replace('West ','W ')
-      .replace(' England','').replace(' Scotland',' Scot')
-      .replace(' and Merseyside','');
-
-    // Shadow for legibility
-    ctx.shadowColor = 'rgba(245,243,238,0.9)';
-    ctx.shadowBlur = 3;
-
-    ctx.fillStyle = isHovered ? '#111' : 'rgba(26,26,26,0.85)';
-    ctx.font = "600 9px 'Barlow Condensed', Barlow, sans-serif";
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(short, p[0], p[1] - 6);
-
-    if(val !== undefined){
-      ctx.font = "700 12px 'Barlow Condensed', Barlow, sans-serif";
-      ctx.fillStyle = isHovered ? '#111' : 'rgba(26,26,26,0.9)';
-      ctx.fillText(val, p[0], p[1] + 7);
-    }
-
-    ctx.shadowBlur = 0;
-    ctx.shadowColor = 'transparent';
-  });
-
-  ctx.restore();
-}
-
-function mapHitTest(mx, my){
-  if(!MAP_GEO || !MAP_PROJECT) return null;
-  for(var i=MAP_GEO.features.length-1; i>=0; i--){
-    var f = MAP_GEO.features[i];
-    var polys = f.geometry.type === 'MultiPolygon' ? f.geometry.coordinates : [f.geometry.coordinates];
-    for(var pi=0; pi<polys.length; pi++){
-      for(var ri=0; ri<polys[pi].length; ri++){
-        var ring = polys[pi][ri];
-        var projected = ring.map(function(pt){ return MAP_PROJECT(pt[0], pt[1]); });
-        if(pointInPolyMap(mx, my, projected)) return f.properties.region;
-      }
-    }
-  }
-  return null;
-}
-
-function pointInPolyMap(x, y, poly){
-  var inside=false;
-  for(var i=0, j=poly.length-1; i<poly.length; j=i++){
-    var xi=poly[i][0], yi=poly[i][1], xj=poly[j][0], yj=poly[j][1];
-    if((yi>y)!==(yj>y) && x<(xj-xi)*(y-yi)/(yj-yi)+xi) inside=!inside;
-  }
-  return inside;
-}
-
-function showMapInfo(regionName){
-  var info = document.getElementById('map-info');
-  if(!info) return;
-  var val = NOW[regionName];
-  var mix = CUR_MIX[regionName];
-  var regionCol = RCOL[regionName] || '#3b82f6';
-
-  var html = '<h3 style="color:'+regionCol+'">'+regionName+'</h3>';
-
-  if(val !== undefined){
-    var col = ci(val);
-    html += '<div class="map-info-val" style="color:'+col+'">'+val+'</div>';
-    html += '<div class="map-info-unit">gCO\u2082/kWh now</div>';
-    var badge, bcls;
-    if(val<75){ badge='Very low'; bcls='bdg-g'; }
-    else if(val<150){ badge='Low'; bcls='bdg-g'; }
-    else if(val<225){ badge='Moderate'; bcls='bdg-a'; }
-    else if(val<300){ badge='High'; bcls='bdg-r'; }
-    else { badge='Very high'; bcls='bdg-r'; }
-    html += '<div style="margin:6px 0"><span class="bdg '+bcls+'">'+badge+'</span></div>';
-  }
-
-  // Stats strip
-  if(RAVG[regionName]){
-    html += '<div style="margin-top:8px;border-top:1px solid var(--rule);padding-top:8px;font-size:12px;color:var(--ink3)">';
-    var rows = [
-      ['All-time avg', Math.round(RAVG[regionName])],
-      ['7-day avg', D7[regionName] ? Math.round(D7[regionName]) : null],
-      ['30-day avg', D30[regionName] ? Math.round(D30[regionName]) : null],
-    ];
-    if(BASE[regionName]){
-      var drop = Math.round((1 - RAVG[regionName]/BASE[regionName])*100);
-      rows.push(['Since 2018', (drop>0?'↓':'↑')+Math.abs(drop)+'%']);
-    }
-    rows.forEach(function(row){
-      if(row[1]===null) return;
-      html += '<div style="display:flex;justify-content:space-between;padding:2px 0"><span>'+row[0]+'</span><span style="font-weight:600;color:var(--ink)">'+row[1]+'</span></div>';
-    });
-    html += '</div>';
-  }
-
-  // Fuel mix bar
-  if(mix){
-    var fuels = ['wind','nuclear','solar','biomass','hydro','imports','gas','coal','other'];
-    html += '<div style="margin-top:8px;border-top:1px solid var(--rule);padding-top:8px">';
-    html += '<div style="font-family:var(--cond);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:4px">Generation mix</div>';
-    html += '<div class="map-gen-bar">';
-    fuels.forEach(function(f){ if(mix[f]&&mix[f]>0) html += '<div style="width:'+mix[f]+'%;background:'+FUEL_COLORS[f]+'"></div>'; });
-    html += '</div><div class="map-gen-legend">';
-    fuels.forEach(function(f){ if(mix[f]&&mix[f]>0) html += '<span><span class="map-gen-dot" style="background:'+FUEL_COLORS[f]+'"></span>'+FUEL_LABELS[f]+' '+mix[f]+'%</span>'; });
-    html += '</div></div>';
-  }
-
-  // Open region link
-  html += '<div style="margin-top:10px"><button onclick="openRegion(\''+regionName+'\')" style="font-size:12px;color:var(--acc);background:none;border:none;cursor:pointer;padding:0;font-weight:500">View full detail \u2192</button></div>';
-
-  info.innerHTML = html;
-}
-
 window.addEventListener('load', function(){
   fetchLiveData();
 
