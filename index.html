@@ -632,13 +632,6 @@ table.hm th{font-family:var(--cond);font-size:9px;font-weight:600;letter-spacing
     </div>
   </div>
 
-  <!-- YoY comparison (only shown for alltime view) -->
-  <div class="card" id="trend-yoy-card">
-    <div class="card-title" style="margin-bottom:12px">Year-on-year: same month comparison <span class="card-sub">· March across all years in dataset</span></div>
-    <div id="yoy-bars" style="display:flex;flex-direction:column;gap:8px"></div>
-    <div class="api-note" style="margin-top:8px">Compares average intensity for the current calendar month across all available years.</div>
-  </div>
-
   <!-- Comparative analysis -->
   <div id="trend-analysis-block" style="display:none">
     <div class="card">
@@ -1665,11 +1658,11 @@ let tLive24hData = {}; // cached live 24h data per region
 
 // ── Subtitles and mode-toggle visibility per view ──
 var TREND_VIEW_META = {
-  alltime:     { sub: 'Monthly averages 2018–2026 · select regions', showMix: true,  showPills: true,  showYoY: true,  showCards: true },
-  annual:      { sub: 'Annual average intensity by year · select regions', showMix: true,  showPills: true,  showYoY: false, showCards: false },
-  seasonal:    { sub: 'Average intensity by month of year · all years combined · select regions', showMix: false, showPills: true,  showYoY: false, showCards: false },
-  hourprofile: { sub: 'Average intensity by hour of day · all-time average · select regions', showMix: false, showPills: true,  showYoY: false, showCards: false },
-  live24h:     { sub: 'Last 24 hours · half-hourly live data from NESO API · select regions', showMix: false, showPills: true,  showYoY: false, showCards: false }
+  alltime:     { sub: 'Monthly averages 2018–2026 · select regions', showMix: true,  showPills: true,  showCards: true },
+  annual:      { sub: 'Annual average intensity by year · select regions', showMix: true,  showPills: true,  showCards: false },
+  seasonal:    { sub: 'Average intensity by month of year · all years combined · select regions', showMix: false, showPills: true,  showCards: false },
+  hourprofile: { sub: 'Average intensity by hour of day · all-time average · select regions', showMix: false, showPills: true,  showCards: false },
+  live24h:     { sub: 'Last 24 hours · half-hourly live data from NESO API · select regions', showMix: false, showPills: true,  showCards: false }
 };
 
 function buildTrend(){
@@ -1717,10 +1710,8 @@ function renderTrend(){
   var modeToggle = document.getElementById('trend-mode-toggle');
   if(modeToggle) modeToggle.style.display = meta.showMix ? '' : 'none';
 
-  // Show/hide YoY and context cards
-  var yoyCard = document.getElementById('trend-yoy-card');
+  // Show/hide context cards
   var ctxCards = document.getElementById('trend-context-cards');
-  if(yoyCard) yoyCard.style.display = meta.showYoY ? '' : 'none';
   if(ctxCards) ctxCards.style.display = meta.showCards ? '' : 'none';
 
   // Dispatch to view renderer
@@ -2754,47 +2745,6 @@ function buildSchedScores(){
 // ══════════════════════════════════════════════════════════
 // YEAR-ON-YEAR COMPARISON
 // ══════════════════════════════════════════════════════════
-function buildYoY(){
-  var el = document.getElementById('yoy-bars');
-  if(!el) return;
-  var now = new Date();
-  var curMo = String(now.getUTCMonth()+1).padStart(2,'0'); // e.g. "03"
-  var moName = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][now.getUTCMonth()];
-
-  // Collect GB average for this month across all years
-  var yoyData = [];
-  Object.keys(MONTHLY).sort().forEach(function(k){
-    if(k.split('-')[1] !== curMo) return;
-    var yr = k.split('-')[0];
-    var vals = RG.map(function(r){ return MONTHLY[k][r]; }).filter(function(v){ return v!=null; });
-    if(!vals.length) return;
-    var avg = Math.round(vals.reduce(function(a,b){return a+b;})/vals.length);
-    yoyData.push({ yr:yr, avg:avg });
-  });
-
-  if(!yoyData.length){ el.innerHTML='<div style="color:var(--ink3);font-size:11px">No data for current month.</div>'; return; }
-  var maxVal = Math.max.apply(null, yoyData.map(function(d){return d.avg;}));
-  var minVal = Math.min.apply(null, yoyData.map(function(d){return d.avg;}));
-  var latest = yoyData[yoyData.length-1];
-  var prev = yoyData.length > 1 ? yoyData[yoyData.length-2] : null;
-  var delta = prev ? latest.avg - prev.avg : 0;
-
-  el.innerHTML = '<div style="font-size:11px;color:var(--ink3);margin-bottom:10px;font-weight:300">GB average intensity for <strong style="color:var(--ink)">' + moName + '</strong> each year · ' + (delta < 0 ? '<span style="color:var(--low)">↓ '+Math.abs(delta)+' gCO₂/kWh vs last year — improving</span>' : delta > 0 ? '<span style="color:var(--high)">↑ '+delta+' gCO₂/kWh vs last year</span>' : 'unchanged vs last year') + '</div>' +
-    yoyData.map(function(d){
-      var pct = Math.round((d.avg / maxVal) * 100);
-      var col = d.avg <= minVal + (maxVal-minVal)*0.33 ? 'var(--low)' : d.avg <= minVal + (maxVal-minVal)*0.66 ? 'var(--mid)' : 'var(--high)';
-      var isLatest = d.yr === latest.yr;
-      return '<div style="display:flex;align-items:center;gap:10px;margin-bottom:5px">' +
-        '<div style="font-family:var(--cond);font-size:12px;font-weight:'+(isLatest?'700':'400')+';color:'+(isLatest?'var(--ink)':'var(--ink3)')+';width:36px">'+d.yr+'</div>' +
-        '<div style="flex:1;height:14px;background:var(--paper);border-radius:2px;overflow:hidden">' +
-          '<div style="height:100%;width:'+pct+'%;background:'+col+';border-radius:2px;transition:width .6s ease"></div>' +
-        '</div>' +
-        '<div style="font-family:var(--cond);font-size:13px;font-weight:'+(isLatest?'700':'500')+';color:'+col+';width:40px;text-align:right">'+d.avg+'</div>' +
-        '<div style="font-size:11px;color:var(--ink3);width:28px">g/kWh</div>' +
-      '</div>';
-    }).join('');
-}
-
 // ══════════════════════════════════════════════════════════
 // MAP — Canvas-rendered GeoJSON with live intensity data
 // ══════════════════════════════════════════════════════════
