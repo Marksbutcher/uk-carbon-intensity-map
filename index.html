@@ -184,6 +184,24 @@ table.hm th{font-family:var(--cond);font-size:9px;font-weight:600;letter-spacing
 .flist li{font-size:12px;color:var(--ink3);padding:7px 10px;background:var(--paper);border-radius:var(--r);line-height:1.5;font-weight:300}
 .flist li strong{display:block;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);margin-bottom:1px}
 
+
+/* ── TREND ANALYSIS ── */
+.tca-table{width:100%;border-collapse:collapse;font-size:12px}
+.tca-table th{font-family:var(--cond);font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3);padding:6px 10px;border-bottom:2px solid var(--rule);text-align:left;white-space:nowrap}
+.tca-table th.tca-metric{min-width:160px}
+.tca-table td{padding:7px 10px;border-bottom:1px solid var(--rule);vertical-align:middle;white-space:nowrap}
+.tca-table tr:last-child td{border-bottom:none}
+.tca-table tr:hover td{background:var(--paper)}
+.tca-best{font-weight:700}
+.tca-dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:5px}
+.trend-insight-row{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--rule)}
+.trend-insight-row:last-child{border-bottom:none}
+.trend-insight-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.trend-insight-body{flex:1;min-width:0}
+.trend-insight-label{font-family:var(--cond);font-size:11px;font-weight:700;margin-bottom:3px}
+.trend-insight-text{font-size:12px;color:var(--ink2);line-height:1.55;font-weight:300}
+.trend-insight-text strong{font-weight:600;color:var(--ink)}
+
 /* ── HEATMAP ADDITIONS ── */
 .hm-ranking{display:flex;flex-direction:column;gap:4px}
 .hm-rank-row{display:flex;align-items:center;gap:8px}
@@ -619,6 +637,20 @@ table.hm th{font-family:var(--cond);font-size:9px;font-weight:600;letter-spacing
     <div class="card-title" style="margin-bottom:12px">Year-on-year: same month comparison <span class="card-sub">· March across all years in dataset</span></div>
     <div id="yoy-bars" style="display:flex;flex-direction:column;gap:8px"></div>
     <div class="api-note" style="margin-top:8px">Compares average intensity for the current calendar month across all available years.</div>
+  </div>
+
+  <!-- Comparative analysis -->
+  <div id="trend-analysis-block" style="display:none">
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap">
+        <div class="card-title" style="margin:0">Region comparison <span class="card-sub" id="trend-compare-sub"></span></div>
+      </div>
+      <div id="trend-compare-table" style="overflow-x:auto"></div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="margin-bottom:14px">What the data says</div>
+      <div id="trend-insights-list"></div>
+    </div>
   </div>
 
 </div>
@@ -1697,6 +1729,9 @@ function renderTrend(){
   else if(tView === 'seasonal') renderTrendSeasonal();
   else if(tView === 'hourprofile') renderTrendHourProfile();
   else if(tView === 'live24h') renderTrendLive24h();
+
+  // Comparative analysis (always updates)
+  buildTrendAnalysis();
 }
 
 // ── Helper: destroy both charts ──
@@ -2979,6 +3014,145 @@ function forEachRing(feature,fn){
 }
 
 function showMapInfo(regionName){}
+
+
+// ══════════════════════════════════════════════════════════
+// TREND COMPARATIVE ANALYSIS
+// ══════════════════════════════════════════════════════════
+function buildTrendAnalysis(){
+  var block = document.getElementById('trend-analysis-block');
+  if(!block) return;
+  var regions = [...tSel];
+  if(regions.length < 1){ block.style.display='none'; return; }
+  block.style.display = '';
+
+  var months = Object.keys(MONTHLY).sort();
+  var MN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var hrs = Array.from({length:24},(_,i)=>i);
+
+  function regionMetrics(r){
+    var vals = months.map(m=>MONTHLY[m]?.[r]).filter(v=>v!=null);
+    var allTimeAvg = vals.length ? Math.round(vals.reduce((a,b)=>a+b)/vals.length) : null;
+    var annuals = {};
+    for(var y=2018;y<=2026;y++){
+      var yv=months.filter(m=>m.startsWith(y+'-')).map(m=>MONTHLY[m]?.[r]).filter(v=>v!=null);
+      if(yv.length>=6) annuals[y]=Math.round(yv.reduce((a,b)=>a+b)/yv.length);
+    }
+    var yk=Object.keys(annuals).map(Number).sort();
+    var firstYear=yk[0],lastYear=yk[yk.length-1],firstAvg=annuals[firstYear],lastAvg=annuals[lastYear];
+    var improvement=firstAvg&&lastAvg?Math.round(((firstAvg-lastAvg)/firstAvg)*100):null;
+    var absReduction=firstAvg&&lastAvg?firstAvg-lastAvg:null;
+    var mean=vals.reduce((a,b)=>a+b,0)/vals.length;
+    var stdDev=Math.round(Math.sqrt(vals.reduce((a,v)=>a+Math.pow(v-mean,2),0)/vals.length));
+    var mav=Array.from({length:12},(_,mi)=>{
+      var ks=months.filter(k=>parseInt(k.split('-')[1])-1===mi);
+      var vs=ks.map(k=>MONTHLY[k]?.[r]).filter(v=>v!=null);
+      return vs.length?Math.round(vs.reduce((a,b)=>a+b)/vs.length):null;
+    });
+    var vmav=mav.filter(v=>v!=null);
+    var bestMo=mav.indexOf(Math.min(...vmav)),worstMo=mav.indexOf(Math.max(...vmav));
+    var hv=hrs.map(h=>HOURLY[h]?.[r]||0);
+    var bestH=hv.indexOf(Math.min(...hv)),worstH=hv.indexOf(Math.max(...hv));
+    var hourRange=Math.round(hv[worstH]-hv[bestH]);
+    return {
+      r,allTimeAvg,stdDev,improvement,absReduction,
+      firstYear,lastYear,firstAvg,lastAvg,
+      bestMo,worstMo,bestMoVal:vmav.length?Math.min(...vmav):null,worstMoVal:vmav.length?Math.max(...vmav):null,
+      bestH,worstH,hourRange,
+      d7:Math.round(D7[r]||0),d30:Math.round(D30[r]||0),now:NOW[r]||0
+    };
+  }
+
+  var data = regions.map(regionMetrics);
+
+  // ── Comparison table ──
+  var subEl=document.getElementById('trend-compare-sub');
+  if(subEl) subEl.textContent='· '+regions.length+' region'+(regions.length>1?'s':'')+' selected';
+
+  function bestIdx(arr,lower){
+    var valid=arr.filter(v=>v!=null&&!isNaN(v));
+    if(!valid.length) return -1;
+    var v=lower?Math.min(...valid):Math.max(...valid);
+    return arr.indexOf(v);
+  }
+  var baseYear=Math.min(...data.map(d=>d.firstYear||2019));
+  var metricDefs=[
+    {label:'All-time average',key:'allTimeAvg',unit:' gCO\u2082/kWh',lower:true},
+    {label:'Now',key:'now',unit:' gCO\u2082/kWh',lower:true},
+    {label:'7-day average',key:'d7',unit:' gCO\u2082/kWh',lower:true},
+    {label:'Improvement since '+baseYear,key:'improvement',lower:false,fmt:v=>v!=null?v+'%':'\u2013'},
+    {label:'Absolute reduction',key:'absReduction',lower:false,fmt:v=>v!=null?v+'\u2193 gCO\u2082/kWh':'\u2013'},
+    {label:'Volatility (std dev)',key:'stdDev',unit:' gCO\u2082/kWh',lower:true},
+    {label:'Hourly range',key:'hourRange',unit:' gCO\u2082/kWh',lower:true},
+    {label:'Best month (avg)',key:'bestMo',fmt:(v,d)=>d.bestMoVal!=null?MN[v]+' ('+d.bestMoVal+')':'\u2013'},
+    {label:'Worst month (avg)',key:'worstMo',fmt:(v,d)=>d.worstMoVal!=null?MN[v]+' ('+d.worstMoVal+')':'\u2013'},
+  ];
+  var thCols=data.map(d=>'<th><span class="tca-dot" style="background:'+RCOL[d.r]+'"></span>'+d.r+'</th>').join('');
+  var tableRows=metricDefs.map(m=>{
+    var vals=data.map(d=>d[m.key]);
+    var numVals=vals.map(v=>typeof v==='number'?v:null);
+    var bIdx=bestIdx(numVals,m.lower);
+    var cells=data.map((d,i)=>{
+      var v=d[m.key];
+      var disp=m.fmt?m.fmt(v,d):(v!=null?v+(m.unit||''):'\u2013');
+      var isBest=i===bIdx&&v!=null;
+      return '<td'+(isBest?' class="tca-best" style="color:'+(m.lower?'var(--low)':'var(--acc)')+';"':'')+'>'+disp+'</td>';
+    }).join('');
+    return '<tr><td style="color:var(--ink3);font-size:11px">'+m.label+'</td>'+cells+'</tr>';
+  }).join('');
+  document.getElementById('trend-compare-table').innerHTML=
+    '<table class="tca-table"><thead><tr><th class="tca-metric">Metric</th>'+thCols+'</tr></thead><tbody>'+tableRows+'</tbody></table>';
+
+  // ── Insights ──
+  var insightHTML=data.map(d=>{
+    var col=RCOL[d.r]||'var(--ink)';
+    var lines=[];
+    // vs others avg
+    var others=data.filter(x=>x.r!==d.r).map(x=>x.allTimeAvg).filter(v=>v!=null);
+    if(others.length){
+      var om=Math.round(others.reduce((a,b)=>a+b)/others.length);
+      var pct=d.allTimeAvg&&om?Math.round(((d.allTimeAvg-om)/om)*100):null;
+      if(pct!==null){
+        var dir=pct<0?'cleaner':'more carbon-intensive';
+        lines.push('<strong>'+Math.abs(pct)+'% '+dir+'</strong> than the other selected regions on average ('+d.allTimeAvg+' vs '+om+' gCO\u2082/kWh all-time).');
+      }
+    }
+    // Improvement
+    if(d.improvement!==null){
+      var pace=d.improvement>=45?'strong decarbonisation pace':d.improvement>=25?'steady improvement':'slower rate of change';
+      lines.push(pace.charAt(0).toUpperCase()+pace.slice(1)+': <strong>'+d.firstAvg+'\u2192'+d.lastAvg+' gCO\u2082/kWh</strong> ('+d.firstYear+'\u2013'+d.lastYear+'), a <strong style="color:var(--low)">'+d.improvement+'%</strong> reduction.');
+    }
+    // Volatility
+    if(d.stdDev){
+      var vd=d.stdDev<30?'low month-to-month volatility \u2014 intensity is structurally stable':
+             d.stdDev<55?'moderate volatility \u2014 meaningful month-to-month variation':
+             'high volatility \u2014 intensity swings considerably, closely tracking gas availability';
+      lines.push('Std dev '+d.stdDev+' gCO\u2082/kWh: <strong>'+vd+'</strong>.');
+    }
+    // Scheduling
+    if(d.hourRange>40)
+      lines.push('Large hourly spread ('+d.hourRange+' gCO\u2082/kWh): strong scheduling incentive \u2014 running workloads at <strong>'+String(d.bestH).padStart(2,'0')+':00</strong> vs <strong>'+String(d.worstH).padStart(2,'0')+':00</strong> makes a measurable difference.');
+    else if(d.hourRange<15)
+      lines.push('Narrow hourly spread ('+d.hourRange+' gCO\u2082/kWh): <strong>time-of-day scheduling has limited impact here</strong> \u2014 intensity is relatively flat across the day.');
+    // Convergence vs cleanest
+    var cleanest=data.reduce((b,x)=>(x.allTimeAvg||999)<(b.allTimeAvg||999)?x:b,data[0]);
+    if(d.r!==cleanest.r&&d.allTimeAvg&&cleanest.allTimeAvg){
+      var histGap=d.allTimeAvg-cleanest.allTimeAvg;
+      var recentGap=(d.d30||0)-(cleanest.d30||0);
+      if(recentGap<histGap*0.7)
+        lines.push('Gap vs <strong>'+cleanest.r+'</strong> has <strong style="color:var(--low)">narrowed recently</strong>: 30-day gap '+recentGap+' vs historical avg gap '+histGap+' gCO\u2082/kWh.');
+      else if(recentGap>histGap*1.3)
+        lines.push('Gap vs <strong>'+cleanest.r+'</strong> has <strong style="color:var(--high)">widened recently</strong>: 30-day gap '+recentGap+' vs historical avg gap '+histGap+' gCO\u2082/kWh.');
+    }
+    return '<div class="trend-insight-row">'+
+      '<div class="trend-insight-dot" style="background:'+col+'"></div>'+
+      '<div class="trend-insight-body">'+
+        '<div class="trend-insight-label" style="color:'+col+'">'+d.r+'</div>'+
+        '<div class="trend-insight-text">'+lines.join(' ')+'</div>'+
+      '</div></div>';
+  }).join('');
+  document.getElementById('trend-insights-list').innerHTML=insightHTML;
+}
 
 // ══════════════════════════════════════════════════════════
 // ROUTING
