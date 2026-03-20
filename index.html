@@ -49,7 +49,7 @@ input,button,select,textarea{font-family:var(--sans);font-size:13px;letter-spaci
 ::-webkit-scrollbar-thumb{background:var(--rule2);border-radius:3px}
 
 /* ── HEADER ── */
-header{background:var(--white);border-bottom:1px solid var(--rule);padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between;gap:20px;position:sticky;top:0;z-index:200}
+header{background:var(--white);border-bottom:1px solid var(--rule);padding:0 28px;height:52px;display:flex;align-items:center;justify-content:space-between;gap:20px;position:sticky;top:0;z-index:200}
 .hd-left{display:flex;align-items:center;gap:0;height:100%;padding:0 20px 0 0;border-right:1px solid var(--rule);flex-shrink:0}
 .hd-title{font-family:var(--sans);font-size:20px;font-weight:700;letter-spacing:.01em;color:var(--ink);line-height:1.1}
 .hd-sub{font-size:11px;color:var(--ink3);margin-top:2px;letter-spacing:.01em}.hd-logo{display:block;flex-shrink:0}.hd-sep{display:inline-block;width:1px;height:20px;background:var(--rule2);margin:0 18px;flex-shrink:0}.hd-product{font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);white-space:nowrap}
@@ -62,14 +62,14 @@ header{background:var(--white);border-bottom:1px solid var(--rule);padding:0 24p
 .grad-bar{width:90px;height:7px;border-radius:2px;background:linear-gradient(90deg,#16a34a,#d97706 45%,#dc2626)}
 
 /* ── NAV ── */
-nav{background:var(--white);border-bottom:1px solid var(--rule);padding:0 24px;display:flex;gap:0;overflow-x:auto}
+nav{background:var(--white);border-bottom:1px solid var(--rule);padding:0 28px;display:flex;gap:0;overflow-x:auto}
 nav::-webkit-scrollbar{height:0}
 .tab{padding:10px 14px;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;font-family:var(--sans);font-size:13px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--ink3);cursor:pointer;white-space:nowrap;transition:color .14s,border-color .14s}
 .tab:hover{color:var(--ink)}
 .tab.active{color:var(--acc);border-bottom-color:var(--acc)}
 
 /* ── LAYOUT ── */
-main{padding:24px 28px;max-width:1400px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:18px}
+main{padding:24px 28px;max-width:1400px;display:flex;flex-direction:column;gap:18px}
 .panel{display:none;flex-direction:column;gap:18px;animation:rise .2s ease both}
 .panel.active{display:flex}
 @keyframes rise{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
