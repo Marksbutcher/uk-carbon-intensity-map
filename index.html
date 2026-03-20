@@ -43,6 +43,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:13px;font-weight:400;line-height:1.55;letter-spacing:-0.01em;-webkit-font-smoothing:antialiased}
+input,button,select,textarea{font-family:var(--sans);font-size:13px;letter-spacing:-0.01em}
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:var(--paper)}
 ::-webkit-scrollbar-thumb{background:var(--rule2);border-radius:3px}
@@ -93,7 +94,7 @@ main{padding:24px 28px;max-width:1800px;display:flex;flex-direction:column;gap:1
 .stat-cell::after{content:'';position:absolute;top:0;left:0;right:0;height:3px}
 .c-g::after{background:var(--low)}.c-r::after{background:var(--high)}.c-a::after{background:var(--mid)}.c-b::after{background:var(--acc)}
 .stat-lbl{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.stat-val{font-family:var(--cond);font-size:22px;font-weight:600;line-height:1;letter-spacing:-.01em}
+.stat-val{font-family:var(--mono);font-size:28px;font-weight:500;letter-spacing:-0.02em;line-height:1;color:var(--ink)}
 .stat-sub{font-size:12px;color:var(--ink3);margin-top:2px;font-weight:300;line-height:1.35}
 
 /* ── GAUGE ── */
@@ -127,7 +128,7 @@ table.dt tr.hl td{background:#eff6ff}
 .civ{font-weight:600;font-family:var(--cond);font-size:13px}
 .mbar{display:inline-block;height:4px;border-radius:2px;vertical-align:middle;margin-left:4px}
 .dp{color:var(--low)}.dn{color:var(--high)}.dm{color:var(--mid)}
-.bdg{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:2px}
+.bdg{display:inline-block;font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:2px 6px;border-radius:3px;white-space:nowrap}
 .bdg-g{background:#dcfce7;color:#15803d}.bdg-r{background:#fee2e2;color:#b91c1c}.bdg-a{background:#fef3c7;color:#b45309}
 
 /* ── FUEL MIX IN TABLE ── */
@@ -919,6 +920,12 @@ table.hm th{font-family:var(--cond);font-size:9px;font-weight:600;letter-spacing
 </div>
 
 <script>
+// Font defaults — Inter throughout
+if (typeof Chart !== 'undefined') {
+  Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
+  Chart.defaults.font.size = 12;
+  Chart.defaults.font.weight = '400';
+}
 // ═══════════════════════════════════════════════════
 // CORE DATA
 // ═══════════════════════════════════════════════════
@@ -970,8 +977,8 @@ Chart.defaults.plugins.tooltip.bodyColor = '#d4d4d4';
 Chart.defaults.plugins.tooltip.borderWidth = 0;
 Chart.defaults.plugins.tooltip.padding = 10;
 Chart.defaults.plugins.tooltip.cornerRadius = 4;
-Chart.defaults.plugins.tooltip.titleFont = {family:'Barlow Condensed,Barlow,sans-serif', size:12, weight:'600'};
-Chart.defaults.plugins.tooltip.bodyFont = {family:'Barlow,sans-serif', size:12};
+Chart.defaults.plugins.tooltip.titleFont = {family:'Inter,sans-serif', size:12, weight:'600'};
+Chart.defaults.plugins.tooltip.bodyFont = {family:'sans-serif', size:12};
 Chart.defaults.plugins.tooltip.boxWidth = 10;
 Chart.defaults.plugins.tooltip.boxHeight = 10;
 function kc(id){if(CH[id]){CH[id].destroy();delete CH[id];}}
@@ -1025,10 +1032,10 @@ function buildNow(){
       ${arc(renew,'0','#22c55e')}
       ${arc(fossil,renew*1.8,'#f97316')}
       ${arc(100-renew-fossil,(renew+fossil)*1.8,'#94a3b8')}
-      <text x="${cx}" y="${cy-18}" text-anchor="middle" font-family="Barlow Condensed" font-size="28" font-weight="700" fill="#1a1a1a">${renew}%</text>
-      <text x="${cx}" y="${cy-2}" text-anchor="middle" font-family="Barlow" font-size="10" fill="#6b6b6b">low/zero carbon</text>
-      <text x="${cx-rx-8}" y="${cy+14}" text-anchor="end" font-family="Barlow" font-size="9" fill="#6b6b6b">Fossil ${fossil}%</text>
-      <text x="${cx+rx+8}" y="${cy+14}" text-anchor="start" font-family="Barlow" font-size="9" fill="#6b6b6b">Clean ${renew}%</text>
+      <text x="${cx}" y="${cy-18}" text-anchor="middle" font-family="Inter" font-size="28" font-weight="700" fill="#1a1a1a">${renew}%</text>
+      <text x="${cx}" y="${cy-2}" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#6b6b6b">low/zero carbon</text>
+      <text x="${cx-rx-8}" y="${cy+14}" text-anchor="end" font-family="Inter,sans-serif" font-size="9" fill="#6b6b6b">Fossil ${fossil}%</text>
+      <text x="${cx+rx+8}" y="${cy+14}" text-anchor="start" font-family="Inter,sans-serif" font-size="9" fill="#6b6b6b">Clean ${renew}%</text>
     </svg>
   `;
 
@@ -1522,8 +1529,8 @@ function buildForecast(){
       responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:false},tooltip:{displayColors:false,callbacks:{label:function(c){return Math.round(c.parsed.y)+' gCO\u2082/kWh';}}}},
       scales:{
-        x:{ticks:{color:'#6b6b6b',font:{size:9,family:'Barlow'},maxRotation:0},grid:{color:'#f0ede6'}},
-        y:{ticks:{color:'#6b6b6b',font:{size:10,family:'Barlow'}},grid:{color:'#f0ede6'},title:{display:true,text:'gCO\u2082/kWh',color:'#6b6b6b',font:{size:10}}}
+        x:{ticks:{color:'#6b6b6b',font:{size:9,family:'Inter'},maxRotation:0},grid:{color:'#f0ede6'}},
+        y:{ticks:{color:'#6b6b6b',font:{size:10,family:'Inter'}},grid:{color:'#f0ede6'},title:{display:true,text:'gCO\u2082/kWh',color:'#6b6b6b',font:{size:10}}}
       }
     }
   });
@@ -1561,10 +1568,10 @@ function buildForecast(){
     options:{
       responsive:true,maintainAspectRatio:false,
       interaction:{mode:'index',intersect:false},
-      plugins:{legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:9,family:'Barlow'},boxWidth:10,padding:8}},tooltip:{usePointStyle:true}},
+      plugins:{legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:9,family:'Inter'},boxWidth:10,padding:8}},tooltip:{usePointStyle:true}},
       scales:{
-        x:{stacked:true,ticks:{color:'#6b6b6b',font:{size:9,family:'Barlow'},maxRotation:0},grid:{display:false}},
-        y:{stacked:true,ticks:{color:'#6b6b6b',font:{size:10,family:'Barlow'},callback:function(v){return v+'%';}},grid:{color:'#f0ede6'},max:100}
+        x:{stacked:true,ticks:{color:'#6b6b6b',font:{size:9,family:'Inter'},maxRotation:0},grid:{display:false}},
+        y:{stacked:true,ticks:{color:'#6b6b6b',font:{size:10,family:'Inter'},callback:function(v){return v+'%';}},grid:{color:'#f0ede6'},max:100}
       }
     }
   });
@@ -1771,14 +1778,14 @@ function buildHM(){
           responsive:true,maintainAspectRatio:false,
           interaction:{mode:'index',intersect:false},
           plugins:{
-            legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Barlow'},boxWidth:12,padding:10}},
+            legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Inter'},boxWidth:12,padding:10}},
             tooltip:{usePointStyle:true,callbacks:{label:function(c){ return c.dataset.label+': '+Math.round(c.parsed.y)+' gCO₂/kWh'; }}}
           },
           scales:{
-            x:{ticks:{color:'#6b6b6b',font:{size:9,family:'Barlow'},maxRotation:40,maxTicksLimit:18},grid:{color:'#f0ede6'}},
-            y:{ticks:{color:'#6b6b6b',font:{size:10,family:'Barlow'}},grid:{color:'#f0ede6'},
+            x:{ticks:{color:'#6b6b6b',font:{size:9,family:'Inter'},maxRotation:40,maxTicksLimit:18},grid:{color:'#f0ede6'}},
+            y:{ticks:{color:'#6b6b6b',font:{size:10,family:'Inter'}},grid:{color:'#f0ede6'},
                title:{display:true,text:'gCO₂/kWh',color:'#6b6b6b',font:{size:10}}},
-            y2:{position:'right',ticks:{color:'#94a3b8',font:{size:9,family:'Barlow'}},grid:{display:false},
+            y2:{position:'right',ticks:{color:'#94a3b8',font:{size:9,family:'Inter'}},grid:{display:false},
                 title:{display:true,text:'Spread (gCO₂/kWh)',color:'#94a3b8',font:{size:10}}}
           }
         }
@@ -1893,13 +1900,13 @@ function tOpts(yLabel, extra){
     responsive:true, maintainAspectRatio:false,
     interaction:{mode:'index',intersect:false},
     plugins:{
-      legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Barlow'},boxWidth:12,padding:10}},
+      legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Inter'},boxWidth:12,padding:10}},
       tooltip:{usePointStyle:true}
     },
     scales:{
-      x:{ticks:{color:'#6b6b6b',font:{size:9,family:'Barlow'},maxRotation:40,maxTicksLimit:24},grid:{color:'#f0ede6'}},
-      y:{ticks:{color:'#6b6b6b',font:{size:10,family:'Barlow'}},grid:{color:'#f0ede6'},
-         title:{display:true,text:yLabel,color:'#6b6b6b',font:{size:10,family:'Barlow'}}}
+      x:{ticks:{color:'#6b6b6b',font:{size:9,family:'Inter'},maxRotation:40,maxTicksLimit:24},grid:{color:'#f0ede6'}},
+      y:{ticks:{color:'#6b6b6b',font:{size:10,family:'Inter'}},grid:{color:'#f0ede6'},
+         title:{display:true,text:yLabel,color:'#6b6b6b',font:{size:10,family:'Inter'}}}
     }
   }, extra||{});
 }
@@ -1929,7 +1936,7 @@ function renderTrendAllTime(){
     tChart = new Chart(ctx, {
       type:'line', data:{labels:months, datasets},
       options: tOpts('gCO₂/kWh', {
-        plugins:{ legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Barlow'},boxWidth:12,padding:10}},
+        plugins:{ legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Inter'},boxWidth:12,padding:10}},
                   tooltip:{usePointStyle:true,callbacks:{label:c=>`${c.dataset.label}: ${Math.round(c.parsed.y)} gCO₂/kWh`}} }
       })
     });
@@ -1945,11 +1952,11 @@ function renderTrendAllTime(){
       options:{
         responsive:true, maintainAspectRatio:false,
         interaction:{mode:'index',intersect:false},
-        plugins:{ legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Barlow'},boxWidth:10,padding:8}},
+        plugins:{ legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Inter'},boxWidth:10,padding:8}},
                   tooltip:{usePointStyle:true,callbacks:{label:c=>`${c.dataset.label}: ${c.parsed.y}%`}} },
         scales:{
-          x:{stacked:true,ticks:{color:'#6b6b6b',font:{size:9,family:'Barlow'},maxRotation:40,maxTicksLimit:24},grid:{color:'#f0ede6'}},
-          y:{stacked:true,ticks:{color:'#6b6b6b',font:{size:10,family:'Barlow'},callback:v=>v+'%'},grid:{color:'#f0ede6'},max:100,
+          x:{stacked:true,ticks:{color:'#6b6b6b',font:{size:9,family:'Inter'},maxRotation:40,maxTicksLimit:24},grid:{color:'#f0ede6'}},
+          y:{stacked:true,ticks:{color:'#6b6b6b',font:{size:10,family:'Inter'},callback:v=>v+'%'},grid:{color:'#f0ede6'},max:100,
              title:{display:true,text:'% of generation',color:'#6b6b6b',font:{size:10}}}
         }
       }
@@ -1986,11 +1993,11 @@ function renderTrendAnnual(){
       options:{
         responsive:true, maintainAspectRatio:false,
         interaction:{mode:'index',intersect:false},
-        plugins:{ legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Barlow'},boxWidth:12,padding:10}},
+        plugins:{ legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Inter'},boxWidth:12,padding:10}},
                   tooltip:{usePointStyle:true,callbacks:{label:c=>`${c.dataset.label}: ${c.parsed.y} gCO₂/kWh`}} },
         scales:{
-          x:{ticks:{color:'#6b6b6b',font:{size:10,family:'Barlow'}},grid:{display:false}},
-          y:{ticks:{color:'#6b6b6b',font:{size:10,family:'Barlow'}},grid:{color:'#f0ede6'},
+          x:{ticks:{color:'#6b6b6b',font:{size:10,family:'Inter'}},grid:{display:false}},
+          y:{ticks:{color:'#6b6b6b',font:{size:10,family:'Inter'}},grid:{color:'#f0ede6'},
              title:{display:true,text:'gCO₂/kWh',color:'#6b6b6b',font:{size:10}}}
         }
       }
@@ -2028,11 +2035,11 @@ function renderTrendAnnual(){
       options:{
         responsive:true, maintainAspectRatio:false,
         interaction:{mode:'index',intersect:false},
-        plugins:{ legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Barlow'},boxWidth:10,padding:8}},
+        plugins:{ legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Inter'},boxWidth:10,padding:8}},
                   tooltip:{usePointStyle:true,callbacks:{label:c=>`${c.dataset.label}: ${c.parsed.y}%`}} },
         scales:{
-          x:{stacked:true,ticks:{color:'#6b6b6b',font:{size:10,family:'Barlow'}},grid:{display:false}},
-          y:{stacked:true,max:100,ticks:{color:'#6b6b6b',font:{size:10,family:'Barlow'},callback:v=>v+'%'},grid:{color:'#f0ede6'},
+          x:{stacked:true,ticks:{color:'#6b6b6b',font:{size:10,family:'Inter'}},grid:{display:false}},
+          y:{stacked:true,max:100,ticks:{color:'#6b6b6b',font:{size:10,family:'Inter'},callback:v=>v+'%'},grid:{color:'#f0ede6'},
              title:{display:true,text:'% of generation',color:'#6b6b6b',font:{size:10}}}
         }
       }
@@ -2067,11 +2074,11 @@ function renderTrendSeasonal(){
     options:{
       responsive:true, maintainAspectRatio:false,
       interaction:{mode:'index',intersect:false},
-      plugins:{ legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Barlow'},boxWidth:12,padding:10}},
+      plugins:{ legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Inter'},boxWidth:12,padding:10}},
                 tooltip:{usePointStyle:true,callbacks:{label:c=>`${c.dataset.label}: ${Math.round(c.parsed.y)} gCO₂/kWh`}} },
       scales:{
-        x:{ticks:{color:'#6b6b6b',font:{size:10,family:'Barlow'}},grid:{color:'#f0ede6'}},
-        y:{ticks:{color:'#6b6b6b',font:{size:10,family:'Barlow'}},grid:{color:'#f0ede6'},
+        x:{ticks:{color:'#6b6b6b',font:{size:10,family:'Inter'}},grid:{color:'#f0ede6'}},
+        y:{ticks:{color:'#6b6b6b',font:{size:10,family:'Inter'}},grid:{color:'#f0ede6'},
            title:{display:true,text:'avg gCO₂/kWh',color:'#6b6b6b',font:{size:10}}}
       }
     }
@@ -2114,11 +2121,11 @@ function renderTrendHourProfile(){
     options:{
       responsive:true, maintainAspectRatio:false,
       interaction:{mode:'index',intersect:false},
-      plugins:{ legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Barlow'},boxWidth:12,padding:10}},
+      plugins:{ legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Inter'},boxWidth:12,padding:10}},
                 tooltip:{usePointStyle:true,callbacks:{label:c=>`${c.dataset.label}: ${Math.round(c.parsed.y)} gCO₂/kWh`}} },
       scales:{
-        x:{ticks:{color:'#6b6b6b',font:{size:9,family:'Barlow'},maxRotation:0,maxTicksLimit:12},grid:{color:'#f0ede6'}},
-        y:{ticks:{color:'#6b6b6b',font:{size:10,family:'Barlow'}},grid:{color:'#f0ede6'},
+        x:{ticks:{color:'#6b6b6b',font:{size:9,family:'Inter'},maxRotation:0,maxTicksLimit:12},grid:{color:'#f0ede6'}},
+        y:{ticks:{color:'#6b6b6b',font:{size:10,family:'Inter'}},grid:{color:'#f0ede6'},
            title:{display:true,text:'avg gCO₂/kWh',color:'#6b6b6b',font:{size:10}}}
       }
     }
@@ -2147,15 +2154,15 @@ function renderTrendHourProfile(){
         responsive:true, maintainAspectRatio:false,
         interaction:{mode:'index',intersect:false},
         plugins:{
-          legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Barlow'},boxWidth:12,padding:10}},
+          legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Inter'},boxWidth:12,padding:10}},
           tooltip:{usePointStyle:true,callbacks:{
             title:items=>'Carbon premium at '+items[0].label,
             label:c=>`${c.dataset.label}: +${Math.round(c.parsed.y)} gCO₂/kWh vs best hour`
           }}
         },
         scales:{
-          x:{ticks:{color:'#6b6b6b',font:{size:9,family:'Barlow'},maxRotation:0,maxTicksLimit:12},grid:{display:false}},
-          y:{ticks:{color:'#6b6b6b',font:{size:10,family:'Barlow'}},grid:{color:'#f0ede6'},
+          x:{ticks:{color:'#6b6b6b',font:{size:9,family:'Inter'},maxRotation:0,maxTicksLimit:12},grid:{display:false}},
+          y:{ticks:{color:'#6b6b6b',font:{size:10,family:'Inter'}},grid:{color:'#f0ede6'},
              title:{display:true,text:'gCO₂/kWh above daily minimum',color:'#6b6b6b',font:{size:10}}}
         }
       }
@@ -2276,11 +2283,11 @@ function renderTrendLive24h(){
       options:{
         responsive:true, maintainAspectRatio:false,
         interaction:{mode:'index',intersect:false},
-        plugins:{ legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Barlow'},boxWidth:12,padding:10}},
+        plugins:{ legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Inter'},boxWidth:12,padding:10}},
                   tooltip:{usePointStyle:true,callbacks:{label:c=>`${c.dataset.label}: ${Math.round(c.parsed.y)} gCO₂/kWh`}} },
         scales:{
-          x:{ticks:{color:'#6b6b6b',font:{size:9,family:'Barlow'},maxRotation:0,maxTicksLimit:12},grid:{color:'#f0ede6'}},
-          y:{ticks:{color:'#6b6b6b',font:{size:10,family:'Barlow'}},grid:{color:'#f0ede6'},
+          x:{ticks:{color:'#6b6b6b',font:{size:9,family:'Inter'},maxRotation:0,maxTicksLimit:12},grid:{color:'#f0ede6'}},
+          y:{ticks:{color:'#6b6b6b',font:{size:10,family:'Inter'}},grid:{color:'#f0ede6'},
              title:{display:true,text:'gCO₂/kWh',color:'#6b6b6b',font:{size:10}}}
         }
       }
@@ -2377,12 +2384,12 @@ function buildMix(){
       responsive:true, maintainAspectRatio:true,
       interaction:{ mode:'index', intersect:false },
       plugins:{
-        legend:{ position:'bottom', labels:{ color:'#6b6b6b', font:{ size:10, family:'Barlow' }, boxWidth:10, padding:8 }},
+        legend:{ position:'bottom', labels:{ color:'#6b6b6b', font:{ size:10, family:'Inter' }, boxWidth:10, padding:8 }},
         tooltip:{ usePointStyle:true, callbacks:{ label:function(c){ return c.dataset.label+': '+c.parsed.y+'%'; }}}
       },
       scales:{
-        x:{ stacked:true, ticks:{ color:'#6b6b6b', font:{ size:9, family:'Barlow' }, maxRotation:40, maxTicksLimit:24 }, grid:{ color:'#f0ede6' }},
-        y:{ stacked:true, max:100, ticks:{ color:'#6b6b6b', font:{ size:10, family:'Barlow' }, callback:function(v){ return v+'%'; }}, grid:{ color:'#f0ede6' },
+        x:{ stacked:true, ticks:{ color:'#6b6b6b', font:{ size:9, family:'Inter' }, maxRotation:40, maxTicksLimit:24 }, grid:{ color:'#f0ede6' }},
+        y:{ stacked:true, max:100, ticks:{ color:'#6b6b6b', font:{ size:10, family:'Inter' }, callback:function(v){ return v+'%'; }}, grid:{ color:'#f0ede6' },
             title:{ display:true, text:'% of generation', color:'#6b6b6b', font:{ size:10 }}}
       }
     }
@@ -2445,9 +2452,9 @@ function buildMix(){
         }
       },
       scales:{
-        x:{ ticks:{ color:'#6b6b6b', font:{ size:9, family:'Barlow' }, callback:function(v){ return v+'%'; }}, grid:{ color:'#f0ede6' },
+        x:{ ticks:{ color:'#6b6b6b', font:{ size:9, family:'Inter' }, callback:function(v){ return v+'%'; }}, grid:{ color:'#f0ede6' },
             title:{ display:true, text:'Wind share (%)', color:'#6b6b6b', font:{ size:10 }}},
-        y:{ ticks:{ color:'#6b6b6b', font:{ size:9, family:'Barlow' }}, grid:{ color:'#f0ede6' },
+        y:{ ticks:{ color:'#6b6b6b', font:{ size:9, family:'Inter' }}, grid:{ color:'#f0ede6' },
             title:{ display:true, text:'Avg intensity (gCO\u2082/kWh)', color:'#6b6b6b', font:{ size:10 }}}
       }
     }
@@ -2475,8 +2482,8 @@ function buildMix(){
           callbacks:{ label:function(c){ return 'Gas: '+c.parsed.y+'% of generation'; }}}
       },
       scales:{
-        x:{ ticks:{ color:'#6b6b6b', font:{ size:9, family:'Barlow' }, maxRotation:40, maxTicksLimit:20 }, grid:{ display:false }},
-        y:{ ticks:{ color:'#6b6b6b', font:{ size:9, family:'Barlow' }, callback:function(v){ return v+'%'; }}, grid:{ color:'#f0ede6' },
+        x:{ ticks:{ color:'#6b6b6b', font:{ size:9, family:'Inter' }, maxRotation:40, maxTicksLimit:20 }, grid:{ display:false }},
+        y:{ ticks:{ color:'#6b6b6b', font:{ size:9, family:'Inter' }, callback:function(v){ return v+'%'; }}, grid:{ color:'#f0ede6' },
             title:{ display:true, text:'Gas share (%)', color:'#6b6b6b', font:{ size:10 }}}
       }
     }
@@ -3009,7 +3016,7 @@ function initMap(){
     .then(function(geo){ MAP_GEO = geo; drawMap(); })
     .catch(function(){
       var wrap = document.getElementById('map-canvas');
-      if(wrap){ var ctx=wrap.getContext('2d'); ctx.fillStyle='#f7f6f2'; ctx.fillRect(0,0,wrap.width||400,wrap.height||480); ctx.fillStyle='#6b6b6b'; ctx.font='13px Barlow,sans-serif'; ctx.textAlign='center'; ctx.fillText('Map data not found — upload regions.geojson to repo root',(wrap.width||400)/2,(wrap.height||480)/2); }
+      if(wrap){ var ctx=wrap.getContext('2d'); ctx.fillStyle='#f7f6f2'; ctx.fillRect(0,0,wrap.width||400,wrap.height||480); ctx.fillStyle='#6b6b6b'; ctx.font='13px sans-serif'; ctx.textAlign='center'; ctx.fillText('Map data not found — upload regions.geojson to repo root',(wrap.width||400)/2,(wrap.height||480)/2); }
     });
 }
 
@@ -3170,11 +3177,11 @@ function drawMapRegions(hoverRegion){
       .replace(' England','').replace(' Scotland','').replace(' and Merseyside','');
     ctx.shadowColor='rgba(0,0,0,0.35)'; ctx.shadowBlur=3;
     ctx.fillStyle=isHov?'#fff':'rgba(255,255,255,0.92)';
-    ctx.font=(isHov?'700':'600')+' 9px \'Barlow Condensed\',Barlow,sans-serif';
+    ctx.font=(isHov?'700':'600')+' 9px \'Inter\',sans-serif';
     ctx.textAlign='center'; ctx.textBaseline='middle';
     ctx.fillText(short,p[0],p[1]-6);
     if(val!==undefined){
-      ctx.font=(isHov?'800':'700')+' 12px \'Barlow Condensed\',Barlow,sans-serif';
+      ctx.font=(isHov?'800':'700')+' 12px \'Inter\',sans-serif';
       ctx.fillStyle=isHov?'#fff':'rgba(255,255,255,0.95)';
       ctx.fillText(val,p[0],p[1]+7);
     }
