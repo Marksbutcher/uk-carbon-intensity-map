@@ -48,7 +48,7 @@ input,button,select,textarea{font-family:var(--sans);font-size:13px;letter-spaci
 ::-webkit-scrollbar-track{background:var(--paper)}
 ::-webkit-scrollbar-thumb{background:var(--rule2);border-radius:3px}
 
-/* ââ HEADER ââ */
+/* ── HEADER ── */
 header{background:var(--white);border-bottom:1px solid var(--rule);padding:0 28px;height:52px;display:flex;align-items:center;justify-content:space-between;gap:20px;position:sticky;top:0;z-index:200}
 .hd-left{display:flex;align-items:center;gap:0;height:100%;padding:0 20px 0 0;border-right:1px solid var(--rule);flex-shrink:0}
 .hd-title{font-family:var(--sans);font-size:20px;font-weight:700;letter-spacing:.01em;color:var(--ink);line-height:1.1}
@@ -61,14 +61,14 @@ header{background:var(--white);border-bottom:1px solid var(--rule);padding:0 28p
 .hd-right{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--ink3);white-space:nowrap}
 .grad-bar{width:90px;height:7px;border-radius:2px;background:linear-gradient(90deg,#16a34a,#d97706 45%,#dc2626)}
 
-/* ââ NAV ââ */
+/* ── NAV ── */
 nav{background:var(--white);border-bottom:1px solid var(--rule);padding:0 28px;display:flex;gap:0;overflow-x:auto}
 nav::-webkit-scrollbar{height:0}
 .tab{padding:10px 14px;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;font-family:var(--sans);font-size:13px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--ink3);cursor:pointer;white-space:nowrap;transition:color .14s,border-color .14s}
 .tab:hover{color:var(--ink)}
 .tab.active{color:var(--acc);border-bottom-color:var(--acc)}
 
-/* ââ LAYOUT ââ */
+/* ── LAYOUT ── */
 main{padding:24px 28px;max-width:1400px;display:flex;flex-direction:column;gap:18px}
 .panel{display:none;flex-direction:column;gap:18px;animation:rise .2s ease both}
 .panel.active{display:flex}
@@ -79,17 +79,17 @@ main{padding:24px 28px;max-width:1400px;display:flex;flex-direction:column;gap:1
 @media(max-width:1100px){.g2,.g3{grid-template-columns:1fr}}
 @media(max-width:600px){.g4{grid-template-columns:1fr 1fr}}
 
-/* ââ SECTION HEADER ââ */
+/* ── SECTION HEADER ── */
 .sh{display:flex;align-items:baseline;gap:10px;border-bottom:1px solid var(--rule);padding-bottom:7px;margin-bottom:2px}
 .sh h2{font-family:var(--sans);font-size:14px;font-weight:600;letter-spacing:-0.01em;color:var(--ink)}
 .sh p{font-family:var(--sans);font-size:12px;color:var(--ink3);letter-spacing:0}
 
-/* ââ CARD ââ */
+/* ── CARD ── */
 .card{background:var(--white);border:1px solid var(--rule);border-radius:var(--r);padding:16px}
 .card-title{font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--ink2);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
 .card-sub{font-size:12px;color:var(--ink3);font-weight:400;letter-spacing:0;text-transform:none}
 
-/* ââ STAT STRIP ââ */
+/* ── STAT STRIP ── */
 .stat-cell{background:var(--white);padding:10px 12px;position:relative}
 .stat-cell::after{content:'';position:absolute;top:0;left:0;right:0;height:3px}
 .c-g::after{background:var(--low)}.c-r::after{background:var(--high)}.c-a::after{background:var(--mid)}.c-b::after{background:var(--acc)}
@@ -97,12 +97,12 @@ main{padding:24px 28px;max-width:1400px;display:flex;flex-direction:column;gap:1
 .stat-val{font-family:var(--mono);font-size:28px;font-weight:500;letter-spacing:-0.02em;line-height:1;color:var(--ink)}
 .stat-sub{font-family:var(--sans);font-size:11px;color:var(--ink3);margin-top:1px;letter-spacing:0}
 
-/* ââ GAUGE ââ */
+/* ── GAUGE ── */
 .gauge-wrap{display:flex;flex-direction:column;align-items:center;padding:8px 0}
 .gauge-svg{overflow:visible}
 .gauge-label{font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:.03em;color:var(--ink2);text-transform:uppercase;text-align:center;margin-top:6px}
 
-/* ââ FUEL BAR ââ */
+/* ── FUEL BAR ── */
 .fuel-stack{height:28px;border-radius:3px;overflow:hidden;display:flex;margin:8px 0}
 .fuel-seg{height:100%;transition:width .4s ease;cursor:default;position:relative}
 .fuel-seg:hover::after{content:attr(data-tip);position:absolute;top:-28px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:10px;padding:3px 7px;border-radius:3px;white-space:nowrap;pointer-events:none;z-index:10}
@@ -110,15 +110,15 @@ main{padding:24px 28px;max-width:1400px;display:flex;flex-direction:column;gap:1
 .fl-item{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--ink3)}
 .fl-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
 
-/* ââ TABLE ââ */
+/* ── TABLE ── */
 .tbl-card{background:var(--white);border:1px solid var(--rule);border-radius:var(--r);overflow:hidden}
 .tbl-wrap{overflow-x:auto}
 table.dt{width:100%;border-collapse:collapse;font-size:11.5px}
 table.dt thead{background:var(--paper)}
 table.dt th{padding:7px 11px;text-align:left;font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);border-bottom:1px solid var(--rule);white-space:nowrap;cursor:pointer;user-select:none}
 table.dt th:hover{color:var(--ink)}
-table.dt th.sa::after{content:' â';color:var(--acc)}
-table.dt th.sd::after{content:' â';color:var(--acc)}
+table.dt th.sa::after{content:' ↑';color:var(--acc)}
+table.dt th.sd::after{content:' ↓';color:var(--acc)}
 table.dt td{padding:6px 11px;border-bottom:1px solid var(--rule);white-space:nowrap;color:var(--ink2)}
 table.dt tr:last-child td{border-bottom:none}
 table.dt tr:hover td{background:var(--paper)}
@@ -131,10 +131,10 @@ table.dt tr.hl td{background:#eff6ff}
 .bdg{display:inline-block;font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:2px 6px;border-radius:3px;white-space:nowrap}
 .bdg-g{background:#dcfce7;color:#15803d}.bdg-r{background:#fee2e2;color:#b91c1c}.bdg-a{background:#fef3c7;color:#b45309}
 
-/* ââ FUEL MIX IN TABLE ââ */
+/* ── FUEL MIX IN TABLE ── */
 .fmix-bar{display:flex;height:6px;border-radius:2px;overflow:hidden;width:80px;flex-shrink:0}
 
-/* ââ HEATMAP ââ */
+/* ── HEATMAP ── */
 .hm-ctrl{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
 .ctrl-grp{display:flex;align-items:center;gap:6px}
 .ctrl-grp label{font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}
@@ -155,7 +155,7 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
 .ins-val{font-family:var(--sans);font-size:20px;font-weight:700;letter-spacing:.02em;color:var(--ink)}
 .ins-sub{font-size:12px;color:var(--ink3);margin-top:2px;font-weight:300;line-height:1.5}
 
-/* ââ CHARTS ââ */
+/* ── CHARTS ── */
 .pills{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
 .pill{font-size:11px;padding:2px 9px;border:1px solid var(--rule2);border-radius:20px;cursor:pointer;color:var(--ink3);background:var(--white);transition:all .12s}
 .pill:hover{color:var(--ink);border-color:var(--rule2)}
@@ -169,7 +169,7 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
 .ct-btn{font-family:var(--sans);font-size:11px;font-weight:500;padding:3px 8px;border:1px solid var(--rule2);border-radius:3px;background:var(--white);color:var(--ink3);cursor:pointer;transition:all .14s}
 .ct-btn.active{background:var(--ink);color:var(--white);border-color:var(--ink)}
 
-/* ââ FORECAST ââ */
+/* ── FORECAST ── */
 .fcast-region-sel{display:flex;align-items:center;gap:8px;margin-bottom:14px}
 .fcast-region-sel label{font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}
 .best-window{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:var(--r);padding:12px 16px;margin-top:12px;display:flex;align-items:flex-start;gap:12px}
@@ -179,7 +179,7 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
 .bw-warning{background:#fef3c7;border:1px solid #fde68a;border-radius:var(--r);padding:12px 16px;margin-top:8px;display:flex;align-items:flex-start;gap:12px}
 .bw-warning .bw-title{color:var(--mid)}
 
-/* ââ ABOUT ââ */
+/* ── ABOUT ── */
 .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:var(--r);overflow:hidden}
 .ab{background:var(--white);padding:22px}
 .ab h3{font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:-0.01em;color:var(--ink)}
@@ -192,7 +192,7 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
 
 
 
-/* ââ SCHEDULE TAB ââ */
+/* ── SCHEDULE TAB ── */
 .fc-best-row td{font-weight:600}
 .fc-hl-best{color:var(--low);font-weight:700}
 .fc-hl-worst{color:var(--high)}
@@ -200,7 +200,7 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
 #fc-all-table .fc-region-link{cursor:pointer;color:var(--ink);text-decoration:none}
 #fc-all-table .fc-region-link:hover{color:var(--acc);text-decoration:underline}
 
-/* ââ TREND ANALYSIS ââ */
+/* ── TREND ANALYSIS ── */
 .tca-table{width:100%;border-collapse:collapse;font-size:12px}
 .tca-table th{font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3);padding:6px 10px;border-bottom:2px solid var(--rule);text-align:left;white-space:nowrap}
 .tca-table th.tca-metric{min-width:160px}
@@ -217,7 +217,7 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
 .trend-insight-text{font-size:12px;color:var(--ink2);line-height:1.55;font-weight:300}
 .trend-insight-text strong{font-weight:600;color:var(--ink)}
 
-/* ââ HEATMAP ADDITIONS ââ */
+/* ── HEATMAP ADDITIONS ── */
 .hm-ranking{display:flex;flex-direction:column;gap:4px}
 .hm-rank-row{display:flex;align-items:center;gap:8px}
 .hm-rank-name{width:170px;flex-shrink:0;font-size:12px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -233,7 +233,7 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
 .rgn-sum-lbl{font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:2px}
 .rgn-sum-txt{font-size:12px;color:var(--ink2);line-height:1.55;font-weight:300}
 .rgn-sum-txt strong{font-weight:600;color:var(--ink)}
-/* ââ MAP ââ */
+/* ── MAP ── */
 .map-layout{display:grid;grid-template-columns:1fr 280px;gap:18px;align-items:stretch}
 @media(max-width:900px){.map-layout{grid-template-columns:1fr}}
 .map-canvas-wrap{position:relative;border-radius:var(--r);overflow:hidden;border:1px solid var(--rule);height:100%;min-height:500px}
@@ -267,7 +267,7 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
 .map-gen-dot{width:6px;height:6px;border-radius:2px;flex-shrink:0}
 
 
-/* ââ TOOLTIP ââ */
+/* ── TOOLTIP ── */
 #tip{position:fixed;background:var(--white);border:1px solid var(--rule2);border-radius:var(--r);padding:9px 13px;font-size:10px;pointer-events:none;display:none;z-index:999;box-shadow:0 4px 20px rgba(0,0,0,.12);min-width:170px}
 #tip-name{font-family:var(--sans);font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px}
 .tr{display:flex;justify-content:space-between;gap:14px;color:var(--ink3);padding:1px 0}
@@ -275,7 +275,7 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
 
 
 
-/* ââ LIVE DATA ââ */
+/* ── LIVE DATA ── */
 .live-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:3px;border:1px solid #bbf7d0;background:#f0fdf4;color:var(--low)}
 .live-badge.stale{border-color:#fde68a;background:#fef9ee;color:var(--mid)}
 .live-badge.error{border-color:#fecaca;background:#fff5f5;color:var(--high)}
@@ -288,7 +288,7 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
 @keyframes spin{to{transform:rotate(360deg)}}
 .api-note{font-size:12px;color:var(--ink3);font-weight:300;font-style:italic;margin-top:6px}
 
-/* ââ WORKLOAD CALCULATOR ââ */
+/* ── WORKLOAD CALCULATOR ── */
 .calc-wrap{background:var(--white);border:1px solid var(--rule);border-radius:var(--r);padding:16px}
 .calc-inputs{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
 .calc-field{display:flex;flex-direction:column;gap:3px}
@@ -302,13 +302,13 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
 .calc-result-sub{font-size:11px;color:var(--ink3);margin-top:2px;font-weight:300}
 @media(max-width:600px){.calc-results{grid-template-columns:1fr 1fr}.calc-inputs{flex-direction:column;align-items:flex-start}}
 
-/* ââ SCHEDULING SCORE ââ */
+/* ── SCHEDULING SCORE ── */
 .score-ring-wrap{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
 .score-ring{flex-shrink:0}
 .score-context{flex:1;min-width:160px}
 .score-label{font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:4px}
 .score-detail{font-size:13px;color:var(--ink2);font-weight:300;line-height:1.6}
-/* ââ POWER MIX PANEL ââ */
+/* ── POWER MIX PANEL ── */
 .mix-region-bars { display:flex; flex-direction:column; gap:3px; }
 .mrb-row { display:flex; align-items:center; gap:10px; cursor:pointer; padding:4px 0; border-radius:var(--r); transition:background .1s; }
 .mrb-row:hover { background:var(--paper); }
@@ -334,7 +334,7 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
 @media(max-width:900px){ .insight-strip{grid-template-columns:repeat(4,1fr)} .analysis-grid{grid-template-columns:1fr} }
 @media(max-width:480px){ .insight-strip{grid-template-columns:1fr 1fr} .mrb-label{width:110px} }
 
-/* ââ BEST WINDOW CHART ââ */
+/* ── BEST WINDOW CHART ── */
 .bw-chart-wrap{background:var(--white);border:1px solid var(--rule);border-radius:var(--r);padding:16px}
 .bw-chart-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}
 .bw-chart-region{display:flex;align-items:center;gap:8px}
@@ -352,7 +352,7 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
 .bw-bar-tip{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:10px;padding:4px 8px;border-radius:3px;white-space:nowrap;z-index:30;pointer-events:none}
 .bw-bar-tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:var(--ink)}
 
-/* ââ COMPARISON CALCULATOR ââ */
+/* ── COMPARISON CALCULATOR ── */
 .comp-calc{background:var(--white);border:1px solid var(--rule);border-radius:var(--r);padding:16px}
 .comp-inputs{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
 .comp-table{width:100%;border-collapse:collapse;font-size:12px}
@@ -365,7 +365,7 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
 .comp-table .cv{font-family:var(--sans);font-size:16px;font-weight:700}
 .comp-saving{font-size:11px;color:var(--low);font-weight:500}
 .comp-reco{margin-top:12px;padding:10px 14px;background:var(--paper);border-radius:var(--r);font-size:13px;color:var(--ink2);line-height:1.6}
-/* ââ REGION DETAIL ââ */
+/* ── REGION DETAIL ── */
 .rgn-hd{font-family:var(--sans);font-size:18px;font-weight:700;letter-spacing:-0.02em;color:var(--ink);line-height:1.1}
 .rgn-hd-name{font-family:var(--sans);font-size:28px;font-weight:700;color:var(--ink)}
 .rgn-hd-val{font-family:var(--mono);font-size:22px;font-weight:500;letter-spacing:-0.03em;line-height:1}
@@ -377,7 +377,7 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
 .rgn-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:var(--r);overflow:hidden}
 @media(max-width:900px){.rgn-stats{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:480px){.rgn-stats{grid-template-columns:1fr 1fr}}
-/* ââ RESPONSIVE ââ */
+/* ── RESPONSIVE ── */
 @media(max-width:1100px){.g2,.g3{grid-template-columns:1fr}}
 @media(max-width:700px){
   header{padding:0 14px;flex-wrap:wrap;gap:0}
@@ -436,12 +436,12 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
   <div class="hd-chips">
     <span class="live-badge" id="live-badge"><span class="pulse"></span>Loading...</span><span class="data-ts" id="data-ts"></span>
     <span class="chip">130,089 readings</span>
-    <span class="chip">gCOâ/kWh</span>
+    <span class="chip">gCO₂/kWh</span>
   </div>
   <div class="hd-right">
-    <span style="color:var(--low);font-weight:500">Low COâ</span>
+    <span style="color:var(--low);font-weight:500">Low CO₂</span>
     <div class="grad-bar"></div>
-    <span style="color:var(--high);font-weight:500">High COâ</span>
+    <span style="color:var(--high);font-weight:500">High CO₂</span>
   </div>
 </header>
 
@@ -458,13 +458,13 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
 
 <main>
 
-<!-- ââââââââââââââââââââââââââ NOW ââââââââââââââââââââââââââ -->
+<!-- ══════════════════════════ NOW ══════════════════════════ -->
 <div id="p-now" class="panel active">
-  <div class="sh"><h2>Current readings</h2><p>Most recent half-hour Â· <span id="now-sh-ts">loading...</span></p></div>
+  <div class="sh"><h2>Current readings</h2><p>Most recent half-hour · <span id="now-sh-ts">loading...</span></p></div>
   <div class="g4" id="now-stats"></div>
   <div class="tbl-card">
     <div style="padding:12px 14px 0">
-      <div class="card-title" style="margin:0">All regions <span class="card-sub">Â· click row to open region detail Â· click header to sort</span></div>
+      <div class="card-title" style="margin:0">All regions <span class="card-sub">· click row to open region detail · click header to sort</span></div>
     </div>
     <div class="tbl-wrap">
       <table class="dt" id="now-tbl">
@@ -486,7 +486,7 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
   <div class="card">
     <div style="display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start">
       <div>
-        <div class="card-title" style="margin-bottom:10px">GB generation mix right now <span class="card-sub">estimated Â· hover segments</span></div>
+        <div class="card-title" style="margin-bottom:10px">GB generation mix right now <span class="card-sub">estimated · hover segments</span></div>
         <div class="fuel-stack" id="gb-fuel-bar"></div>
         <div class="fuel-legend" id="gb-fuel-legend"></div>
       </div>
@@ -500,7 +500,7 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
   <!-- 24-hour best-window chart -->
   <div class="bw-chart-wrap">
     <div class="bw-chart-header">
-      <div class="card-title" style="margin:0">Best windows today <span class="card-sub">Â· next 24 hours Â· coloured by cleanliness vs historical average</span></div>
+      <div class="card-title" style="margin:0">Best windows today <span class="card-sub">· next 24 hours · coloured by cleanliness vs historical average</span></div>
       <div class="bw-chart-region">
         <label>Region</label>
         <select id="bw-region" onchange="buildBestWindow()"></select>
@@ -510,9 +510,9 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
     <div class="bw-reco" id="bw-reco"></div>
   </div>
 
-  <!-- Workload calculator â comparison mode -->
+  <!-- Workload calculator — comparison mode -->
   <div class="comp-calc">
-    <div class="card-title" style="margin-bottom:12px">Carbon cost calculator <span class="card-sub">Â· compare regions Â· live intensity</span></div>
+    <div class="card-title" style="margin-bottom:12px">Carbon cost calculator <span class="card-sub">· compare regions · live intensity</span></div>
     <div class="comp-inputs">
       <div class="calc-field">
         <label>Workload size (kWh)</label>
@@ -543,8 +543,8 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
           <th>Scenario</th>
           <th>Intensity now</th>
           <th>Best window</th>
-          <th>COâ now</th>
-          <th>COâ best window</th>
+          <th>CO₂ now</th>
+          <th>CO₂ best window</th>
           <th>Saving vs best</th>
         </tr></thead>
         <tbody id="comp-tbody"></tbody>
@@ -558,16 +558,16 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
 
   <!-- Scheduling score -->
   <div class="card">
-    <div class="card-title" style="margin-bottom:12px">Scheduling score by region <span class="card-sub">Â· how clean is right now vs historical average for this hour</span></div>
+    <div class="card-title" style="margin-bottom:12px">Scheduling score by region <span class="card-sub">· how clean is right now vs historical average for this hour</span></div>
     <div id="sched-scores"></div>
     <div class="api-note" style="margin-top:8px">Score = percentile rank vs all historical readings for this hour of day and month. 100 = cleanest on record. Based on 7+ years of half-hourly data.</div>
   </div>
 
 </div>
 
-<!-- ââââââââââââââââââââââââââ FORECAST ââââââââââââââââââââââââââ -->
+<!-- ══════════════════════════ FORECAST ══════════════════════════ -->
 <div id="p-forecast" class="panel">
-  <div class="sh"><h2>Scheduling windows</h2><p>Where and when to run deferrable workloads Â· all regions Â· next 48 hours</p></div>
+  <div class="sh"><h2>Scheduling windows</h2><p>Where and when to run deferrable workloads · all regions · next 48 hours</p></div>
 
   <!-- Row 1: workload preset + region selector -->
   <div style="display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:4px">
@@ -590,25 +590,25 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
       <label>Region detail</label>
       <select id="fc-region" onchange="buildForecast()"></select>
     </div>
-    <div style="font-size:11px;color:var(--ink3);padding-bottom:4px">Indicative Â· based on NESO historical patterns</div>
+    <div style="font-size:11px;color:var(--ink3);padding-bottom:4px">Indicative · based on NESO historical patterns</div>
   </div>
 
   <!-- Row 2: cross-region best window table -->
   <div class="card" style="margin-bottom:0">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
-      <div class="card-title" style="margin:0">All-region scheduling table <span class="card-sub">Â· sorted by best forecast window Â· next 48h</span></div>
+      <div class="card-title" style="margin:0">All-region scheduling table <span class="card-sub">· sorted by best forecast window · next 48h</span></div>
       <div id="fc-kwh-label" style="font-family:var(--sans);font-size:12px;color:var(--ink3)"></div>
     </div>
     <div style="overflow-x:auto">
       <table class="tca-table" id="fc-all-table">
         <thead><tr>
           <th style="min-width:170px">Region</th>
-          <th>Now<br><span style="font-weight:400;text-transform:none;letter-spacing:0">gCOâ/kWh</span></th>
-          <th>Best window<br><span style="font-weight:400;text-transform:none;letter-spacing:0">gCOâ/kWh</span></th>
-          <th>Peak<br><span style="font-weight:400;text-transform:none;letter-spacing:0">gCOâ/kWh</span></th>
-          <th>Spread<br><span style="font-weight:400;text-transform:none;letter-spacing:0">gCOâ/kWh</span></th>
-          <th>COâ at best<br><span style="font-weight:400;text-transform:none;letter-spacing:0">for workload</span></th>
-          <th>Saving vs worst<br><span style="font-weight:400;text-transform:none;letter-spacing:0">kg COâ</span></th>
+          <th>Now<br><span style="font-weight:400;text-transform:none;letter-spacing:0">gCO₂/kWh</span></th>
+          <th>Best window<br><span style="font-weight:400;text-transform:none;letter-spacing:0">gCO₂/kWh</span></th>
+          <th>Peak<br><span style="font-weight:400;text-transform:none;letter-spacing:0">gCO₂/kWh</span></th>
+          <th>Spread<br><span style="font-weight:400;text-transform:none;letter-spacing:0">gCO₂/kWh</span></th>
+          <th>CO₂ at best<br><span style="font-weight:400;text-transform:none;letter-spacing:0">for workload</span></th>
+          <th>Saving vs worst<br><span style="font-weight:400;text-transform:none;letter-spacing:0">kg CO₂</span></th>
         </tr></thead>
         <tbody id="fc-all-tbody"></tbody>
       </table>
@@ -618,10 +618,10 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
 
   <!-- Row 3: single-region detail -->
   <div class="card" style="margin-bottom:0">
-    <div class="card-title" style="margin-bottom:10px">Region detail â <span id="fc-region-label">Yorkshire</span></div>
+    <div class="card-title" style="margin-bottom:10px">Region detail — <span id="fc-region-label">Yorkshire</span></div>
     <div class="g2">
       <div class="chart-wrap">
-        <div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Intensity forecast â next 48h</div>
+        <div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Intensity forecast — next 48h</div>
         <canvas id="fc-chart" height="190"></canvas>
       </div>
       <div class="chart-wrap">
@@ -634,9 +634,9 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
 
 </div>
 
-<!-- ââââââââââââââââââââââââââ HEATMAP ââââââââââââââââââââââââââ -->
+<!-- ══════════════════════════ HEATMAP ══════════════════════════ -->
 <div id="p-heatmap" class="panel">
-  <div class="sh"><h2>Heatmap</h2><p>Green = lower carbon Â· red = higher Â· hover any cell for exact value</p></div>
+  <div class="sh"><h2>Heatmap</h2><p>Green = lower carbon · red = higher · hover any cell for exact value</p></div>
   <div class="hm-ctrl">
     <div class="ctrl-grp"><label>Region</label><select id="hm-r" onchange="buildHM()"></select></div>
     <div class="ctrl-grp"><label>Period</label>
@@ -644,13 +644,13 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
         <option value="24h">Last 24 hours</option>
         <option value="weekly">52 weeks</option>
         <option value="monthly" selected>12 months (avg)</option>
-        <option value="yearly">Year by year (2018â2026)</option>
+        <option value="yearly">Year by year (2018–2026)</option>
       </select>
     </div>
     <div class="ctrl-grp" id="hm-scale-grp"><label>Scale</label>
       <select id="hm-s" onchange="buildHM()">
-        <option value="abs">Absolute â compare regions fairly</option>
-        <option value="rel">Per-region â show each region's own trend</option>
+        <option value="abs">Absolute — compare regions fairly</option>
+        <option value="rel">Per-region — show each region's own trend</option>
       </select>
     </div>
   </div>
@@ -665,13 +665,13 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
 
   <!-- Regional ranking -->
   <div class="card" id="hm-ranking-card" style="display:none">
-    <div class="card-title" style="margin-bottom:10px">Regional ranking <span class="card-sub" id="hm-ranking-sub">Â· average intensity for selected view</span></div>
+    <div class="card-title" style="margin-bottom:10px">Regional ranking <span class="card-sub" id="hm-ranking-sub">· average intensity for selected view</span></div>
     <div class="hm-ranking" id="hm-ranking"></div>
   </div>
 
   <!-- Spread chart: cleanest vs dirtiest over time -->
   <div class="card" id="hm-spread-card" style="display:none">
-    <div class="card-title" style="margin-bottom:4px">Regional spread over time <span class="card-sub">Â· gap between cleanest and dirtiest region each month</span></div>
+    <div class="card-title" style="margin-bottom:4px">Regional spread over time <span class="card-sub">· gap between cleanest and dirtiest region each month</span></div>
     <div style="font-size:12px;color:var(--ink3);margin-bottom:10px;line-height:1.5">When the gap is large, Scotland has cheap clean power that transmission constraints prevent from reaching England. A narrowing gap means the grid is becoming more homogeneous.</div>
     <div class="chart-wrap" style="height:220px">
       <canvas id="hm-spread-chart"></canvas>
@@ -681,9 +681,9 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
 
 </div>
 
-<!-- ââââââââââââââââââââââââââ TREND ââââââââââââââââââââââââââ -->
+<!-- ══════════════════════════ TREND ══════════════════════════ -->
 <div id="p-trend" class="panel">
-  <div class="sh"><h2>Trend &amp; analysis</h2><p id="trend-sh-sub">Select a view Â· select regions Â· toggle intensity or generation mix</p></div>
+  <div class="sh"><h2>Trend &amp; analysis</h2><p id="trend-sh-sub">Select a view · select regions · toggle intensity or generation mix</p></div>
 
   <!-- View selector + region pills + mode toggle -->
   <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:8px">
@@ -691,7 +691,7 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
       <div class="ctrl-grp">
         <label>View</label>
         <select id="trend-view" onchange="onTrendViewChange()">
-          <option value="alltime">All-time monthly (2018â2026)</option>
+          <option value="alltime">All-time monthly (2018–2026)</option>
           <option value="annual">Annual averages by year</option>
           <option value="seasonal">Seasonal pattern (month of year)</option>
           <option value="hourprofile">Hour-of-day profile</option>
@@ -752,9 +752,9 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
 </div>
 
 
-<!-- ââââââââââââââââââââââââââ MAP ââââââââââââââââââââââââââ -->
+<!-- ══════════════════════════ MAP ══════════════════════════ -->
 <div id="p-map" class="panel">
-  <div class="sh"><h2>Regional map</h2><p>Live carbon intensity by region Â· hover for detail Â· click to open region view</p></div>
+  <div class="sh"><h2>Regional map</h2><p>Live carbon intensity by region · hover for detail · click to open region view</p></div>
   <div class="map-layout">
     <!-- Canvas with floating tooltip -->
     <div class="map-canvas-wrap">
@@ -762,7 +762,7 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
       <div id="map-tooltip">
         <div class="mtt-region" id="mtt-region"></div>
         <div class="mtt-val" id="mtt-val"></div>
-        <div class="mtt-unit">gCOâ/kWh now</div>
+        <div class="mtt-unit">gCO₂/kWh now</div>
         <div class="mtt-badge" id="mtt-badge"></div>
         <div class="mtt-bar" id="mtt-bar"></div>
         <div style="font-size:10px;color:#aaa;margin-top:5px" id="mtt-extra"></div>
@@ -771,16 +771,16 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
     <!-- Sidebar: all-region ranked list + legend -->
     <div class="map-sidebar">
       <div class="map-info-card">
-        <h3>All regions <span style="font-size:11px;font-weight:400;color:var(--ink3)">Â· now Â· gCOâ/kWh</span></h3>
+        <h3>All regions <span style="font-size:11px;font-weight:400;color:var(--ink3)">· now · gCO₂/kWh</span></h3>
         <div id="map-rank-list"></div>
       </div>
       <div class="map-info-card">
         <div style="font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px">Intensity scale</div>
         <div class="map-legend-row">
           <div class="map-legend-item"><div class="map-legend-swatch" style="background:#16a34a"></div>&lt;75</div>
-          <div class="map-legend-item"><div class="map-legend-swatch" style="background:#65a30d"></div>75â150</div>
-          <div class="map-legend-item"><div class="map-legend-swatch" style="background:#d97706"></div>150â225</div>
-          <div class="map-legend-item"><div class="map-legend-swatch" style="background:#ea580c"></div>225â300</div>
+          <div class="map-legend-item"><div class="map-legend-swatch" style="background:#65a30d"></div>75–150</div>
+          <div class="map-legend-item"><div class="map-legend-swatch" style="background:#d97706"></div>150–225</div>
+          <div class="map-legend-item"><div class="map-legend-swatch" style="background:#ea580c"></div>225–300</div>
           <div class="map-legend-item"><div class="map-legend-swatch" style="background:#dc2626"></div>&gt;300</div>
         </div>
         <div style="font-size:11px;color:var(--ink3);margin-top:8px;line-height:1.5">Click a region to open full detail. Double-click to jump to Region tab.</div>
@@ -812,17 +812,17 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
   </div>
 </div>
 
-<!-- ââââââââââââââââââââââââââ ABOUT ââââââââââââââââââââââââââ -->
+<!-- ══════════════════════════ ABOUT ══════════════════════════ -->
 <div id="p-about" class="panel">
   <div class="sh"><h2>About</h2></div>
   <div class="about-grid">
     <div class="ab">
       <h3>What is carbon intensity?</h3>
-      <p>Carbon intensity measures how much COâ is released per unit of electricity consumed â in grams per kilowatt-hour (gCOâ/kWh). The lower the number, the cleaner the electricity.</p>
+      <p>Carbon intensity measures how much CO₂ is released per unit of electricity consumed — in grams per kilowatt-hour (gCO₂/kWh). The lower the number, the cleaner the electricity.</p>
       <ul class="flist">
-        <li><strong>Nuclear, wind, solar</strong>Under 20 gCOâ/kWh</li>
-        <li><strong>Gas (combined cycle)</strong>350â400 gCOâ/kWh</li>
-        <li><strong>UK grid average today</strong>Around 150 gCOâ/kWh, down from ~280 in 2018</li>
+        <li><strong>Nuclear, wind, solar</strong>Under 20 gCO₂/kWh</li>
+        <li><strong>Gas (combined cycle)</strong>350–400 gCO₂/kWh</li>
+        <li><strong>UK grid average today</strong>Around 150 gCO₂/kWh, down from ~280 in 2018</li>
       </ul>
     </div>
     <div class="ab">
@@ -833,23 +833,23 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
     <div class="ab">
       <h3>How to use this</h3>
       <ul class="flist">
-        <li><strong>Compute scheduling</strong>Shift AI training, batch jobs or pipelines to low-intensity windows â typically overnight or midday</li>
-        <li><strong>EV fleet charging</strong>Avoid 17:00â20:00 in most English regions. Overnight is almost always better.</li>
+        <li><strong>Compute scheduling</strong>Shift AI training, batch jobs or pipelines to low-intensity windows — typically overnight or midday</li>
+        <li><strong>EV fleet charging</strong>Avoid 17:00–20:00 in most English regions. Overnight is almost always better.</li>
         <li><strong>Carbon reporting</strong>Use location- and time-specific intensity for accurate Scope 2 emissions (DESNZ methodology)</li>
         <li><strong>Site selection</strong>A data centre in Scotland runs on a fraction of the grid carbon of one in the East Midlands</li>
       </ul>
     </div>
     <div class="ab">
       <h3>Data &amp; methodology</h3>
-      <p>Intensity data from the <a href="https://carbonintensity.org.uk" target="_blank">National Grid ESO Carbon Intensity API</a>. 130,089 half-hourly readings across 14 GB regions, Sep 2018 â Mar 2026.</p>
-      <p>Generation mix data is modelled by NESO using power flow analysis â it is an estimate of fuel consumption per region, not a direct metered measurement. Treat as indicative for operational decisions.</p>
+      <p>Intensity data from the <a href="https://carbonintensity.org.uk" target="_blank">National Grid ESO Carbon Intensity API</a>. 130,089 half-hourly readings across 14 GB regions, Sep 2018 – Mar 2026.</p>
+      <p>Generation mix data is modelled by NESO using power flow analysis — it is an estimate of fuel consumption per region, not a direct metered measurement. Treat as indicative for operational decisions.</p>
       <p>Forecast data uses NESO's ML-based 96h ahead model scaled to current conditions. Built by <a href="#">Posetiv Cloud</a>.</p>
       <p style="margin-top:10px;font-family:var(--sans);font-size:11px;color:var(--ink3);letter-spacing:.03em">github.com/posetiv/uk-grid-carbon</p>
     </div>
   </div>
 </div>
 
-<!-- ââââââââââââââââââââââââââ REGION ââââââââââââââââââââââââââ -->
+<!-- ══════════════════════════ REGION ══════════════════════════ -->
 <div id="p-region" class="panel">
   <div class="rgn-hd">
     <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
@@ -860,7 +860,7 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
       </div>
     </div>
     <div>
-      <div class="rgn-hd-val" id="rgn-val">â</div>
+      <div class="rgn-hd-val" id="rgn-val">—</div>
       <div class="rgn-hd-meta" id="rgn-meta">gCO&#8322;/kWh now</div>
     </div>
     <div class="rgn-hd-fbar">
@@ -876,7 +876,7 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
       <canvas id="rgn-trend-chart" height="220"></canvas>
     </div>
     <div class="chart-wrap">
-      <div class="card-title" style="margin-bottom:10px">Average intensity by hour of day <span class="card-sub">Â· all-time average</span></div>
+      <div class="card-title" style="margin-bottom:10px">Average intensity by hour of day <span class="card-sub">· all-time average</span></div>
       <canvas id="rgn-sched-chart" height="220"></canvas>
       <div id="rgn-sched-tip" style="margin-top:10px"></div>
     </div>
@@ -917,16 +917,16 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
   <div class="card" id="rgn-context"></div>
 </div>
 
-<!-- ââââââââââââââââââââââââââ POWER MIX ââââââââââââââââââââââââââ -->
+<!-- ══════════════════════════ POWER MIX ══════════════════════════ -->
 <div id="p-mix" class="panel">
-  <div class="sh"><h2>Power mix</h2><p>What the GB grid is actually running on Â· and why it matters for carbon intensity</p></div>
+  <div class="sh"><h2>Power mix</h2><p>What the GB grid is actually running on · and why it matters for carbon intensity</p></div>
 
   <!-- Stat strip -->
   <div class="insight-strip" id="mix-stats"></div>
 
   <!-- Regional fuel mix bars -->
   <div class="card">
-    <div class="card-title" style="margin-bottom:14px">Current fuel mix by region <span class="card-sub">Â· sorted by clean energy share Â· click a region to open detail</span></div>
+    <div class="card-title" style="margin-bottom:14px">Current fuel mix by region <span class="card-sub">· sorted by clean energy share · click a region to open detail</span></div>
     <div class="mix-region-bars" id="mix-region-bars"></div>
     <div class="mix-legend" id="mix-legend"></div>
   </div>
@@ -935,7 +935,7 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
   <div style="display:grid;grid-template-columns:2fr 1fr;gap:18px">
     <div class="chart-wrap">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-        <div class="card-title" style="margin:0">GB generation mix 2018â2026 <span class="card-sub">monthly Â· stacked area</span></div>
+        <div class="card-title" style="margin:0">GB generation mix 2018–2026 <span class="card-sub">monthly · stacked area</span></div>
       </div>
       <canvas id="mix-history-chart" height="280"></canvas>
     </div>
@@ -950,7 +950,7 @@ table.hm th{font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing
   <!-- Wind-intensity correlation -->
   <div class="analysis-grid">
     <div class="chart-wrap">
-      <div class="card-title" style="margin-bottom:10px">Wind share vs carbon intensity <span class="card-sub">monthly GB averages Â· each point = one month</span></div>
+      <div class="card-title" style="margin-bottom:10px">Wind share vs carbon intensity <span class="card-sub">monthly GB averages · each point = one month</span></div>
       <canvas id="mix-scatter-chart" height="260"></canvas>
     </div>
     <div class="chart-wrap">
@@ -1020,15 +1020,15 @@ async function pcLookup(){
   }finally{btn.disabled=false;btn.textContent='Look up';}
 }
 
-// Font defaults â Inter throughout
+// Font defaults — Inter throughout
 if (typeof Chart !== 'undefined') {
   Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
   Chart.defaults.font.size = 12;
   Chart.defaults.font.weight = '400';
 }
-// âââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ═══════════════════════════════════════════════════
 // CORE DATA
-// âââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ═══════════════════════════════════════════════════
 const RG = ["North Scotland","South Scotland","North West England","North East England","Yorkshire","North Wales and Merseyside","South Wales","West Midlands","East Midlands","East England","South West England","South England","London","South East England"];
 
 const RAVG = {"North Scotland":65.8,"South Scotland":35.5,"North West England":63.5,"North East England":39.0,"Yorkshire":203.0,"North Wales and Merseyside":134.1,"South Wales":297.7,"West Midlands":166.1,"East Midlands":277.9,"East England":144.6,"South West England":204.3,"South England":231.0,"London":171.5,"South East England":183.8};
@@ -1055,9 +1055,9 @@ const MONTHLY = {"2018-09":{"North Scotland":74.4,"South Scotland":20.6,"North W
 // 48h forecast (generated, starting at hour 9 March 19)
 const FORECAST = {"North Scotland":[40,40,41,41,41,41,39,37,35,35,38,41,43,43,43,41,39,37,36,38,40,40,39,38,38,38,39,39,39,39,37,35,33,33,36,39,41,41,41,39,37,35,34,36,38,38,37,36],"South Scotland":[56,55,54,53,52,52,50,48,46,45,47,51,54,54,54,51,49,47,45,47,50,50,49,47,47,47,47,48,48,48,46,44,42,41,43,46,49,49,49,47,45,43,42,43,46,46,45,44],"North West England":[145,142,139,136,134,133,129,124,120,118,123,133,139,139,139,133,127,122,118,122,129,129,126,122,122,122,123,124,124,124,119,114,110,108,113,122,128,128,128,122,117,112,109,113,119,119,117,113],"North East England":[85,84,83,81,80,79,77,74,72,70,73,79,83,83,83,79,76,73,70,72,77,77,75,73,72,72,73,73,74,74,71,68,65,64,67,73,77,77,77,73,70,67,65,68,72,72,70,68],"Yorkshire":[208,205,201,197,194,193,188,180,175,172,179,193,203,203,202,193,184,177,171,177,188,188,183,178,177,177,178,180,180,179,172,165,159,157,164,177,186,186,185,177,169,162,158,164,173,173,169,164],"North Wales and Merseyside":[164,162,158,155,153,152,148,142,138,135,141,152,159,160,159,152,145,140,135,139,148,148,144,140,139,140,140,142,142,141,136,130,126,124,129,140,147,147,146,140,133,128,125,129,137,136,133,129],"South Wales":[322,317,310,304,300,298,290,279,271,266,277,299,314,315,313,299,285,274,266,274,291,290,283,275,274,274,276,279,279,277,267,256,247,243,254,274,287,288,287,274,262,252,245,254,268,267,261,253],"West Midlands":[245,241,236,231,228,226,220,212,205,202,210,227,239,239,238,227,217,208,202,208,221,221,215,209,208,209,210,212,212,211,203,195,188,185,193,209,219,219,218,209,199,192,186,193,204,204,199,193],"East Midlands":[276,272,266,261,257,255,249,239,232,228,237,256,270,270,269,256,245,235,228,235,250,249,243,236,235,235,237,239,239,238,229,219,212,208,218,235,247,247,246,235,224,216,210,218,230,229,224,217],"East England":[119,117,115,112,110,110,107,103,100,98,102,110,116,116,116,110,105,101,98,101,107,107,105,102,101,101,102,103,103,102,99,95,91,90,94,101,106,107,106,101,97,93,90,94,99,99,97,94],"South West England":[124,122,120,117,115,115,112,107,104,102,106,115,121,121,120,115,109,105,102,105,112,111,109,106,105,105,106,107,107,107,103,99,95,93,97,105,110,110,110,105,100,96,94,97,103,102,100,97],"South England":[169,167,163,160,157,156,152,146,142,139,145,157,165,165,164,157,149,144,139,143,152,152,148,144,143,143,144,145,145,145,140,134,129,127,132,143,150,150,149,142,136,131,127,132,140,139,136,132],"London":[176,174,170,166,164,163,158,152,148,145,151,163,172,172,171,163,156,150,145,150,159,159,155,151,150,150,151,152,153,152,146,140,135,133,139,150,158,158,157,150,143,138,134,139,147,146,143,139],"South East England":[180,177,174,170,167,166,162,155,151,148,154,167,175,176,175,167,159,153,148,153,163,162,158,154,153,153,154,156,156,155,149,143,138,136,142,153,161,161,160,153,146,140,136,141,150,149,146,141]};
 
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
 // COLOUR UTILITIES
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
 function ci(v, a=1) {
   const t = Math.max(0, Math.min(v/400, 1));
   let r,g,b;
@@ -1066,11 +1066,11 @@ function ci(v, a=1) {
   return `rgba(${r},${g},${b},${a})`;
 }
 
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
 // CHART REGISTRY
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
 const CH = {};
-// ââ Chart.js global tooltip defaults: dark bg, readable text ââ
+// ── Chart.js global tooltip defaults: dark bg, readable text ──
 Chart.defaults.plugins.tooltip.backgroundColor = '#1e1e1e';
 Chart.defaults.plugins.tooltip.titleColor = '#ffffff';
 Chart.defaults.plugins.tooltip.bodyColor = '#d4d4d4';
@@ -1083,9 +1083,9 @@ Chart.defaults.plugins.tooltip.boxWidth = 10;
 Chart.defaults.plugins.tooltip.boxHeight = 10;
 function kc(id){if(CH[id]){CH[id].destroy();delete CH[id];}}
 
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
 // NOW PANEL
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
 function buildNow(){
   // Stat chips
   const vals = RG.map(r=>NOW[r]);
@@ -1093,10 +1093,10 @@ function buildNow(){
   const gbAvg=Math.round(vals.reduce((a,b)=>a+b)/vals.length);
   const mnR=RG.find(r=>NOW[r]===mn), mxR=RG.find(r=>NOW[r]===mx);
   document.getElementById('now-stats').innerHTML=`
-    <div class="stat-cell c-b"><div class="stat-lbl">GB average now</div><div class="stat-val" style="color:${ci(gbAvg)}">${gbAvg}</div><div class="stat-sub">gCOâ/kWh Â· all regions</div></div>
+    <div class="stat-cell c-b"><div class="stat-lbl">GB average now</div><div class="stat-val" style="color:${ci(gbAvg)}">${gbAvg}</div><div class="stat-sub">gCO₂/kWh · all regions</div></div>
     <div class="stat-cell c-g"><div class="stat-lbl">Cleanest region</div><div class="stat-val" style="color:var(--low)">${Math.round(mn)}</div><div class="stat-sub">${mnR}</div></div>
     <div class="stat-cell c-r"><div class="stat-lbl">Highest intensity</div><div class="stat-val" style="color:var(--high)">${Math.round(mx)}</div><div class="stat-sub">${mxR}</div></div>
-    <div class="stat-cell c-a"><div class="stat-lbl">Regional spread</div><div class="stat-val" style="color:var(--mid)">${Math.round(mx-mn)}</div><div class="stat-sub">gCOâ/kWh gap, best to worst</div></div>
+    <div class="stat-cell c-a"><div class="stat-lbl">Regional spread</div><div class="stat-val" style="color:var(--mid)">${Math.round(mx-mn)}</div><div class="stat-sub">gCO₂/kWh gap, best to worst</div></div>
   `;
 
   // GB fuel bar (weighted average)
@@ -1173,7 +1173,7 @@ function renderNowTable(){
       <td class="tn">${Math.round(row.d30)}</td>
       <td class="tn" style="color:var(--ink3)">${Math.round(row.all)}</td>
       <td class="tn ${vc}">${vs}${Math.round(row.vs)}</td>
-      <td class="tn" style="color:var(--low)">â ${row.drop}%</td>
+      <td class="tn" style="color:var(--low)">↓ ${row.drop}%</td>
       <td><div class="fmix-bar">${fbar}</div></td>
       <td>${badge}</td>
     </tr>`;
@@ -1216,10 +1216,10 @@ function buildRegion(){
 
   var renew2 = Math.round((mix.wind||0)+(mix.solar||0)+(mix.hydro||0)+(mix.nuclear||0));
   document.getElementById('rgn-stats').innerHTML =
-    '<div class="stat-cell c-b"><div class="stat-lbl">Now</div><div class="stat-val" style="color:'+ci(now)+'">'+now+'</div><div class="stat-sub">gCOâ/kWh</div></div>' +
-    '<div class="stat-cell c-g"><div class="stat-lbl">7-day avg</div><div class="stat-val">'+Math.round(D7[r])+'</div><div class="stat-sub">gCOâ/kWh</div></div>' +
+    '<div class="stat-cell c-b"><div class="stat-lbl">Now</div><div class="stat-val" style="color:'+ci(now)+'">'+now+'</div><div class="stat-sub">gCO₂/kWh</div></div>' +
+    '<div class="stat-cell c-g"><div class="stat-lbl">7-day avg</div><div class="stat-val">'+Math.round(D7[r])+'</div><div class="stat-sub">gCO₂/kWh</div></div>' +
     '<div class="stat-cell"><div class="stat-lbl">All-time avg</div><div class="stat-val">'+Math.round(avg)+'</div><div class="stat-sub">since 2018</div></div>' +
-    '<div class="stat-cell c-g"><div class="stat-lbl">Reduction since 2018</div><div class="stat-val" style="color:var(--low)">â'+drop+'%</div><div class="stat-sub">'+Math.round(base)+' â '+Math.round(avg)+'</div></div>' +
+    '<div class="stat-cell c-g"><div class="stat-lbl">Reduction since 2018</div><div class="stat-val" style="color:var(--low)">↓'+drop+'%</div><div class="stat-sub">'+Math.round(base)+' → '+Math.round(avg)+'</div></div>' +
     '<div class="stat-cell c-b"><div class="stat-lbl">Clean energy now</div><div class="stat-val" style="color:var(--acc)">'+renew2+'%</div><div class="stat-sub">wind+solar+nuclear+hydro</div></div>';
 
   // Trend vs GB
@@ -1234,8 +1234,8 @@ function buildRegion(){
       {label:'GB average', data:gbAvgs, borderColor:'#94a3b8', backgroundColor:'transparent', borderWidth:1.5, borderDash:[4,3], pointRadius:0, tension:.35, fill:false}
     ]},
     options:{responsive:true, maintainAspectRatio:false, interaction:{mode:'index',intersect:false},
-      plugins:{legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:10},boxWidth:12,padding:10}}, tooltip:{usePointStyle:true,callbacks:{label:function(c){return c.dataset.label+': '+Math.round(c.parsed.y)+' gCOâ/kWh';}}}},
-      scales:{x:{ticks:{color:'#6b6b6b',font:{size:9},maxRotation:40,maxTicksLimit:20},grid:{color:'#f0ede6'}}, y:{ticks:{color:'#6b6b6b',font:{size:9}},grid:{color:'#f0ede6'},title:{display:true,text:'gCOâ/kWh',color:'#6b6b6b',font:{size:9}}}}
+      plugins:{legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:10},boxWidth:12,padding:10}}, tooltip:{usePointStyle:true,callbacks:{label:function(c){return c.dataset.label+': '+Math.round(c.parsed.y)+' gCO₂/kWh';}}}},
+      scales:{x:{ticks:{color:'#6b6b6b',font:{size:9},maxRotation:40,maxTicksLimit:20},grid:{color:'#f0ede6'}}, y:{ticks:{color:'#6b6b6b',font:{size:9}},grid:{color:'#f0ede6'},title:{display:true,text:'gCO₂/kWh',color:'#6b6b6b',font:{size:9}}}}
     }
   });
 
@@ -1250,14 +1250,14 @@ function buildRegion(){
       data:hAvg, backgroundColor:hAvg.map(function(v){return ci(v,.75);}), borderColor:hAvg.map(function(v){return ci(v,1);}), borderWidth:1, borderRadius:2
     }]},
     options:{responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:false}, tooltip:{displayColors:false,callbacks:{label:function(c){return 'avg '+Math.round(c.parsed.y)+' gCOâ/kWh';}}}},
-      scales:{x:{ticks:{color:'#6b6b6b',font:{size:8},maxRotation:40},grid:{display:false}}, y:{ticks:{color:'#6b6b6b',font:{size:9}},grid:{color:'#f0ede6'},title:{display:true,text:'avg gCOâ/kWh',color:'#6b6b6b',font:{size:9}}}}
+      plugins:{legend:{display:false}, tooltip:{displayColors:false,callbacks:{label:function(c){return 'avg '+Math.round(c.parsed.y)+' gCO₂/kWh';}}}},
+      scales:{x:{ticks:{color:'#6b6b6b',font:{size:8},maxRotation:40},grid:{display:false}}, y:{ticks:{color:'#6b6b6b',font:{size:9}},grid:{color:'#f0ede6'},title:{display:true,text:'avg gCO₂/kWh',color:'#6b6b6b',font:{size:9}}}}
     }
   });
   var bestHr=hAvg.indexOf(Math.min.apply(null,hAvg)), worstHr=hAvg.indexOf(Math.max.apply(null,hAvg));
-  document.getElementById('rgn-sched-tip').innerHTML = '<div style="font-size:13px;color:var(--ink3);line-height:1.6">Best hour: <strong style="color:var(--low)">'+String(bestHr).padStart(2,'0')+':00</strong> ('+Math.round(hAvg[bestHr])+' avg). Peak: <strong style="color:var(--high)">'+String(worstHr).padStart(2,'0')+':00</strong> ('+Math.round(hAvg[worstHr])+' avg). Shifting 1 MWh saves ~'+Math.round(hAvg[worstHr]-hAvg[bestHr])+' kg COâ.</div>';
+  document.getElementById('rgn-sched-tip').innerHTML = '<div style="font-size:13px;color:var(--ink3);line-height:1.6">Best hour: <strong style="color:var(--low)">'+String(bestHr).padStart(2,'0')+':00</strong> ('+Math.round(hAvg[bestHr])+' avg). Peak: <strong style="color:var(--high)">'+String(worstHr).padStart(2,'0')+':00</strong> ('+Math.round(hAvg[worstHr])+' avg). Shifting 1 MWh saves ~'+Math.round(hAvg[worstHr]-hAvg[bestHr])+' kg CO₂.</div>';
 
-  // 48h forecast chart â use live data if available, otherwise fetch
+  // 48h forecast chart — use live data if available, otherwise fetch
   kc('rgn-fc');
   var fVals = (LIVE_FORECAST[r] && LIVE_FORECAST[r].length > 0) ? LIVE_FORECAST[r].map(function(p){return p.intensity||0;}) : FORECAST[r];
   if(!LIVE_FORECAST[r] || LIVE_FORECAST[r].length === 0){ fetchRegionForecast(r, function(pts){ if(pts && document.getElementById('p-region').classList.contains('active') && activeRegion===r) buildRegion(); }); }
@@ -1273,7 +1273,7 @@ function buildRegion(){
   CH['rgn-fc'] = new Chart(ctx1, {
     type:'line',
     data:{labels:fcLabels, datasets:[{
-      label:'gCOâ/kWh', data:fVals,
+      label:'gCO₂/kWh', data:fVals,
       borderColor:RCOL[r], backgroundColor:fVals.map(function(v){return ci(v,.07);}),
       borderWidth:2,
       pointRadius:fVals.map(function(_,i){return i===bestIdx||i===worstIdx?5:0;}),
@@ -1282,8 +1282,8 @@ function buildRegion(){
     }]},
     options:{
       responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:false}, tooltip:{displayColors:false,callbacks:{label:function(c){return Math.round(c.parsed.y)+' gCOâ/kWh';}}}},
-      scales:{x:{ticks:{color:'#6b6b6b',font:{size:9},maxRotation:0},grid:{color:'#f0ede6'}}, y:{ticks:{color:'#6b6b6b',font:{size:9}},grid:{color:'#f0ede6'},title:{display:true,text:'gCOâ/kWh',color:'#6b6b6b',font:{size:9}}}}
+      plugins:{legend:{display:false}, tooltip:{displayColors:false,callbacks:{label:function(c){return Math.round(c.parsed.y)+' gCO₂/kWh';}}}},
+      scales:{x:{ticks:{color:'#6b6b6b',font:{size:9},maxRotation:0},grid:{color:'#f0ede6'}}, y:{ticks:{color:'#6b6b6b',font:{size:9}},grid:{color:'#f0ede6'},title:{display:true,text:'gCO₂/kWh',color:'#6b6b6b',font:{size:9}}}}
     }
   });
   var bestH2=(startH+bestIdx)%24, worstH2=(startH+worstIdx)%24;
@@ -1291,8 +1291,8 @@ function buildRegion(){
   var worstDay = worstIdx<(24-startH)?'today':'tomorrow';
   document.getElementById('rgn-fc-tip').innerHTML =
     '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
-    '<div class="best-window" style="flex:1;margin:0"><div class="bw-icon">â</div><div><div class="bw-title">Best: '+String(bestH2).padStart(2,'0')+':00 '+bestDay+'</div><div class="bw-body">'+fVals[bestIdx]+' gCOâ/kWh &middot; '+(fVals[worstIdx]-fVals[bestIdx])+' gCOâ/kWh saving vs peak</div></div></div>' +
-    '<div class="bw-warning" style="flex:1;margin:0"><div class="bw-icon">â ï¸</div><div><div class="bw-title" style="color:var(--mid)">Peak: '+String(worstH2).padStart(2,'0')+':00 '+worstDay+'</div><div class="bw-body">'+fVals[worstIdx]+' gCOâ/kWh &middot; avoid intensive workloads</div></div></div>' +
+    '<div class="best-window" style="flex:1;margin:0"><div class="bw-icon">✅</div><div><div class="bw-title">Best: '+String(bestH2).padStart(2,'0')+':00 '+bestDay+'</div><div class="bw-body">'+fVals[bestIdx]+' gCO₂/kWh &middot; '+(fVals[worstIdx]-fVals[bestIdx])+' gCO₂/kWh saving vs peak</div></div></div>' +
+    '<div class="bw-warning" style="flex:1;margin:0"><div class="bw-icon">⚠️</div><div><div class="bw-title" style="color:var(--mid)">Peak: '+String(worstH2).padStart(2,'0')+':00 '+worstDay+'</div><div class="bw-body">'+fVals[worstIdx]+' gCO₂/kWh &middot; avoid intensive workloads</div></div></div>' +
     '</div>';
 
   // Mix over time
@@ -1467,20 +1467,20 @@ function buildRgnSummary(r, avg, base, drop, mix, renew2, nowVal){
 }
 
 
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
 // FORECAST PANEL
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
 function initForecast(){
   const sel=document.getElementById('fc-region');
   if(!sel.options.length){RG.forEach(r=>{const o=document.createElement('option');o.value=o.text=r;sel.appendChild(o);});sel.value='Yorkshire';}
   // Also update kwh label on init
   var labelEl=document.getElementById('fc-kwh-label');
-  if(labelEl) labelEl.textContent='Custom workload Â· 100 kWh';
+  if(labelEl) labelEl.textContent='Custom workload · 100 kWh';
   buildForecast();
 }
 
 
-// ââ Schedule tab preset handler ââ
+// ── Schedule tab preset handler ──
 var FC_PRESETS = {
   custom:       {kwh: null,  label: 'Custom workload'},
   ai_training:  {kwh: 500,   label: 'AI training run'},
@@ -1506,11 +1506,11 @@ function buildForecast(){
 
   // Update label
   var labelEl = document.getElementById('fc-kwh-label');
-  if(labelEl) labelEl.textContent = presetLabel+' Â· '+kwh+' kWh';
+  if(labelEl) labelEl.textContent = presetLabel+' · '+kwh+' kWh';
   var regionLabel = document.getElementById('fc-region-label');
   if(regionLabel) regionLabel.textContent = r;
 
-  // ââ ALL-REGION TABLE ââ
+  // ── ALL-REGION TABLE ──
   var tableData = RG.map(function(region){
     var live = LIVE_FORECAST[region];
     var vals = (live && live.length > 0) ? live.map(function(p){return p.intensity||0;}) : FORECAST[region];
@@ -1580,7 +1580,7 @@ function buildForecast(){
           Math.round(totalSaving/0.17)+'\u202fkm driven') + '.' : '');
   }
 
-  // ââ SINGLE-REGION DETAIL CHART ââ
+  // ── SINGLE-REGION DETAIL CHART ──
   var livePts = LIVE_FORECAST[r];
   var now = new Date();
   var startH = now.getUTCHours();
@@ -1708,9 +1708,9 @@ function buildFcWindows(r, vals, startH, kwh){
     '<div style="font-size:11px;color:var(--ink3);margin-top:8px;font-style:italic">Indicative forecast from NESO historical patterns. Click any region in the table above to update this detail view.</div>';
 }
 
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
 // HEATMAP PANEL
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
 function initHM(){
   const sel=document.getElementById('hm-r');
   if(!sel.options.length){
@@ -1767,7 +1767,7 @@ function buildHM(){
   const body=regions.map(r=>{
     const cells=cols.map((c,i)=>{
       const v=cellFn(r,c);const bg=colFn(r,v);
-      const lbl=`${r} Â· ${colLbls[i]||c} Â· ${v!=null?v:'â'} gCOâ/kWh`;
+      const lbl=`${r} · ${colLbls[i]||c} · ${v!=null?v:'–'} gCO₂/kWh`;
       return `<td class="hm-cell" style="background:${bg}" data-r="${r}" data-v="${v??''}" data-lbl="${lbl.replace(/"/g,'&quot;')}"></td>`;
     }).join('');
     return `<tr><td class="hm-rl">${r}</td>${cells}</tr>`;
@@ -1778,7 +1778,7 @@ function buildHM(){
   const tip=document.getElementById('tip');
   document.querySelectorAll('.hm-cell').forEach(cell=>{
     cell.addEventListener('mouseenter',e=>{
-      const parts=cell.dataset.lbl.split(' Â· ');
+      const parts=cell.dataset.lbl.split(' · ');
       document.getElementById('tip-name').textContent=isAll?parts[0]:parts[0];
       document.getElementById('tip-l1').textContent='Intensity';document.getElementById('tip-v1').textContent=parts[2]??'';
       document.getElementById('tip-l2').textContent='Period';document.getElementById('tip-v2').textContent=parts[1]??'';
@@ -1800,18 +1800,18 @@ function buildHM(){
       const bMo=cols.reduce((b,c)=>(cellFn(region,c)??999)<(cellFn(region,b)??999)?c:b,0);
       const wMo=cols.reduce((b,c)=>(cellFn(region,c)??0)>(cellFn(region,b)??0)?c:b,0);
       insEl.innerHTML=`
-        <div class="ins-cell"><div class="ins-lbl" style="color:var(--low)">Cleanest month (average)</div><div class="ins-val">${MN[bMo]}</div><div class="ins-sub">${cellFn(region,bMo)} gCOâ/kWh â highest solar generation and milder demand</div></div>
-        <div class="ins-cell"><div class="ins-lbl" style="color:var(--high)">Highest carbon month (average)</div><div class="ins-val">${MN[wMo]}</div><div class="ins-sub">${cellFn(region,wMo)} gCOâ/kWh â winter demand peak, low renewables</div></div>`;
+        <div class="ins-cell"><div class="ins-lbl" style="color:var(--low)">Cleanest month (average)</div><div class="ins-val">${MN[bMo]}</div><div class="ins-sub">${cellFn(region,bMo)} gCO₂/kWh — highest solar generation and milder demand</div></div>
+        <div class="ins-cell"><div class="ins-lbl" style="color:var(--high)">Highest carbon month (average)</div><div class="ins-val">${MN[wMo]}</div><div class="ins-sub">${cellFn(region,wMo)} gCO₂/kWh — winter demand peak, low renewables</div></div>`;
     } else if(period==='24h'){
       const sv=cols.map(c=>cellFn(region,c));const bS=sv.indexOf(Math.min(...sv)),wS=sv.indexOf(Math.max(...sv));
       const bt=`${String(Math.floor(bS/2)).padStart(2,'0')}:${bS%2?'30':'00'}`;
       const wt=`${String(Math.floor(wS/2)).padStart(2,'0')}:${wS%2?'30':'00'}`;
       insEl.innerHTML=`
-        <div class="ins-cell"><div class="ins-lbl" style="color:var(--low)">Lowest carbon slot</div><div class="ins-val">${bt}</div><div class="ins-sub">${sv[bS]} gCOâ/kWh â best window for deferrable workloads</div></div>
-        <div class="ins-cell"><div class="ins-lbl" style="color:var(--high)">Highest carbon slot</div><div class="ins-val">${wt}</div><div class="ins-sub">${sv[wS]} gCOâ/kWh â shifting load saves ~${sv[wS]-sv[bS]} gCOâ/kWh</div></div>`;
+        <div class="ins-cell"><div class="ins-lbl" style="color:var(--low)">Lowest carbon slot</div><div class="ins-val">${bt}</div><div class="ins-sub">${sv[bS]} gCO₂/kWh — best window for deferrable workloads</div></div>
+        <div class="ins-cell"><div class="ins-lbl" style="color:var(--high)">Highest carbon slot</div><div class="ins-val">${wt}</div><div class="ins-sub">${sv[wS]} gCO₂/kWh — shifting load saves ~${sv[wS]-sv[bS]} gCO₂/kWh</div></div>`;
     }
   }
-  // ââ Regional ranking strip ââ
+  // ── Regional ranking strip ──
   var rankCard = document.getElementById('hm-ranking-card');
   var rankEl = document.getElementById('hm-ranking');
   var rankSub = document.getElementById('hm-ranking-sub');
@@ -1835,14 +1835,14 @@ function buildHM(){
     }).join('');
 
     var periodLabel = period==='24h'?'hour-of-day average':period==='weekly'?'weekly average':period==='monthly'?'monthly average':'annual average';
-    if(rankSub) rankSub.textContent = 'Â· sorted by '+periodLabel+' intensity (gCOâ/kWh)';
+    if(rankSub) rankSub.textContent = '· sorted by '+periodLabel+' intensity (gCO₂/kWh)';
     rankCard.style.display = '';
   }
 
-  // ââ Spread chart: min vs max region per month ââ
+  // ── Spread chart: min vs max region per month ──
   var spreadCard = document.getElementById('hm-spread-card');
   if(spreadCard){
-    // Only show for all-time monthly or weekly view â needs time dimension
+    // Only show for all-time monthly or weekly view — needs time dimension
     var showSpread = (period === 'monthly' || period === 'weekly' || period === '24h') && !isAll ? false :
                      (period === 'weekly' || period === 'yearly') ? false : true;
     // Actually: show spread for the yearly (year-by-year) and monthly period views where cols = time
@@ -1879,14 +1879,14 @@ function buildHM(){
           interaction:{mode:'index',intersect:false},
           plugins:{
             legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Inter'},boxWidth:12,padding:10}},
-            tooltip:{usePointStyle:true,callbacks:{label:function(c){ return c.dataset.label+': '+Math.round(c.parsed.y)+' gCOâ/kWh'; }}}
+            tooltip:{usePointStyle:true,callbacks:{label:function(c){ return c.dataset.label+': '+Math.round(c.parsed.y)+' gCO₂/kWh'; }}}
           },
           scales:{
             x:{ticks:{color:'#6b6b6b',font:{size:9,family:'Inter'},maxRotation:40,maxTicksLimit:18},grid:{color:'#f0ede6'}},
             y:{ticks:{color:'#6b6b6b',font:{size:10,family:'Inter'}},grid:{color:'#f0ede6'},
-               title:{display:true,text:'gCOâ/kWh',color:'#6b6b6b',font:{size:10}}},
+               title:{display:true,text:'gCO₂/kWh',color:'#6b6b6b',font:{size:10}}},
             y2:{position:'right',ticks:{color:'#94a3b8',font:{size:9,family:'Inter'}},grid:{display:false},
-                title:{display:true,text:'Spread (gCOâ/kWh)',color:'#94a3b8',font:{size:10}}}
+                title:{display:true,text:'Spread (gCO₂/kWh)',color:'#94a3b8',font:{size:10}}}
           }
         }
       });
@@ -1899,17 +1899,17 @@ function buildHM(){
       var maxGapMonth = spreadMonths[spreadGap.indexOf(maxGap)];
       var minGapMonth = spreadMonths[spreadGap.indexOf(minGap)];
       var spreadInsEl = document.getElementById('hm-spread-insight');
-      if(spreadInsEl) spreadInsEl.innerHTML = 'Average regional spread: <strong>'+avgGap+' gCOâ/kWh</strong>. ' +
-        'Widest gap: <strong>'+maxGap+' gCOâ/kWh</strong> in '+maxGapMonth+' â maximum transmission constraint. ' +
-        'Narrowest: <strong>'+minGap+' gCOâ/kWh</strong> in '+minGapMonth+'.';
+      if(spreadInsEl) spreadInsEl.innerHTML = 'Average regional spread: <strong>'+avgGap+' gCO₂/kWh</strong>. ' +
+        'Widest gap: <strong>'+maxGap+' gCO₂/kWh</strong> in '+maxGapMonth+' — maximum transmission constraint. ' +
+        'Narrowest: <strong>'+minGap+' gCO₂/kWh</strong> in '+minGapMonth+'.';
     }
   }
 
 }
 
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
 // TREND PANEL
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
 let tSel = new Set(['South Scotland','East Midlands','South Wales','London']);
 let tMode = 'intensity';
 let tChart = null;
@@ -1917,13 +1917,13 @@ let tChart2 = null;
 let tView = 'alltime'; // alltime | annual | seasonal | hourprofile | live24h
 let tLive24hData = {}; // cached live 24h data per region
 
-// ââ Subtitles and mode-toggle visibility per view ââ
+// ── Subtitles and mode-toggle visibility per view ──
 var TREND_VIEW_META = {
-  alltime:     { sub: 'Monthly averages 2018â2026 Â· select regions', showMix: true,  showPills: true,  showCards: true },
-  annual:      { sub: 'Annual average intensity by year Â· select regions', showMix: true,  showPills: true,  showCards: false },
-  seasonal:    { sub: 'Average intensity by month of year Â· all years combined Â· select regions', showMix: false, showPills: true,  showCards: false },
-  hourprofile: { sub: 'Average intensity by hour of day Â· all-time average Â· select regions', showMix: false, showPills: true,  showCards: false },
-  live24h:     { sub: 'Last 24 hours Â· half-hourly live data from NESO API Â· select regions', showMix: false, showPills: true,  showCards: false }
+  alltime:     { sub: 'Monthly averages 2018–2026 · select regions', showMix: true,  showPills: true,  showCards: true },
+  annual:      { sub: 'Annual average intensity by year · select regions', showMix: true,  showPills: true,  showCards: false },
+  seasonal:    { sub: 'Average intensity by month of year · all years combined · select regions', showMix: false, showPills: true,  showCards: false },
+  hourprofile: { sub: 'Average intensity by hour of day · all-time average · select regions', showMix: false, showPills: true,  showCards: false },
+  live24h:     { sub: 'Last 24 hours · half-hourly live data from NESO API · select regions', showMix: false, showPills: true,  showCards: false }
 };
 
 function buildTrend(){
@@ -1986,7 +1986,7 @@ function renderTrend(){
   buildTrendAnalysis();
 }
 
-// ââ Helper: destroy both charts ââ
+// ── Helper: destroy both charts ──
 function destroyTrendCharts(){
   if(tChart){ tChart.destroy(); tChart=null; }
   if(tChart2){ tChart2.destroy(); tChart2=null; }
@@ -1994,7 +1994,7 @@ function destroyTrendCharts(){
   document.getElementById('trend-insight').style.display = 'none';
 }
 
-// ââ Helper: build a standard chart options block ââ
+// ── Helper: build a standard chart options block ──
 function tOpts(yLabel, extra){
   return Object.assign({
     responsive:true, maintainAspectRatio:false,
@@ -2011,7 +2011,7 @@ function tOpts(yLabel, extra){
   }, extra||{});
 }
 
-// ââ Helper: show insight strip ââ
+// ── Helper: show insight strip ──
 function showTrendInsight(html){
   var el = document.getElementById('trend-insight');
   if(!el) return;
@@ -2019,9 +2019,9 @@ function showTrendInsight(html){
   el.innerHTML = '<div class="insight">'+html+'</div>';
 }
 
-// ââââââââââââââââââââââââââââââââââââââââ
+// ════════════════════════════════════════
 // VIEW: ALL-TIME MONTHLY
-// ââââââââââââââââââââââââââââââââââââââââ
+// ════════════════════════════════════════
 function renderTrendAllTime(){
   destroyTrendCharts();
   var months = Object.keys(MONTHLY).sort();
@@ -2035,9 +2035,9 @@ function renderTrendAllTime(){
     }));
     tChart = new Chart(ctx, {
       type:'line', data:{labels:months, datasets},
-      options: tOpts('gCOâ/kWh', {
+      options: tOpts('gCO₂/kWh', {
         plugins:{ legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Inter'},boxWidth:12,padding:10}},
-                  tooltip:{usePointStyle:true,callbacks:{label:c=>`${c.dataset.label}: ${Math.round(c.parsed.y)} gCOâ/kWh`}} }
+                  tooltip:{usePointStyle:true,callbacks:{label:c=>`${c.dataset.label}: ${Math.round(c.parsed.y)} gCO₂/kWh`}} }
       })
     });
   } else {
@@ -2064,9 +2064,9 @@ function renderTrendAllTime(){
   }
 }
 
-// ââââââââââââââââââââââââââââââââââââââââ
+// ════════════════════════════════════════
 // VIEW: ANNUAL AVERAGES
-// ââââââââââââââââââââââââââââââââââââââââ
+// ════════════════════════════════════════
 function renderTrendAnnual(){
   destroyTrendCharts();
   var years = [];
@@ -2094,11 +2094,11 @@ function renderTrendAnnual(){
         responsive:true, maintainAspectRatio:false,
         interaction:{mode:'index',intersect:false},
         plugins:{ legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Inter'},boxWidth:12,padding:10}},
-                  tooltip:{usePointStyle:true,callbacks:{label:c=>`${c.dataset.label}: ${c.parsed.y} gCOâ/kWh`}} },
+                  tooltip:{usePointStyle:true,callbacks:{label:c=>`${c.dataset.label}: ${c.parsed.y} gCO₂/kWh`}} },
         scales:{
           x:{ticks:{color:'#6b6b6b',font:{size:10,family:'Inter'}},grid:{display:false}},
           y:{ticks:{color:'#6b6b6b',font:{size:10,family:'Inter'}},grid:{color:'#f0ede6'},
-             title:{display:true,text:'gCOâ/kWh',color:'#6b6b6b',font:{size:10}}}
+             title:{display:true,text:'gCO₂/kWh',color:'#6b6b6b',font:{size:10}}}
         }
       }
     });
@@ -2112,15 +2112,15 @@ function renderTrendAnnual(){
         var pct = Math.round((1-last/first)*100);
         insHtml += '<div><div style="font-family:var(--sans);font-size:11px;font-weight:600;color:'+RCOL[r]+'">'+r+'</div>' +
           '<div style="font-family:var(--sans);font-size:22px;font-weight:700;color:'+(pct>0?'var(--low)':'var(--high)')+'">'+
-          (pct>0?'â':'â')+Math.abs(pct)+'%</div>' +
-          '<div style="font-size:11px;color:var(--ink3)">'+first+' â '+last+' gCOâ/kWh</div></div>';
+          (pct>0?'↓':'↑')+Math.abs(pct)+'%</div>' +
+          '<div style="font-size:11px;color:var(--ink3)">'+first+' → '+last+' gCO₂/kWh</div></div>';
       }
     });
     insHtml += '</div>';
     showTrendInsight(insHtml);
 
   } else {
-    // Annual GB mix â line chart one line per fuel
+    // Annual GB mix — line chart one line per fuel
     function annualMix(fuelIdx, year){
       var keys = Object.keys(MONTHLY_MIX).filter(k=>k.startsWith(year+'-'));
       var vals = keys.map(k=>MONTHLY_MIX[k]?.[fuelIdx]).filter(v=>v!=null);
@@ -2147,9 +2147,9 @@ function renderTrendAnnual(){
   }
 }
 
-// ââââââââââââââââââââââââââââââââââââââââ
+// ════════════════════════════════════════
 // VIEW: SEASONAL (month of year)
-// ââââââââââââââââââââââââââââââââââââââââ
+// ════════════════════════════════════════
 function renderTrendSeasonal(){
   destroyTrendCharts();
   var MN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -2175,11 +2175,11 @@ function renderTrendSeasonal(){
       responsive:true, maintainAspectRatio:false,
       interaction:{mode:'index',intersect:false},
       plugins:{ legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Inter'},boxWidth:12,padding:10}},
-                tooltip:{usePointStyle:true,callbacks:{label:c=>`${c.dataset.label}: ${Math.round(c.parsed.y)} gCOâ/kWh`}} },
+                tooltip:{usePointStyle:true,callbacks:{label:c=>`${c.dataset.label}: ${Math.round(c.parsed.y)} gCO₂/kWh`}} },
       scales:{
         x:{ticks:{color:'#6b6b6b',font:{size:10,family:'Inter'}},grid:{color:'#f0ede6'}},
         y:{ticks:{color:'#6b6b6b',font:{size:10,family:'Inter'}},grid:{color:'#f0ede6'},
-           title:{display:true,text:'avg gCOâ/kWh',color:'#6b6b6b',font:{size:10}}}
+           title:{display:true,text:'avg gCO₂/kWh',color:'#6b6b6b',font:{size:10}}}
       }
     }
   });
@@ -2192,16 +2192,16 @@ function renderTrendSeasonal(){
     var wMo = vals.indexOf(Math.max.apply(null,vals.filter(v=>v!=null)));
     showTrendInsight(
       '<div class="ins-cell"><div class="ins-lbl" style="color:var(--low)">Cleanest month</div>' +
-      '<div class="ins-val">'+MN[bMo]+'</div><div class="ins-sub">avg '+vals[bMo]+' gCOâ/kWh in '+r0+' â solar generation peaks, lower heating demand</div></div>' +
+      '<div class="ins-val">'+MN[bMo]+'</div><div class="ins-sub">avg '+vals[bMo]+' gCO₂/kWh in '+r0+' — solar generation peaks, lower heating demand</div></div>' +
       '<div class="ins-cell"><div class="ins-lbl" style="color:var(--high)">Highest carbon month</div>' +
-      '<div class="ins-val">'+MN[wMo]+'</div><div class="ins-sub">avg '+vals[wMo]+' gCOâ/kWh in '+r0+' â winter peak demand, low solar, gas fills the gap</div></div>'
+      '<div class="ins-val">'+MN[wMo]+'</div><div class="ins-sub">avg '+vals[wMo]+' gCO₂/kWh in '+r0+' — winter peak demand, low solar, gas fills the gap</div></div>'
     );
   }
 }
 
-// ââââââââââââââââââââââââââââââââââââââââ
+// ════════════════════════════════════════
 // VIEW: HOUR-OF-DAY PROFILE
-// ââââââââââââââââââââââââââââââââââââââââ
+// ════════════════════════════════════════
 function renderTrendHourProfile(){
   destroyTrendCharts();
   var hours = Array.from({length:24},(_,i)=>i);
@@ -2222,16 +2222,16 @@ function renderTrendHourProfile(){
       responsive:true, maintainAspectRatio:false,
       interaction:{mode:'index',intersect:false},
       plugins:{ legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Inter'},boxWidth:12,padding:10}},
-                tooltip:{usePointStyle:true,callbacks:{label:c=>`${c.dataset.label}: ${Math.round(c.parsed.y)} gCOâ/kWh`}} },
+                tooltip:{usePointStyle:true,callbacks:{label:c=>`${c.dataset.label}: ${Math.round(c.parsed.y)} gCO₂/kWh`}} },
       scales:{
         x:{ticks:{color:'#6b6b6b',font:{size:9,family:'Inter'},maxRotation:0,maxTicksLimit:12},grid:{color:'#f0ede6'}},
         y:{ticks:{color:'#6b6b6b',font:{size:10,family:'Inter'}},grid:{color:'#f0ede6'},
-           title:{display:true,text:'avg gCOâ/kWh',color:'#6b6b6b',font:{size:10}}}
+           title:{display:true,text:'avg gCO₂/kWh',color:'#6b6b6b',font:{size:10}}}
       }
     }
   });
 
-  // Second chart: show scheduling opportunity â spread between best and worst hour
+  // Second chart: show scheduling opportunity — spread between best and worst hour
   if(tSel.size > 0){
     var wrap2 = document.getElementById('trend-wrap2');
     wrap2.style.display = '';
@@ -2257,13 +2257,13 @@ function renderTrendHourProfile(){
           legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Inter'},boxWidth:12,padding:10}},
           tooltip:{usePointStyle:true,callbacks:{
             title:items=>'Carbon premium at '+items[0].label,
-            label:c=>`${c.dataset.label}: +${Math.round(c.parsed.y)} gCOâ/kWh vs best hour`
+            label:c=>`${c.dataset.label}: +${Math.round(c.parsed.y)} gCO₂/kWh vs best hour`
           }}
         },
         scales:{
           x:{ticks:{color:'#6b6b6b',font:{size:9,family:'Inter'},maxRotation:0,maxTicksLimit:12},grid:{display:false}},
           y:{ticks:{color:'#6b6b6b',font:{size:10,family:'Inter'}},grid:{color:'#f0ede6'},
-             title:{display:true,text:'gCOâ/kWh above daily minimum',color:'#6b6b6b',font:{size:10}}}
+             title:{display:true,text:'gCO₂/kWh above daily minimum',color:'#6b6b6b',font:{size:10}}}
         }
       }
     });
@@ -2279,17 +2279,17 @@ function renderTrendHourProfile(){
     showTrendInsight(
       '<div class="ins-cell"><div class="ins-lbl" style="color:var(--low)">Best hour ('+r0+')</div>' +
       '<div class="ins-val">'+String(bH).padStart(2,'0')+':00</div>' +
-      '<div class="ins-sub">avg '+Math.round(hVals[bH])+' gCOâ/kWh Â· scheduling here vs peak saves '+saving+' gCOâ/kWh</div></div>' +
+      '<div class="ins-sub">avg '+Math.round(hVals[bH])+' gCO₂/kWh · scheduling here vs peak saves '+saving+' gCO₂/kWh</div></div>' +
       '<div class="ins-cell"><div class="ins-lbl" style="color:var(--high)">Peak carbon hour</div>' +
       '<div class="ins-val">'+String(wH).padStart(2,'0')+':00</div>' +
-      '<div class="ins-sub">avg '+Math.round(hVals[wH])+' gCOâ/kWh Â· avoid intensive workloads during this window</div></div>'
+      '<div class="ins-sub">avg '+Math.round(hVals[wH])+' gCO₂/kWh · avoid intensive workloads during this window</div></div>'
     );
   }
 }
 
-// ââââââââââââââââââââââââââââââââââââââââ
+// ════════════════════════════════════════
 // VIEW: LAST 24 HOURS (LIVE)
-// ââââââââââââââââââââââââââââââââââââââââ
+// ════════════════════════════════════════
 function renderTrendLive24h(){
   destroyTrendCharts();
   var ctx = document.getElementById('trend-chart').getContext('2d');
@@ -2300,7 +2300,7 @@ function renderTrendLive24h(){
     var ld = document.createElement('div');
     ld.id = 'trend-loading';
     ld.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--ink3);background:var(--paper);border-radius:var(--r)';
-    ld.textContent = 'Fetching live data from NESO APIâ¦';
+    ld.textContent = 'Fetching live data from NESO API…';
     wrap.style.position = 'relative';
     wrap.appendChild(ld);
   }
@@ -2384,11 +2384,11 @@ function renderTrendLive24h(){
         responsive:true, maintainAspectRatio:false,
         interaction:{mode:'index',intersect:false},
         plugins:{ legend:{position:'bottom',labels:{color:'#6b6b6b',font:{size:11,family:'Inter'},boxWidth:12,padding:10}},
-                  tooltip:{usePointStyle:true,callbacks:{label:c=>`${c.dataset.label}: ${Math.round(c.parsed.y)} gCOâ/kWh`}} },
+                  tooltip:{usePointStyle:true,callbacks:{label:c=>`${c.dataset.label}: ${Math.round(c.parsed.y)} gCO₂/kWh`}} },
         scales:{
           x:{ticks:{color:'#6b6b6b',font:{size:9,family:'Inter'},maxRotation:0,maxTicksLimit:12},grid:{color:'#f0ede6'}},
           y:{ticks:{color:'#6b6b6b',font:{size:10,family:'Inter'}},grid:{color:'#f0ede6'},
-             title:{display:true,text:'gCOâ/kWh',color:'#6b6b6b',font:{size:10}}}
+             title:{display:true,text:'gCO₂/kWh',color:'#6b6b6b',font:{size:10}}}
         }
       }
     });
@@ -2401,12 +2401,12 @@ function renderTrendLive24h(){
       var maxV = Math.max.apply(null,vals);
       var minT = r0.pts[vals.indexOf(minV)];
       var maxT = r0.pts[vals.indexOf(maxV)];
-      var fmtT = function(pt){ if(!pt||!pt.from) return 'â'; var d=new Date(pt.from); return String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0')+' UTC'; };
+      var fmtT = function(pt){ if(!pt||!pt.from) return '–'; var d=new Date(pt.from); return String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0')+' UTC'; };
       showTrendInsight(
         '<div class="ins-cell"><div class="ins-lbl" style="color:var(--low)">Cleanest in 24h ('+r0.region+')</div>' +
-        '<div class="ins-val">'+minV+'</div><div class="ins-sub">gCOâ/kWh at '+fmtT(minT)+'</div></div>' +
+        '<div class="ins-val">'+minV+'</div><div class="ins-sub">gCO₂/kWh at '+fmtT(minT)+'</div></div>' +
         '<div class="ins-cell"><div class="ins-lbl" style="color:var(--high)">Peak carbon in 24h</div>' +
-        '<div class="ins-val">'+maxV+'</div><div class="ins-sub">gCOâ/kWh at '+fmtT(maxT)+' Â· '+Math.round(maxV-minV)+' gCOâ/kWh spread</div></div>'
+        '<div class="ins-val">'+maxV+'</div><div class="ins-sub">gCO₂/kWh at '+fmtT(maxT)+' · '+Math.round(maxV-minV)+' gCO₂/kWh spread</div></div>'
       );
     }
   });
@@ -2414,9 +2414,9 @@ function renderTrendLive24h(){
 
 
 
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
 // POWER MIX PANEL
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
 function buildMix(){
   var FUELS   = window.FUELS;
   var FC      = window.FUEL_COLORS;
@@ -2425,7 +2425,7 @@ function buildMix(){
   var MM      = window.MONTHLY_MIX;
   var months  = Object.keys(MM).sort();
 
-  // ââ Stat strip ââ
+  // ── Stat strip ──
   // Compute GB averages across all regions
   var gbNow = {};
   FUELS.forEach(function(f){ gbNow[f] = Math.round(RG.reduce(function(s,r){ return s+(CM[r][f]||0); },0)/RG.length); });
@@ -2442,10 +2442,10 @@ function buildMix(){
   document.getElementById('mix-stats').innerHTML =
     '<div class="is-cell"><div class="is-lbl">Clean energy now (GB)</div><div class="is-val" style="color:var(--low)">'+renewNow+'%</div><div class="is-sub">wind, solar, nuclear, hydro combined</div></div>' +
     '<div class="is-cell"><div class="is-lbl">Wind share now</div><div class="is-val" style="color:#0ea5e9">'+windNow+'%</div><div class="is-sub">the biggest single driver of intensity variation</div></div>' +
-    '<div class="is-cell"><div class="is-lbl">Gas dependency now</div><div class="is-val" style="color:var(--mid)">'+gasNow+'%</div><div class="is-sub">the residual floor â fills gaps when wind is low</div></div>' +
-    '<div class="is-cell"><div class="is-lbl">Coal share</div><div class="is-val" style="color:var(--ink3)">0%</div><div class="is-sub">last UK coal station closed Sep 2024 â was '+coal18+'% in 2018</div></div>';
+    '<div class="is-cell"><div class="is-lbl">Gas dependency now</div><div class="is-val" style="color:var(--mid)">'+gasNow+'%</div><div class="is-sub">the residual floor — fills gaps when wind is low</div></div>' +
+    '<div class="is-cell"><div class="is-lbl">Coal share</div><div class="is-val" style="color:var(--ink3)">0%</div><div class="is-sub">last UK coal station closed Sep 2024 — was '+coal18+'% in 2018</div></div>';
 
-  // ââ Regional bars sorted by clean share ââ
+  // ── Regional bars sorted by clean share ──
   var rgData = RG.map(function(r){
     var m = CM[r];
     var clean = Math.round((m.wind||0)+(m.solar||0)+(m.hydro||0)+(m.nuclear||0));
@@ -2470,7 +2470,7 @@ function buildMix(){
     return '<div class="mix-leg-item"><div class="mix-leg-dot" style="background:'+FC[f]+'"></div>'+FL[f]+' ('+gbNow[f]+'%)</div>';
   }).join('');
 
-  // ââ Stacked area history ââ
+  // ── Stacked area history ──
   kc('mix-history');
   var ctx1 = document.getElementById('mix-history-chart').getContext('2d');
   var histDs = FUELS.map(function(f,fi){
@@ -2495,7 +2495,7 @@ function buildMix(){
     }
   });
 
-  // ââ What has changed facts ââ
+  // ── What has changed facts ──
   var latestM = MM[months[months.length-1]];
   var windNow2 = latestM[1]||0, windThen = base18[1]||0;
   var solarNow2 = latestM[3]||0, solarThen = base18[3]||0;
@@ -2504,7 +2504,7 @@ function buildMix(){
   var facts = [
     { lbl:'Wind share', val: '+'+( windNow2-windThen)+'pp', sub:''+windThen+'% \u2192 '+windNow2+'% of generation', col:'#0ea5e9' },
     { lbl:'Solar share', val: '+'+(solarNow2-solarThen)+'pp', sub:''+solarThen+'% \u2192 '+solarNow2+'%  (seasonal peak ~20%)', col:'#eab308' },
-    { lbl:'Gas share', val: (gasNow2-gasThen)+'pp', sub:''+gasThen+'% \u2192 '+gasNow2+'% â still the dominant flexible source', col:'#f97316' },
+    { lbl:'Gas share', val: (gasNow2-gasThen)+'pp', sub:''+gasThen+'% \u2192 '+gasNow2+'% — still the dominant flexible source', col:'#f97316' },
     { lbl:'Coal share', val: '\u22120%', sub:'Eliminated. Last station closed Sep 2024', col:'#78716c' },
   ];
   document.getElementById('mix-change-facts').innerHTML = facts.map(function(f){
@@ -2517,9 +2517,9 @@ function buildMix(){
     '</div>';
   }).join('');
 
-  // ââ Wind vs intensity scatter ââ
+  // ── Wind vs intensity scatter ──
   kc('mix-scatter');
-  // Need monthly GB intensity â compute from MONTHLY
+  // Need monthly GB intensity — compute from MONTHLY
   var scatterPts = months.map(function(m){
     var wind = MM[m]?.[1]||0;
     var intensVals = RG.map(function(r){ return window.MONTHLY[m]?.[r]; }).filter(function(v){ return v!=null; });
@@ -2547,7 +2547,7 @@ function buildMix(){
         tooltip:{ displayColors:false,
           callbacks:{
             title:function(items){ return items[0].raw.m; },
-            label:function(c){ return 'Wind: '+c.raw.x+'% Â· Intensity: '+c.raw.y+' gCO\u2082/kWh'; }
+            label:function(c){ return 'Wind: '+c.raw.x+'% · Intensity: '+c.raw.y+' gCO\u2082/kWh'; }
           }
         }
       },
@@ -2560,7 +2560,7 @@ function buildMix(){
     }
   });
 
-  // ââ Gas dependency line ââ
+  // ── Gas dependency line ──
   kc('mix-gas');
   var ctx3 = document.getElementById('mix-gas-chart').getContext('2d');
   var gasData = months.map(function(m){ return MM[m]?.[0]||0; });
@@ -2589,7 +2589,7 @@ function buildMix(){
     }
   });
 
-  // ââ Analysis cards ââ
+  // ── Analysis cards ──
   // Compute wind-intensity correlation
   var pts = scatterPts.filter(function(p){ return p.x > 0 && p.y > 0; });
   var n = pts.length;
@@ -2618,21 +2618,21 @@ function buildMix(){
     '</div>' +
     '<div class="analysis-card">' +
       '<h3>Seasonal and structural patterns</h3>' +
-      '<p>Winter months (NovâFeb) average <strong>'+Math.round(winterAvg)+' gCO\u2082/kWh</strong> GB intensity. Summer months (MayâAug) average <strong>'+Math.round(summerAvg)+' gCO\u2082/kWh</strong>. The '+Math.round(winterAvg-summerAvg)+' gCO\u2082/kWh gap is driven by solar availability in summer and higher heating demand in winter forcing more gas dispatch.</p>' +
-      '<p>The cleanest month on record in this dataset was <strong>'+bestMonth.m+'</strong> at '+bestMonth.y+' gCO\u2082/kWh GB average â wind supplied '+bestMonth.x+'% of generation. The highest was <strong>'+worstMonth.m+'</strong> at '+worstMonth.y+' gCO\u2082/kWh, when wind was at '+worstMonth.x+'%.</p>' +
-      '<p>The structural improvement since 2018 is visible in the scatter: the newer points (purple, blue) cluster towards the lower-right â same or higher wind share, lower intensity â partly because coal removal has permanently lowered the gas-equivalent intensity floor.</p>' +
+      '<p>Winter months (Nov–Feb) average <strong>'+Math.round(winterAvg)+' gCO\u2082/kWh</strong> GB intensity. Summer months (May–Aug) average <strong>'+Math.round(summerAvg)+' gCO\u2082/kWh</strong>. The '+Math.round(winterAvg-summerAvg)+' gCO\u2082/kWh gap is driven by solar availability in summer and higher heating demand in winter forcing more gas dispatch.</p>' +
+      '<p>The cleanest month on record in this dataset was <strong>'+bestMonth.m+'</strong> at '+bestMonth.y+' gCO\u2082/kWh GB average — wind supplied '+bestMonth.x+'% of generation. The highest was <strong>'+worstMonth.m+'</strong> at '+worstMonth.y+' gCO\u2082/kWh, when wind was at '+worstMonth.x+'%.</p>' +
+      '<p>The structural improvement since 2018 is visible in the scatter: the newer points (purple, blue) cluster towards the lower-right — same or higher wind share, lower intensity — partly because coal removal has permanently lowered the gas-equivalent intensity floor.</p>' +
     '</div>' +
     '<div class="analysis-card">' +
       '<h3>The gas problem</h3>' +
-      '<p>Gas is now the single largest source of GB electricity, supplying around <strong>'+gasNow2+'%</strong> of generation. It is cleaner than coal â around 350â400 gCO\u2082/kWh vs 800+ for coal â but it is still a high-carbon source by any meaningful standard.</p>' +
+      '<p>Gas is now the single largest source of GB electricity, supplying around <strong>'+gasNow2+'%</strong> of generation. It is cleaner than coal — around 350–400 gCO\u2082/kWh vs 800+ for coal — but it is still a high-carbon source by any meaningful standard.</p>' +
       '<p>The gas bar chart shows the fleet\'s gas dependency has actually increased in some recent periods as coal has exited. The grid has not decarbonised by eliminating fossil fuels; it has decarbonised by growing renewables fast enough that the total carbon per kWh has fallen despite gas remaining dominant in the residual mix.</p>' +
-      '<p>For operators targeting near-zero Scope 2 emissions, the implication is clear: even the cleanest GB grid hours carry a non-trivial carbon load from gas dispatch in southern England. Marginal abatement at the consumption end â demand reduction, efficiency, load shifting â remains meaningful even as the grid improves.</p>' +
+      '<p>For operators targeting near-zero Scope 2 emissions, the implication is clear: even the cleanest GB grid hours carry a non-trivial carbon load from gas dispatch in southern England. Marginal abatement at the consumption end — demand reduction, efficiency, load shifting — remains meaningful even as the grid improves.</p>' +
     '</div>' +
     '<div class="analysis-card">' +
       '<h3>Regional structure vs national averages</h3>' +
-      '<p>GB national averages mask very large regional variation. Scotland regularly operates below 30 gCO\u2082/kWh â sometimes near zero on windy days â while parts of the English Midlands and Wales can exceed 300 gCO\u2082/kWh simultaneously. These are not temporary fluctuations; they reflect structural differences in generation mix.</p>' +
+      '<p>GB national averages mask very large regional variation. Scotland regularly operates below 30 gCO\u2082/kWh — sometimes near zero on windy days — while parts of the English Midlands and Wales can exceed 300 gCO\u2082/kWh simultaneously. These are not temporary fluctuations; they reflect structural differences in generation mix.</p>' +
       '<p>The reason national averages persist as the reporting standard is administrative convenience, not accuracy. Location-specific intensity data is available via the NESO API and is the correct basis for Scope 2 reporting under GHG Protocol market-based and location-based methods.</p>' +
-      '<p>For a data centre, hyperscale workload, or EV fleet operator, the gap between the cleanest and dirtiest GB region typically exceeds <strong>250â300 gCO\u2082/kWh</strong>. Choosing where and when to run compute is a more powerful lever than most other carbon interventions available to a technology operator.</p>' +
+      '<p>For a data centre, hyperscale workload, or EV fleet operator, the gap between the cleanest and dirtiest GB region typically exceeds <strong>250–300 gCO\u2082/kWh</strong>. Choosing where and when to run compute is a more powerful lever than most other carbon interventions available to a technology operator.</p>' +
     '</div>';
 }
 
@@ -2645,9 +2645,9 @@ var REGION_ID = {
 var REGION_ID_REV = {};
 Object.keys(REGION_ID).forEach(function(id){ REGION_ID_REV[REGION_ID[id]] = parseInt(id); });
 
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
-// LIVE DATA â NESO Carbon Intensity API
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
+// LIVE DATA — NESO Carbon Intensity API
+// ══════════════════════════════════════════════════════════
 var LIVE = { loaded:false, ts:null, regions:{}, mix:{}, gbMix:{}, gbIntensity:null };
 var LIVE_FORECAST = {};
 var CORS_PROXY = 'https://carbon-proxy.mark-3f3.workers.dev/?url=';
@@ -2705,7 +2705,7 @@ function fetchLiveData(){
       if(shTs) shTs.textContent = tsStr;
       setLiveBadge('ok','Live');
 
-      // Rebuild active panel with fresh data â but not forecast/heatmap/trend
+      // Rebuild active panel with fresh data — but not forecast/heatmap/trend
       // which manage their own chart lifecycle and would flash on rebuild
       var activePanel = document.querySelector('.panel.active');
       if(activePanel){
@@ -2724,7 +2724,7 @@ function fetchLiveData(){
     })
     .catch(function(err){
       console.warn('Live data fetch failed:', err);
-      setLiveBadge('error','Offline â using cached data');
+      setLiveBadge('error','Offline — using cached data');
       document.getElementById('data-ts').textContent = 'API unavailable';
     });
 }
@@ -2754,9 +2754,9 @@ function fetchRegionForecast(regionName, callback){
 }
 
 
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
 // BEST-WINDOW CHART (24h)
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
 function initBestWindow(){
   var sel = document.getElementById('bw-region');
   if(!sel || sel.options.length > 0) return;
@@ -2847,7 +2847,7 @@ function buildBestWindow(){
 
   var recoHtml;
   if(saving <= 5){
-    recoHtml = '<span class="bw-go">Now is a good time to run workloads in '+region+'</span> â '+nowVal+' gCO\u2082/kWh, close to the forecast minimum. No significant advantage to waiting.';
+    recoHtml = '<span class="bw-go">Now is a good time to run workloads in '+region+'</span> — '+nowVal+' gCO\u2082/kWh, close to the forecast minimum. No significant advantage to waiting.';
   } else {
     recoHtml = 'Current intensity: <strong>'+nowVal+' gCO\u2082/kWh</strong>. ' +
       'Best window: <span class="bw-go">'+String(bestH).padStart(2,'0')+':00 '+bestDay+'</span> at <strong>'+bestVal+' gCO\u2082/kWh</strong>. ' +
@@ -2855,9 +2855,9 @@ function buildBestWindow(){
   }
   recoEl.innerHTML = recoHtml;
 }
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
 // WORKLOAD CALCULATOR
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
 function initCalc(){
   var selA = document.getElementById('calc-region');
   var selB = document.getElementById('calc-region-b');
@@ -2942,7 +2942,7 @@ function updateCalc(){
     '</tr>';
   }).join('');
 
-  // ââ Recommendation line ââ
+  // ── Recommendation line ──
   var saved = Math.max(0, worstRow.kgBest - bestRow.kgBest);
   var gPerKwh = Math.round(saved / kwh * 1000);
   var recoEl = document.getElementById('comp-reco');
@@ -2958,7 +2958,7 @@ function updateCalc(){
       (bestRow.bestTime ? ' Optimal window: <strong>'+bestRow.bestTime+'</strong>.' : '');
   }
 
-  // ââ Context block: annualisation + real-world equivalents ââ
+  // ── Context block: annualisation + real-world equivalents ──
   var ctxEl = document.getElementById('calc-context');
   if(!ctxEl) return;
 
@@ -2967,13 +2967,13 @@ function updateCalc(){
   var annWorst = worstRow.kgBest * annualMult;
 
   // Real-world equivalents (using DEFRA/ICCT figures)
-  // LondonâBarcelona one-way economy ~110 kg CO2 (1,530km Ã 72 gCO2/pkm)
+  // London–Barcelona one-way economy ~110 kg CO2 (1,530km × 72 gCO2/pkm)
   var barcelonaFlight = 110;
-  // LondonâEdinburgh one-way economy ~46 kg CO2 (530km Ã 87 gCO2/pkm domestic)
+  // London–Edinburgh one-way economy ~46 kg CO2 (530km × 87 gCO2/pkm domestic)
   var edinburghFlight = 46;
   // Average UK car 1km = 0.17 kg CO2
   var carKmCO2 = 0.17;
-  // Average UK home annual electricity = ~3,500 kWh â ~800 kg CO2 at grid avg
+  // Average UK home annual electricity = ~3,500 kWh → ~800 kg CO2 at grid avg
   var homeAnnualCO2 = 800;
 
   // Choose the most legible equivalent based on magnitude of annual saving
@@ -3049,9 +3049,9 @@ function updateCalc(){
   ctxEl.innerHTML = ctxHTML;
 }
 
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
 // SCHEDULING SCORE
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
 function buildSchedScores(){
   var el = document.getElementById('sched-scores');
   if(!el) return;
@@ -3099,12 +3099,12 @@ function buildSchedScores(){
   }).join('');
 }
 
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
 // YEAR-ON-YEAR COMPARISON
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
-// MAP â Canvas-rendered GeoJSON with live intensity data
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
+// MAP — Canvas-rendered GeoJSON with live intensity data
+// ══════════════════════════════════════════════════════════
 var MAP_GEO = null;
 var MAP_DRAWN = false;
 var MAP_PROJECT = null;
@@ -3116,7 +3116,7 @@ function initMap(){
     .then(function(geo){ MAP_GEO = geo; drawMap(); })
     .catch(function(){
       var wrap = document.getElementById('map-canvas');
-      if(wrap){ var ctx=wrap.getContext('2d'); ctx.fillStyle='#f7f6f2'; ctx.fillRect(0,0,wrap.width||400,wrap.height||480); ctx.fillStyle='#6b6b6b'; ctx.font='13px sans-serif'; ctx.textAlign='center'; ctx.fillText('Map data not found â upload regions.geojson to repo root',(wrap.width||400)/2,(wrap.height||480)/2); }
+      if(wrap){ var ctx=wrap.getContext('2d'); ctx.fillStyle='#f7f6f2'; ctx.fillRect(0,0,wrap.width||400,wrap.height||480); ctx.fillStyle='#6b6b6b'; ctx.font='13px sans-serif'; ctx.textAlign='center'; ctx.fillText('Map data not found — upload regions.geojson to repo root',(wrap.width||400)/2,(wrap.height||480)/2); }
     });
 }
 
@@ -3212,7 +3212,7 @@ function updateMapTooltip(region){
       return mix[f]&&mix[f]>0?'<div style="width:'+mix[f]+'%;background:'+FUEL_COLORS[f]+'"></div>':'';
     }).join('');
     var clean=Math.round((mix.wind||0)+(mix.solar||0)+(mix.nuclear||0)+(mix.hydro||0)+(mix.biomass||0));
-    document.getElementById('mtt-extra').textContent = clean+'% low-carbon Â· click for region detail';
+    document.getElementById('mtt-extra').textContent = clean+'% low-carbon · click for region detail';
   }
 }
 
@@ -3323,9 +3323,9 @@ function forEachRing(feature,fn){
 function showMapInfo(regionName){}
 
 
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
 // TREND COMPARATIVE ANALYSIS
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
 function buildTrendAnalysis(){
   var block = document.getElementById('trend-analysis-block');
   if(!block) return;
@@ -3372,9 +3372,9 @@ function buildTrendAnalysis(){
 
   var data = regions.map(regionMetrics);
 
-  // ââ Comparison table ââ
+  // ── Comparison table ──
   var subEl=document.getElementById('trend-compare-sub');
-  if(subEl) subEl.textContent='Â· '+regions.length+' region'+(regions.length>1?'s':'')+' selected';
+  if(subEl) subEl.textContent='· '+regions.length+' region'+(regions.length>1?'s':'')+' selected';
 
   function bestIdx(arr,lower){
     var valid=arr.filter(v=>v!=null&&!isNaN(v));
@@ -3410,7 +3410,7 @@ function buildTrendAnalysis(){
   document.getElementById('trend-compare-table').innerHTML=
     '<table class="tca-table"><thead><tr><th class="tca-metric">Metric</th>'+thCols+'</tr></thead><tbody>'+tableRows+'</tbody></table>';
 
-  // ââ Insights ââ
+  // ── Insights ──
   var insightHTML=data.map(d=>{
     var col=RCOL[d.r]||'var(--ink)';
     var lines=[];
@@ -3461,9 +3461,9 @@ function buildTrendAnalysis(){
   document.getElementById('trend-insights-list').innerHTML=insightHTML;
 }
 
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
 // ROUTING
-// ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════════════════
 var INIT = {};
 function initNow(){ buildNow(); initBestWindow(); initCalc(); buildSchedScores(); }
 var BUILD = {now:initNow, forecast:initForecast, mix:buildMix, heatmap:initHM, trend:buildTrend, region:buildRegion, map:initMap, about:function(){}};
@@ -3485,7 +3485,7 @@ window.addEventListener('load', function(){
   fetchLiveData();
 
   // Align refresh to NESO half-hour publishing schedule
-  // NESO publishes at :00 and :30 UTC â schedule next fetch 2 minutes after each slot
+  // NESO publishes at :00 and :30 UTC — schedule next fetch 2 minutes after each slot
   function scheduleNextFetch(){
     var now = new Date();
     var ms = now.getTime();
@@ -3510,7 +3510,7 @@ window.addEventListener('load', function(){
     var min = String(d.getUTCMinutes()).padStart(2,'0');
     var dd = String(d.getUTCDate()).padStart(2,'0');
     var mo = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getUTCMonth()];
-    el.textContent = dd+' '+mo+' '+hh+':'+min+' UTC Â· next '+String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0');
+    el.textContent = dd+' '+mo+' '+hh+':'+min+' UTC · next '+String(mm).padStart(2,'0')+':'+String(ss).padStart(2,'0');
   }, 1000);
 });
 </script>
