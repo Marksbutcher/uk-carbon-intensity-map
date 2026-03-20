@@ -4,24 +4,29 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>UK Regional Carbon Intensity</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 :root {
-  --paper:  #f7f6f2;
+  --paper:  #f9fafb;
   --white:  #ffffff;
-  --ink:    #1a1a1a;
-  --ink2:   #3d3d3d;
-  --ink3:   #6b6b6b;
-  --rule:   #e0ddd6;
-  --rule2:  #cecbc3;
+  --ink:    #111827;
+  --ink2:   #374151;
+  --ink3:   #6b7280;
+  --rule:   #e5e7eb;
+  --rule2:  #d1d5db;
   --low:    #16a34a;
   --mid:    #d97706;
   --high:   #dc2626;
-  --acc:    #1d4ed8;
-  --r:      4px;
-  --sans:   'Barlow', -apple-system, sans-serif;
-  --cond:   'Barlow Condensed', sans-serif;
+  --acc:    #7DB92A;
+  --r:      5px;
+  --r2:     8px;
+  --green:  #7DB92A;
+  --glt:    #95C11F;
+  --gdk:    #4a7019;
+  --mono:   'DM Mono', ui-monospace, 'Cascadia Code', monospace;
+  --sans:   'Inter', system-ui, -apple-system, sans-serif;
+  --cond:   'Inter', system-ui, sans-serif;
 }
 /* fuel colours */
 :root {
@@ -37,7 +42,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:13px;font-weight:400;line-height:1.5;-webkit-font-smoothing:antialiased}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:13px;font-weight:400;line-height:1.55;letter-spacing:-0.01em;-webkit-font-smoothing:antialiased}
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:var(--paper)}
 ::-webkit-scrollbar-thumb{background:var(--rule2);border-radius:3px}
@@ -56,7 +61,7 @@ header{background:var(--white);border-bottom:1px solid var(--rule);padding:0 28p
 .grad-bar{width:90px;height:7px;border-radius:2px;background:linear-gradient(90deg,#16a34a,#d97706 45%,#dc2626)}
 
 /* ── NAV ── */
-nav{background:var(--white);border-bottom:2px solid var(--rule);padding:0 28px;display:flex;gap:0;overflow-x:auto}
+nav{background:var(--white);border-bottom:1px solid var(--rule);padding:0 24px;display:flex;gap:0;overflow-x:auto}
 nav::-webkit-scrollbar{height:0}
 .tab{padding:11px 16px;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;font-family:var(--cond);font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--ink3);cursor:pointer;white-space:nowrap;transition:color .14s,border-color .14s}
 .tab:hover{color:var(--ink)}
@@ -393,7 +398,11 @@ table.hm th{font-family:var(--cond);font-size:9px;font-weight:600;letter-spacing
 <body>
 <header>
   <div class="hd-left">
-    <div class="hd-title">UK Regional Carbon Intensity</div>
+    <div class="hd-brand-wrap">
+      <svg class="hd-logo" width="88" height="17" viewBox="0 0 285 56" xmlns="http://www.w3.org/2000/svg" aria-label="Posetiv"><path d="M0 43.5V12.5H16C18.6 12.5 20.9 13 23 13.9 25 14.8 26.8 16 28.3 17.4 29.8 18.8 30.9 20.5 31.7 22.4 32.5 24.3 32.9 26.3 32.9 28.4 32.9 30.6 32.5 32.6 31.7 34.5 30.9 36.4 29.8 38.1 28.3 39.5 26.8 40.9 25 42.1 23 43 21 43.9 18.7 44.4 16.1 44.4H7.7V56H0V43.5ZM7.7 37.8H15.5C16.7 37.8 17.8 37.6 18.8 37.1 19.8 36.6 20.6 36 21.3 35.2 22 34.4 22.5 33.5 22.9 32.5 23.3 31.5 23.4 30.4 23.4 29.3 23.4 28.1 23.2 27 22.8 26 22.4 25 21.8 24.2 21.1 23.4 20.4 22.7 19.6 22.1 18.6 21.7 17.6 21.2 16.6 21 15.5 21H7.7V37.8Z" fill="#7DB92A"/><path d="M35.5 28.7C35.5 26.5 35.9 24.4 36.6 22.5 37.4 20.5 38.6 18.8 40 17.3 41.4 15.9 43.1 14.7 45.1 13.8 47.1 13 49.3 12.5 51.7 12.5 54.2 12.5 56.4 13 58.4 13.8 60.4 14.7 62.1 15.9 63.5 17.3 64.9 18.8 66 20.5 66.8 22.5 67.6 24.4 68 26.5 68 28.7 68 30.9 67.6 33 66.8 35 66 37 64.9 38.6 63.5 40.1 62.1 41.6 60.4 42.8 58.4 43.6 56.4 44.5 54.2 44.9 51.7 44.9 49.3 44.9 47.1 44.5 45.1 43.6 43.1 42.8 41.4 41.6 40 40.1 38.6 38.6 37.4 36.9 36.6 35 35.9 33 35.5 30.9 35.5 28.7ZM51.7 38.3C53.2 38.3 54.5 38.1 55.6 37.5 56.6 36.9 57.5 36.1 58.2 35.2 58.9 34.2 59.5 33.2 59.8 32.1 60.2 30.9 60.3 29.8 60.3 28.7 60.3 27.6 60.2 26.5 59.8 25.4 59.5 24.2 58.9 23.2 58.2 22.3 57.5 21.4 56.6 20.6 55.6 20 54.5 19.4 53.2 19.2 51.7 19.2 50.3 19.2 49 19.4 47.9 20 46.9 20.6 46 21.4 45.3 22.3 44.5 23.2 44 24.2 43.7 25.4 43.3 26.5 43.2 27.6 43.2 28.7 43.2 29.8 43.3 30.9 43.7 32.1 44 33.2 44.5 34.2 45.3 35.2 46 36.1 46.9 36.9 47.9 37.5 49 38.1 50.3 38.3 51.7 38.3Z" fill="#1D1D1B"/><path d="M71.3 12.5H79.4L88.3 36.9 97.3 12.5H105.1L91.2 49.2C90.4 51.3 89.4 53.1 88.4 54.6 87.3 56 85.5 56.7 83 56.7 82.2 56.7 81.4 56.6 80.6 56.4 79.8 56.2 79.1 55.9 78.5 55.5L80.1 49.6C80.5 49.8 80.9 49.9 81.3 50 81.7 50.1 82.1 50.1 82.4 50.1 83.3 50.1 84 49.9 84.4 49.4 84.9 48.9 85.3 48.3 85.6 47.5L71.3 12.5Z" fill="#1D1D1B"/><path d="M106.6 25.5H121.5C121.5 24.8 121.4 24 121.1 23.2 120.7 22.4 120.3 21.7 119.7 21.1 119.1 20.5 118.4 20 117.5 19.6 116.6 19.2 115.6 18.9 114.4 18.9 113.1 18.9 112 19.2 111.1 19.6 110.1 20 109.3 20.5 108.6 21.1 108 21.7 107.5 22.4 107.1 23.2 106.8 24 106.6 24.8 106.6 25.5ZM128.9 39.5C127.5 40.9 125.7 42.1 123.6 43 121.5 43.9 119 44.4 116.2 44.4 113.7 44.4 111.4 44 109.4 43.1 107.3 42.3 105.5 41.1 104 39.6 102.5 38.1 101.3 36.4 100.5 34.4 99.7 32.5 99.3 30.3 99.3 28 99.3 25.8 99.7 23.7 100.5 21.8 101.3 19.8 102.5 18.1 104 16.6 105.5 15.2 107.3 14 109.3 13.2 111.3 12.4 113.6 12 116 12 118.3 12 120.5 12.4 122.5 13.2 124.5 14 126.2 15.1 127.6 16.6 129 18 130.1 19.7 130.8 21.6 131.5 23.5 131.9 25.6 131.9 27.8L131.9 31H106.7C106.7 32.2 106.9 33.2 107.4 34.1 107.9 35 108.6 35.8 109.4 36.4 110.2 37 111.1 37.5 112.1 37.9 113.1 38.2 114.1 38.4 115.1 38.4 116.6 38.4 117.9 38.3 119 38 120 37.7 121 37.4 121.8 37 122.5 36.6 123.2 36.3 123.7 35.9 124.2 35.4 124.5 35.1 124.8 34.8L128.9 39.5Z" fill="#1D1D1B"/><path d="M135.9 19.8H130.7V13.6H135.9V3.8H143.5V13.6H151.6V19.8H143.5V33.1C143.5 34.8 143.8 36.1 144.4 37 145 37.9 145.9 38.4 147.2 38.4 148.4 38.4 149.4 38.2 150 37.9 150.8 37.6 151.5 37.1 152.1 36.7L155.3 41.4C153.8 42.6 152.3 43.5 150.9 44.1 149.4 44.7 147.6 45 145.4 45 142 45 139.4 44 137.6 42.1 135.8 40.1 135.9 37.1 135.9 33.5V19.8Z" fill="#1D1D1B"/><path d="M157.4 28.5C157.4 26.2 157.8 24.1 158.7 22.2 159.5 20.3 160.7 18.6 162.2 17.1 163.7 15.7 165.5 14.6 167.5 13.7 169.5 12.9 171.8 12.5 174.2 12.5 176.7 12.5 178.9 12.9 181 13.7 183 14.6 184.8 15.7 186.3 17.2 187.8 18.6 188.9 20.3 189.8 22.2 190.6 24.1 191 26.2 191 28.5 191 30.8 190.6 32.9 189.8 34.8 189 36.7 187.8 38.4 186.3 39.9 184.8 41.3 183 42.4 181 43.3 179 44.1 176.7 44.5 174.2 44.5 171.8 44.5 169.5 44.1 167.5 43.3 165.5 42.4 163.7 41.3 162.2 39.8 160.7 38.4 159.5 36.7 158.7 34.8 157.8 32.9 157.4 30.7 157.4 28.5ZM174.2 37.8C175.5 37.8 176.7 37.5 177.7 37 178.7 36.5 179.6 35.7 180.3 34.8 181 33.9 181.5 32.9 181.9 31.8 182.2 30.7 182.4 29.6 182.4 28.5 182.4 27.4 182.2 26.3 181.9 25.2 181.5 24.1 181 23.1 180.3 22.2 179.6 21.3 178.7 20.6 177.7 20.1 176.6 19.5 175.5 19.3 174.2 19.3 173 19.3 171.8 19.5 170.8 20.1 169.7 20.6 168.8 21.4 168.1 22.2 167.4 23.1 166.9 24.1 166.6 25.2 166.2 26.3 166 27.4 166 28.5 166 29.6 166.2 30.7 166.6 31.8 167 32.9 167.5 33.9 168.2 34.8 168.9 35.7 169.8 36.5 170.8 37 171.8 37.5 173 37.8 174.2 37.8Z" fill="#1D1D1B"/><path d="M194 13.6H201.4L208.7 35.4 216 13.6H222.6L229.9 35.4 237.2 13.6H244.6L233.4 44H226.4L219.3 22.9 212.2 44H205.2L194 13.6Z" fill="#1D1D1B"/></svg>
+      <span class="hd-divider"></span>
+      <span class="hd-product">UK Carbon Intensity</span>
+    </div>
     <div class="hd-sub">National Grid ESO · 14 regions · half-hourly · Sep 2018 – Mar 2026</div>
   </div>
   <div class="hd-chips">
